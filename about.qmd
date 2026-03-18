@@ -1,0 +1,30 @@
+---
+title: "About"
+---
+
+I'm a Senior Data Scientist based in San Francisco with 11+ years of progressive experience spanning operations, analytics, and data science.
+
+**Career path:** Started in operations at ZocDoc, transitioned into analytics at Square (now Block), and grew into a senior data science role at Atlassian over 6 years. Also taught data analytics at General Assembly.
+
+**What I do:** Build targeting models, experimentation frameworks, and AI-powered tools that help teams make better decisions. At Atlassian, my work attributed $20M in bookings and $50M in pipeline to enterprise marketing programs.
+
+**What sets me apart:** My path through operations and teaching means I communicate analysis in terms stakeholders actually act on. I also led AI adoption for a 40+ person data org — training, tooling, and hands-on enablement with LLMs, RAG, and agentic workflows.
+
+**What I'm looking for:** Senior data science roles where I can combine analytical rigor with AI-augmented workflows, ideally at companies pushing the boundaries of how data teams work.
+
+## Skills
+
+**Languages:** Python (Pandas, NumPy, scikit-learn), SQL
+
+**Platforms:** Snowflake, Databricks, AWS, GCP, Airflow, Docker
+
+**Methods:** Propensity Modeling, Segmentation & Targeting, Lift Analysis, A/B Testing, Experimentation Design
+
+**AI/LLM:** LLMs, RAG, Prompt Engineering, Agentic Workflows, Tool Use
+
+**Visualization:** Tableau, Streamlit, Matplotlib
+
+## Education
+
+- **B.A. Psychology** — UC Santa Barbara
+- **Post-Baccalaureate, Mathematics** — City University of New York

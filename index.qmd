@@ -1,0 +1,28 @@
+---
+title: "Philip Felix"
+subtitle: "Senior Data Scientist"
+---
+
+I'm a data scientist with 11+ years of experience turning data into business decisions across enterprise SaaS, fintech, and healthtech.
+
+Most recently at Atlassian, I built targeting and segmentation models that drove $20M+ in bookings, and led AI adoption across a 40+ person data org. I'm strongest at the intersection of analytics, experimentation, and AI-augmented workflows.
+
+## Featured Projects
+
+### [Lead Scoring & Buying Group Identification](projects/lead-scoring.qmd)
+
+A propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.
+
+**Stack:** Python, Pandas, scikit-learn, Matplotlib
+
+### [Context Agent](projects/context-agent.qmd)
+
+An LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.
+
+**Stack:** Python, Claude API, DuckDB, Streamlit
+
+## Get in Touch
+
+- [GitHub](https://github.com/pfelix828)
+- [LinkedIn](https://linkedin.com/in/pfelix1)
+- [Email](mailto:pfelix828@gmail.com)

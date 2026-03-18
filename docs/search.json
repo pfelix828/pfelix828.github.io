@@ -1,0 +1,121 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m a Senior Data Scientist based in San Francisco with 11+ years of progressive experience spanning operations, analytics, and data science.\nCareer path: Started in operations at ZocDoc, transitioned into analytics at Square (now Block), and grew into a senior data science role at Atlassian over 6 years. Also taught data analytics at General Assembly.\nWhat I do: Build targeting models, experimentation frameworks, and AI-powered tools that help teams make better decisions. At Atlassian, my work attributed $20M in bookings and $50M in pipeline to enterprise marketing programs.\nWhat sets me apart: My path through operations and teaching means I communicate analysis in terms stakeholders actually act on. I also led AI adoption for a 40+ person data org — training, tooling, and hands-on enablement with LLMs, RAG, and agentic workflows.\nWhat I’m looking for: Senior data science roles where I can combine analytical rigor with AI-augmented workflows, ideally at companies pushing the boundaries of how data teams work."
+  },
+  {
+    "objectID": "about.html#skills",
+    "href": "about.html#skills",
+    "title": "About",
+    "section": "Skills",
+    "text": "Skills\nLanguages: Python (Pandas, NumPy, scikit-learn), SQL\nPlatforms: Snowflake, Databricks, AWS, GCP, Airflow, Docker\nMethods: Propensity Modeling, Segmentation & Targeting, Lift Analysis, A/B Testing, Experimentation Design\nAI/LLM: LLMs, RAG, Prompt Engineering, Agentic Workflows, Tool Use\nVisualization: Tableau, Streamlit, Matplotlib"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "About",
+    "section": "Education",
+    "text": "Education\n\nB.A. Psychology — UC Santa Barbara\nPost-Baccalaureate, Mathematics — City University of New York"
+  },
+  {
+    "objectID": "projects/context-agent.html",
+    "href": "projects/context-agent.html",
+    "title": "Context Agent",
+    "section": "",
+    "text": "View on GitHub"
+  },
+  {
+    "objectID": "projects/context-agent.html#the-problem",
+    "href": "projects/context-agent.html#the-problem",
+    "title": "Context Agent",
+    "section": "The Problem",
+    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nContext Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
+  },
+  {
+    "objectID": "projects/context-agent.html#how-it-works",
+    "href": "projects/context-agent.html#how-it-works",
+    "title": "Context Agent",
+    "section": "How It Works",
+    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
+  },
+  {
+    "objectID": "projects/context-agent.html#technical-decisions",
+    "href": "projects/context-agent.html#technical-decisions",
+    "title": "Context Agent",
+    "section": "Technical Decisions",
+    "text": "Technical Decisions\n\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.\nTool use over RAG — The agent needs to act (run queries, generate charts), not just retrieve information. Tool use gives it the ability to reason and execute."
+  },
+  {
+    "objectID": "projects/context-agent.html#stack",
+    "href": "projects/context-agent.html#stack",
+    "title": "Context Agent",
+    "section": "Stack",
+    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
+  },
+  {
+    "objectID": "projects/lead-scoring.html",
+    "href": "projects/lead-scoring.html",
+    "title": "Lead Scoring & Buying Group Identification",
+    "section": "",
+    "text": "View on GitHub"
+  },
+  {
+    "objectID": "projects/lead-scoring.html#the-problem",
+    "href": "projects/lead-scoring.html#the-problem",
+    "title": "Lead Scoring & Buying Group Identification",
+    "section": "The Problem",
+    "text": "The Problem\nIn B2B SaaS, marketing teams target thousands of accounts but only a fraction will close. The challenge is twofold:\n\nWhich accounts are most likely to buy? — Propensity scoring ranks accounts by conversion likelihood so marketing can allocate resources efficiently.\nWhat’s preventing accounts from closing? — Buying group analysis identifies who’s missing at each account (roles, seniority, functions) and recommends specific enrichment actions.\n\nThis project builds both layers and combines them into a targeting framework that maps directly to how GTM teams operate."
+  },
+  {
+    "objectID": "projects/lead-scoring.html#key-results",
+    "href": "projects/lead-scoring.html#key-results",
+    "title": "Lead Scoring & Buying Group Identification",
+    "section": "Key Results",
+    "text": "Key Results\n\nPropensity Model (Logistic Regression)\n\n\n\nMetric\nValue\n\n\n\n\nTest AUC\n0.608\n\n\nPrecision @ Top 10%\n54.5% (vs. 36% baseline)\n\n\nTop-Decile Lift\n1.4x\n\n\n\nThe model uses 49 features across three layers — firmographic/technographic signals, contact composition metrics, and buying group characteristics. Top drivers include VP+ engagement on deals, complementary tech stack, and buying group completeness.\n\n\nBuying Group Analysis\n\n\n\nCompleteness Tier\nWin Rate\nAccounts\n\n\n\n\nComplete (75-100)\n51%\n146\n\n\nHigh (50-75)\n38%\n176\n\n\nMedium (25-50)\n27%\n170\n\n\nLow (0-25)\n24%\n87\n\n\n\nAccounts with complete buying groups win at 2x the rate of those with low completeness. The gap analysis identified 464 accounts with specific coverage gaps and estimated $286M in addressable pipeline from enrichment."
+  },
+  {
+    "objectID": "projects/lead-scoring.html#methodology",
+    "href": "projects/lead-scoring.html#methodology",
+    "title": "Lead Scoring & Buying Group Identification",
+    "section": "Methodology",
+    "text": "Methodology\n\nSynthetic Data\nFour tables mirror a real CRM stack: accounts (1,500 companies with firmographic and technographic data), contacts (10,504 people with job titles, functions, seniority), opportunities (800 deals), and contact_opportunity (1,944 role assignments linking people to deals).\nWin probability is influenced by realistic signals: VP+ contacts on the deal, technical + business function mix, complementary tech stack, buying group size, segment, and industry.\n\n\nFeature Engineering\nFeatures are built at three levels, from weakest to strongest signal:\n\nFirmographic/Technographic — segment, employee count, revenue, tech stack flags, existing customer status\nContact Composition — VP+ count, function diversity, senior density, technical + business mix\nBuying Group — deal contact count, role coverage, completeness score (0-100)\n\n\n\nModel Selection\nLogistic regression was chosen over random forest despite marginal AUC improvement (0.608 vs 0.652) because:\n\nCoefficients translate directly to scoring rules (“VP+ engagement adds X points”)\nMirrors what production marketing stacks (Marketo, HubSpot) actually use\nEasier to explain to non-technical stakeholders\nRegularization (L2, C=0.01) handles feature redundancy\n\n\n\nBuying Group Framework\nEach account’s buying group is scored on four dimensions (25 points each):\n\nRole coverage — Champion, Decision Maker, Evaluator, Influencer\nSeniority mix — VP+ and Director/Manager level contacts\nFunction diversity — contacts across 2+ departments\nTechnical + Business — both builders and buyers at the table\n\nGap accounts are paired with propensity scores to create a 2x2 targeting framework that prioritizes enrichment where it will have the highest ROI."
+  },
+  {
+    "objectID": "projects/lead-scoring.html#what-id-do-differently-in-production",
+    "href": "projects/lead-scoring.html#what-id-do-differently-in-production",
+    "title": "Lead Scoring & Buying Group Identification",
+    "section": "What I’d Do Differently in Production",
+    "text": "What I’d Do Differently in Production\n\nTitle normalization — Real job titles are messy. Would use fuzzy matching or an LLM to standardize before feature extraction.\nTemporal validation — Train on earlier time periods, test on later ones. Time-based splits are more realistic than random splits.\nLive scoring pipeline — Integrate with Salesforce/HubSpot via scheduled batch scoring or event-driven updates.\nModel monitoring — Track AUC and calibration over time. Retrain when performance degrades.\nA/B test the model — Randomly assign accounts to model-scored vs. control groups and measure incremental lift."
+  },
+  {
+    "objectID": "projects/lead-scoring.html#stack",
+    "href": "projects/lead-scoring.html#stack",
+    "title": "Lead Scoring & Buying Group Identification",
+    "section": "Stack",
+    "text": "Stack\nPython | Pandas | scikit-learn | Matplotlib | Jupyter"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Philip Felix",
+    "section": "",
+    "text": "I’m a data scientist with 11+ years of experience turning data into business decisions across enterprise SaaS, fintech, and healthtech.\nMost recently at Atlassian, I built targeting and segmentation models that drove $20M+ in bookings, and led AI adoption across a 40+ person data org. I’m strongest at the intersection of analytics, experimentation, and AI-augmented workflows."
+  },
+  {
+    "objectID": "index.html#featured-projects",
+    "href": "index.html#featured-projects",
+    "title": "Philip Felix",
+    "section": "Featured Projects",
+    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nA propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.\nStack: Python, Pandas, scikit-learn, Matplotlib\n\n\nContext Agent\nAn LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.\nStack: Python, Claude API, DuckDB, Streamlit"
+  },
+  {
+    "objectID": "index.html#get-in-touch",
+    "href": "index.html#get-in-touch",
+    "title": "Philip Felix",
+    "section": "Get in Touch",
+    "text": "Get in Touch\n\nGitHub\nLinkedIn\nEmail"
+  }
+]

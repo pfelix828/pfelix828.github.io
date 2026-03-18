@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Philip Felix"
+  description: "Senior Data Scientist | Analytics, Experimentation & AI-Augmented Workflows"
+  navbar:
+    left:
+      - text: Home
+        href: index.qmd
+      - text: Projects
+        menu:
+          - text: Lead Scoring & Buying Groups
+            href: projects/lead-scoring.qmd
+          - text: Context Agent
+            href: projects/context-agent.qmd
+      - text: About
+        href: about.qmd
+    right:
+      - icon: github
+        href: https://github.com/pfelix828
+      - icon: linkedin
+        href: https://linkedin.com/in/pfelix1
+
+  page-footer:
+    center: "Built with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme: flatly
+    toc: true
+    code-fold: true
+    code-summary: "Show code"
