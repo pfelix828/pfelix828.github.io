@@ -1,0 +1,212 @@
+---
+title: "Interview Prep: Lead Scoring Project"
+listing: false
+search: false
+---
+
+::: {.callout-note}
+Private prep doc — not linked from site navigation.
+:::
+
+---
+
+## The 60-Second Pitch
+
+> "I built an end-to-end lead scoring system for B2B SaaS marketing. It takes CRM data — accounts, contacts, deal history — and does two things: first, it scores every account on how likely they are to close, using a logistic regression model. Second, it analyzes the buying group at each account — who's involved in the deal, what roles they play — and identifies specific coverage gaps. The punchline is that accounts with complete buying groups close at 2x the rate of those with gaps, and the gap analysis identifies specific enrichment targets with estimated pipeline value. It mirrors what I built at Atlassian, where the same methodology drove $50M in pipeline from contact enrichment."
+
+Practice this until it's natural. Hit the business framing first, then the method, then the result.
+
+---
+
+## Likely Questions & How to Answer Them
+
+### "Walk me through how you built this."
+
+**Your answer (2-3 minutes):**
+
+"I started with the data. In a real CRM you have four key tables — accounts with firmographic data like company size and industry, contacts with their job titles and seniority levels, opportunities which are the actual deals in progress, and then a bridge table that tells you which contacts are involved in which deals and what role they play — Champion, Decision Maker, Evaluator, and so on.
+
+The feature engineering is where most of the value comes from. I built features at three levels. First, account-level stuff — company size, industry, tech stack. Second, contact composition — rolling up who we know at each account. How many VPs do we have? Are we talking to multiple departments or just one? Third, and this is the strongest signal — the buying group features. How many people are on the deal, what roles are filled, do we have both technical and business contacts engaged.
+
+For the model, I used logistic regression. I also trained a Random Forest to benchmark, and the performance difference was marginal, so I went with logistic regression because the coefficients are directly interpretable — you can tell marketing 'VP engagement is your strongest signal' and they can act on that.
+
+For evaluation, I focused on business metrics — lift charts, precision at the top 10%, revenue capture curves — because AUC alone doesn't answer the question marketing actually cares about, which is 'if I can only target 100 accounts, which ones?'"
+
+**If they want more detail, they'll ask. Don't over-explain unprompted.**
+
+---
+
+### "Why logistic regression?"
+
+**Your answer:**
+
+"Three reasons. First, interpretability — the coefficients translate directly to a scoring system that marketing teams can understand and act on. 'VP engagement adds X points' is something a campaign manager can work with. Second, it's what production marketing stacks actually use under the hood — Marketo, HubSpot, they're all running logistic regression for lead scoring. So the approach is directly transferable. Third, I benchmarked against a Random Forest and the AUC difference was small — 0.61 vs 0.65 — not enough to justify losing interpretability."
+
+**Follow-up you might get:** "When *would* you use a more complex model?"
+
+> "If the AUC gap were larger — say 5+ points — I'd consider it, especially if the use case was purely automated scoring with no human in the loop. If someone needs to understand *why* an account is scored high, logistic regression wins. If it's just feeding a downstream system and nobody looks at the coefficients, you can go complex."
+
+---
+
+### "What is AUC? What does 0.608 mean?"
+
+**What AUC is (in your words):**
+
+AUC stands for Area Under the ROC Curve. Here's the intuition: if you pick one account that actually won and one that actually lost, AUC is the probability that the model scores the winner higher than the loser.
+
+- **0.5** = coin flip, model is useless
+- **1.0** = perfect separation, model never gets it wrong
+- **0.608** = the model ranks the winner higher than the loser about 61% of the time
+
+**Why 0.608 is actually okay:**
+
+"For account-level propensity models with the kind of features available in a CRM, AUC in the 0.60-0.70 range is typical. A lot of what determines whether a deal closes — budget timing, internal politics, competitive dynamics — isn't in the data. The model captures the structural signals that *are* in the data, and the business metrics show it concentrates value at the top: the top 10% of scored accounts have a 55% win rate vs 36% baseline. That's actionable."
+
+**Honest framing if pushed:** "AUC isn't high enough that you'd blindly trust the model. It's a tool that improves prioritization, not a crystal ball. That's why I pair it with the buying group analysis — the model tells you *who* to focus on, the buying group analysis tells you *what to do about it*."
+
+---
+
+### "Explain precision at K."
+
+**Your answer:**
+
+"Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 55% precision — more than half of them won, compared to a 36% baseline. That's the metric that matters for marketing because their question is always 'I have limited budget and team capacity, which accounts should I target?' The model says: target the top of the list and you'll hit winners at a much higher rate."
+
+---
+
+### "What is regularization? Why did you use it?"
+
+**What it is:**
+
+Regularization is a technique that prevents the model from overfitting — putting too much weight on any single feature or memorizing quirks of the training data. It adds a penalty to the model for large coefficients, which forces it to keep things simple.
+
+**L2 vs L1 (in case they ask):**
+
+- **L2 (Ridge)** — shrinks all coefficients toward zero, but keeps them all in the model. Good when you think most features have some signal.
+- **L1 (Lasso)** — can shrink coefficients all the way to zero, effectively removing features. Good for feature selection when you suspect many features are noise.
+
+"I used L2 because most of the features are grounded in real business logic — there's a reason each one is there. I didn't want the model to arbitrarily drop features; I wanted it to weight them appropriately."
+
+**The C parameter:**
+
+"C controls how strong the regularization is. Lower C = stronger regularization = simpler model. I tested 0.01, 0.1, 1.0, and 10.0 through cross-validation, and 0.01 performed best — which makes sense with ~580 accounts and 49 features. The model benefits from being constrained."
+
+---
+
+### "What is cross-validation?"
+
+**Your answer:**
+
+"Instead of evaluating the model on one fixed split of the data, cross-validation splits the training data into K chunks — I used 5. It trains on 4 chunks, evaluates on the 5th, and rotates through all 5 combinations. The average performance across all 5 gives you a more reliable estimate than a single split, because you're not at the mercy of which particular accounts happened to land in the test set."
+
+---
+
+### "What is feature engineering?"
+
+**Your answer:**
+
+"It's the process of turning raw data into signals the model can learn from. A company name or a job title string isn't useful to a model. But 'this account has 3 VP-level contacts across 4 different departments' — that's a signal. Feature engineering is where domain knowledge meets data science. Knowing that buying group composition matters for B2B deals is a business insight; encoding it as contact count, function diversity, and senior density is the engineering part."
+
+---
+
+### "What's the buying group analysis and why does it matter?"
+
+**Your answer:**
+
+"In B2B, deals aren't closed by one person. A typical enterprise deal has 4-7 people involved — someone championing the deal internally, someone who can sign the check, someone evaluating the technical fit, and people influencing the decision. If any of those roles are missing, the deal stalls.
+
+I score every account's buying group on a 0-100 scale across four dimensions: are the key roles filled, is there executive engagement, are multiple departments involved, and do we have both technical and business contacts. Accounts that score 75+ close at 51%. Accounts below 25 close at 24%. That's a 2x difference.
+
+The gap analysis then identifies *what's missing* at each account — 'you need a Champion at this account' or 'you have no VP-level engagement here.' That turns a model score into a specific action for the marketing team."
+
+---
+
+### "How does this relate to what you did at Atlassian?"
+
+**Your answer:**
+
+"At Atlassian I pioneered the ICP and Buying Group analysis for the enterprise marketing org — it was a first for the team. I identified contact segments that were 5x more likely to progress through the funnel, found accounts with coverage gaps, and built enrichment strategies to fill them. That work drove $50M in estimated pipeline from contact additions and $20M in attributed bookings.
+
+This portfolio project recreates the methodology on synthetic data so I can walk through the full approach openly. The real work at Atlassian used internal data I can't share, but the approach — scoring accounts on completeness, identifying gaps, estimating pipeline value of enrichment — is identical."
+
+---
+
+### "You used synthetic data. How do you know this would work on real data?"
+
+**Your answer:**
+
+"Good question. The synthetic data has realistic signal strength baked in — VP presence, tech stack fit, buying group size all influence win probability, but at magnitudes you'd actually see in a real CRM, not artificially clean signal. The AUC of 0.61 reflects that — it's not 0.95, which would be a red flag.
+
+That said, real data would add challenges: messy job titles that need normalization, missing fields, data entry inconsistencies, class imbalance. The 'What I'd Do Differently in Production' section of the project addresses all of those. I also talk about temporal validation — training on earlier periods and testing on later ones — which is more realistic than the random split I use here."
+
+---
+
+### "Tell me about the Streamlit dashboard."
+
+**Your answer:**
+
+"It's an interactive version of the notebook outputs. Four tabs — propensity scores with filtering by segment and industry, buying group analysis with the completeness-vs-win-rate charts, a gap analysis tab that surfaces the highest-ROI enrichment targets, and model details showing feature importance and lift charts. It's self-contained — generates the data and trains the model in-memory, no API or database needed. Runs locally or on Streamlit Cloud."
+
+---
+
+## Concepts You Should Be Comfortable With
+
+### The ones you'll definitely get asked about:
+
+| Concept | One-sentence explanation |
+|---------|------------------------|
+| **Logistic regression** | A model that predicts the probability of a yes/no outcome by learning a weighted sum of input features |
+| **AUC** | Probability that the model ranks a random positive higher than a random negative; 0.5 = random, 1.0 = perfect |
+| **Precision @ K** | Of the top K% scored items, what fraction are actually positive |
+| **Lift** | How much better the model is than random at a given threshold — 1.4x means 40% better |
+| **Regularization** | A penalty that keeps model coefficients small, preventing overfitting |
+| **Cross-validation** | Evaluate model performance by rotating through multiple train/test splits |
+| **Feature engineering** | Transforming raw data into numeric signals that capture domain knowledge |
+| **Overfitting** | When a model memorizes training data quirks instead of learning real patterns; performs well on training data but poorly on new data |
+| **Train/test split** | Holding out 20% of data the model never sees during training, to get an honest performance estimate |
+| **Stratified split** | Ensuring the train and test sets have the same ratio of wins to losses |
+
+### The ones you might get asked about:
+
+| Concept | One-sentence explanation |
+|---------|------------------------|
+| **StandardScaler** | Centers features to mean=0 and std=1 so features on different scales (employee count vs 0/1 flags) are comparable |
+| **One-hot encoding** | Converting a category like "SMB/Mid-Market/Enterprise" into three separate 0/1 columns |
+| **Log transform** | Compresses right-skewed data (most values small, a few huge) into a more symmetric distribution |
+| **GridSearchCV** | Systematically tries different hyperparameter values and picks the one with best cross-validated performance |
+| **Pipeline** | Chains preprocessing (scaling) and the model together so they're applied consistently to train and test data |
+| **Calibration** | Whether predicted probabilities are trustworthy — a model that says "40% chance" should be right ~40% of the time |
+| **ROC curve** | Plots true positive rate vs false positive rate at every score threshold; AUC is the area under this curve |
+| **Coefficients** | In logistic regression, the weight assigned to each feature. Positive = increases probability, negative = decreases it |
+| **Point-biserial correlation** | Correlation between a continuous variable and a binary variable — used to check feature-target relationships |
+
+---
+
+## Gotchas & Honest Answers
+
+### "Did you write all the code yourself?"
+
+**Honest answer:** "I built this with AI assistance — I used Claude Code as a coding partner. I directed the architecture, made the analytical decisions (what features to build, which model to use, how to evaluate), and wrote the business framing. The AI helped with implementation — writing the sklearn pipelines, generating the synthetic data, structuring the tests. This is how I work as a data scientist — I use AI tools to extend my capabilities, which is why I can ship end-to-end projects like this faster than you'd expect."
+
+**Why this is fine:** This is literally the skill companies are hiring for. You're demonstrating AI-augmented productivity, not pretending to be an ML engineer.
+
+### "Could you write logistic regression from scratch?"
+
+**Honest answer:** "I understand the mechanics — it's maximum likelihood estimation of a sigmoid function over a linear combination of features. I could walk through the math on a whiteboard. But in practice, nobody writes logistic regression from scratch — you use scikit-learn, and the value is in knowing *when* to use it, *how* to evaluate it, and *what* the output means for the business. That's where I focus."
+
+### "Why is the AUC only 0.61?"
+
+**Honest answer:** "Account-level propensity models with CRM features typically land in the 0.60-0.70 range. The features that drive deal outcomes in B2B — budget timing, competitive landscape, internal champion strength — are only partially observable in CRM data. The model captures the structural signals that are available, and the business metrics show it concentrates value: top 10% accounts convert at 55% vs 36% baseline. That's a meaningful improvement for a marketing team deciding where to spend their time."
+
+### "This is synthetic data. Isn't that cheating?"
+
+**Honest answer:** "The synthetic data lets me show the full methodology without exposing proprietary Atlassian data. The signals are calibrated to be realistic — the AUC isn't 0.95, the feature correlations are modest, there's noise. But you're right that it's a limitation. In the project I explicitly address what would be different with real data: title normalization, temporal validation, class imbalance, and model monitoring."
+
+---
+
+## Questions YOU Should Ask (That Show You Know This Space)
+
+- "How does your team currently score or prioritize accounts? Is there a model in place, or is it rule-based?"
+- "When a model like this ships, who consumes the output — is it the sales team directly, or does it feed into a marketing automation platform?"
+- "How do you think about temporal validation vs random splits for models that inform forward-looking decisions?"
+- "What's the feedback loop look like — if the model starts degrading, how quickly would you know?"

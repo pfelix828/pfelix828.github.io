@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Interview Prep: Lead Scoring Project – Philip Felix</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-f93c2b1f3f0577f377aefa4848a86a36.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Philip Felix</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../projects/lead-scoring.html">
+ <span class="dropdown-text">Lead Scoring &amp; Buying Groups</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../projects/context-agent.html">
+ <span class="dropdown-text">Context Agent</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pfelix828"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/pfelix1"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-60-second-pitch" id="toc-the-60-second-pitch" class="nav-link active" data-scroll-target="#the-60-second-pitch">The 60-Second Pitch</a></li>
+  <li><a href="#likely-questions-how-to-answer-them" id="toc-likely-questions-how-to-answer-them" class="nav-link" data-scroll-target="#likely-questions-how-to-answer-them">Likely Questions &amp; How to Answer Them</a>
+  <ul class="collapse">
+  <li><a href="#walk-me-through-how-you-built-this." id="toc-walk-me-through-how-you-built-this." class="nav-link" data-scroll-target="#walk-me-through-how-you-built-this.">“Walk me through how you built this.”</a></li>
+  <li><a href="#why-logistic-regression" id="toc-why-logistic-regression" class="nav-link" data-scroll-target="#why-logistic-regression">“Why logistic regression?”</a></li>
+  <li><a href="#what-is-auc-what-does-0.608-mean" id="toc-what-is-auc-what-does-0.608-mean" class="nav-link" data-scroll-target="#what-is-auc-what-does-0.608-mean">“What is AUC? What does 0.608 mean?”</a></li>
+  <li><a href="#explain-precision-at-k." id="toc-explain-precision-at-k." class="nav-link" data-scroll-target="#explain-precision-at-k.">“Explain precision at K.”</a></li>
+  <li><a href="#what-is-regularization-why-did-you-use-it" id="toc-what-is-regularization-why-did-you-use-it" class="nav-link" data-scroll-target="#what-is-regularization-why-did-you-use-it">“What is regularization? Why did you use it?”</a></li>
+  <li><a href="#what-is-cross-validation" id="toc-what-is-cross-validation" class="nav-link" data-scroll-target="#what-is-cross-validation">“What is cross-validation?”</a></li>
+  <li><a href="#what-is-feature-engineering" id="toc-what-is-feature-engineering" class="nav-link" data-scroll-target="#what-is-feature-engineering">“What is feature engineering?”</a></li>
+  <li><a href="#whats-the-buying-group-analysis-and-why-does-it-matter" id="toc-whats-the-buying-group-analysis-and-why-does-it-matter" class="nav-link" data-scroll-target="#whats-the-buying-group-analysis-and-why-does-it-matter">“What’s the buying group analysis and why does it matter?”</a></li>
+  <li><a href="#how-does-this-relate-to-what-you-did-at-atlassian" id="toc-how-does-this-relate-to-what-you-did-at-atlassian" class="nav-link" data-scroll-target="#how-does-this-relate-to-what-you-did-at-atlassian">“How does this relate to what you did at Atlassian?”</a></li>
+  <li><a href="#you-used-synthetic-data.-how-do-you-know-this-would-work-on-real-data" id="toc-you-used-synthetic-data.-how-do-you-know-this-would-work-on-real-data" class="nav-link" data-scroll-target="#you-used-synthetic-data.-how-do-you-know-this-would-work-on-real-data">“You used synthetic data. How do you know this would work on real data?”</a></li>
+  <li><a href="#tell-me-about-the-streamlit-dashboard." id="toc-tell-me-about-the-streamlit-dashboard." class="nav-link" data-scroll-target="#tell-me-about-the-streamlit-dashboard.">“Tell me about the Streamlit dashboard.”</a></li>
+  </ul></li>
+  <li><a href="#concepts-you-should-be-comfortable-with" id="toc-concepts-you-should-be-comfortable-with" class="nav-link" data-scroll-target="#concepts-you-should-be-comfortable-with">Concepts You Should Be Comfortable With</a>
+  <ul class="collapse">
+  <li><a href="#the-ones-youll-definitely-get-asked-about" id="toc-the-ones-youll-definitely-get-asked-about" class="nav-link" data-scroll-target="#the-ones-youll-definitely-get-asked-about">The ones you’ll definitely get asked about:</a></li>
+  <li><a href="#the-ones-you-might-get-asked-about" id="toc-the-ones-you-might-get-asked-about" class="nav-link" data-scroll-target="#the-ones-you-might-get-asked-about">The ones you might get asked about:</a></li>
+  </ul></li>
+  <li><a href="#gotchas-honest-answers" id="toc-gotchas-honest-answers" class="nav-link" data-scroll-target="#gotchas-honest-answers">Gotchas &amp; Honest Answers</a>
+  <ul class="collapse">
+  <li><a href="#did-you-write-all-the-code-yourself" id="toc-did-you-write-all-the-code-yourself" class="nav-link" data-scroll-target="#did-you-write-all-the-code-yourself">“Did you write all the code yourself?”</a></li>
+  <li><a href="#could-you-write-logistic-regression-from-scratch" id="toc-could-you-write-logistic-regression-from-scratch" class="nav-link" data-scroll-target="#could-you-write-logistic-regression-from-scratch">“Could you write logistic regression from scratch?”</a></li>
+  <li><a href="#why-is-the-auc-only-0.61" id="toc-why-is-the-auc-only-0.61" class="nav-link" data-scroll-target="#why-is-the-auc-only-0.61">“Why is the AUC only 0.61?”</a></li>
+  <li><a href="#this-is-synthetic-data.-isnt-that-cheating" id="toc-this-is-synthetic-data.-isnt-that-cheating" class="nav-link" data-scroll-target="#this-is-synthetic-data.-isnt-that-cheating">“This is synthetic data. Isn’t that cheating?”</a></li>
+  </ul></li>
+  <li><a href="#questions-you-should-ask-that-show-you-know-this-space" id="toc-questions-you-should-ask-that-show-you-know-this-space" class="nav-link" data-scroll-target="#questions-you-should-ask-that-show-you-know-this-space">Questions YOU Should Ask (That Show You Know This Space)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Interview Prep: Lead Scoring Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Private prep doc — not linked from site navigation.</p>
+</div>
+</div>
+<hr>
+<section id="the-60-second-pitch" class="level2">
+<h2 class="anchored" data-anchor-id="the-60-second-pitch">The 60-Second Pitch</h2>
+<blockquote class="blockquote">
+<p>“I built an end-to-end lead scoring system for B2B SaaS marketing. It takes CRM data — accounts, contacts, deal history — and does two things: first, it scores every account on how likely they are to close, using a logistic regression model. Second, it analyzes the buying group at each account — who’s involved in the deal, what roles they play — and identifies specific coverage gaps. The punchline is that accounts with complete buying groups close at 2x the rate of those with gaps, and the gap analysis identifies specific enrichment targets with estimated pipeline value. It mirrors what I built at Atlassian, where the same methodology drove $50M in pipeline from contact enrichment.”</p>
+</blockquote>
+<p>Practice this until it’s natural. Hit the business framing first, then the method, then the result.</p>
+<hr>
+</section>
+<section id="likely-questions-how-to-answer-them" class="level2">
+<h2 class="anchored" data-anchor-id="likely-questions-how-to-answer-them">Likely Questions &amp; How to Answer Them</h2>
+<section id="walk-me-through-how-you-built-this." class="level3">
+<h3 class="anchored" data-anchor-id="walk-me-through-how-you-built-this.">“Walk me through how you built this.”</h3>
+<p><strong>Your answer (2-3 minutes):</strong></p>
+<p>“I started with the data. In a real CRM you have four key tables — accounts with firmographic data like company size and industry, contacts with their job titles and seniority levels, opportunities which are the actual deals in progress, and then a bridge table that tells you which contacts are involved in which deals and what role they play — Champion, Decision Maker, Evaluator, and so on.</p>
+<p>The feature engineering is where most of the value comes from. I built features at three levels. First, account-level stuff — company size, industry, tech stack. Second, contact composition — rolling up who we know at each account. How many VPs do we have? Are we talking to multiple departments or just one? Third, and this is the strongest signal — the buying group features. How many people are on the deal, what roles are filled, do we have both technical and business contacts engaged.</p>
+<p>For the model, I used logistic regression. I also trained a Random Forest to benchmark, and the performance difference was marginal, so I went with logistic regression because the coefficients are directly interpretable — you can tell marketing ‘VP engagement is your strongest signal’ and they can act on that.</p>
+<p>For evaluation, I focused on business metrics — lift charts, precision at the top 10%, revenue capture curves — because AUC alone doesn’t answer the question marketing actually cares about, which is ‘if I can only target 100 accounts, which ones?’”</p>
+<p><strong>If they want more detail, they’ll ask. Don’t over-explain unprompted.</strong></p>
+<hr>
+</section>
+<section id="why-logistic-regression" class="level3">
+<h3 class="anchored" data-anchor-id="why-logistic-regression">“Why logistic regression?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“Three reasons. First, interpretability — the coefficients translate directly to a scoring system that marketing teams can understand and act on. ‘VP engagement adds X points’ is something a campaign manager can work with. Second, it’s what production marketing stacks actually use under the hood — Marketo, HubSpot, they’re all running logistic regression for lead scoring. So the approach is directly transferable. Third, I benchmarked against a Random Forest and the AUC difference was small — 0.61 vs 0.65 — not enough to justify losing interpretability.”</p>
+<p><strong>Follow-up you might get:</strong> “When <em>would</em> you use a more complex model?”</p>
+<blockquote class="blockquote">
+<p>“If the AUC gap were larger — say 5+ points — I’d consider it, especially if the use case was purely automated scoring with no human in the loop. If someone needs to understand <em>why</em> an account is scored high, logistic regression wins. If it’s just feeding a downstream system and nobody looks at the coefficients, you can go complex.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="what-is-auc-what-does-0.608-mean" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-auc-what-does-0.608-mean">“What is AUC? What does 0.608 mean?”</h3>
+<p><strong>What AUC is (in your words):</strong></p>
+<p>AUC stands for Area Under the ROC Curve. Here’s the intuition: if you pick one account that actually won and one that actually lost, AUC is the probability that the model scores the winner higher than the loser.</p>
+<ul>
+<li><strong>0.5</strong> = coin flip, model is useless</li>
+<li><strong>1.0</strong> = perfect separation, model never gets it wrong</li>
+<li><strong>0.608</strong> = the model ranks the winner higher than the loser about 61% of the time</li>
+</ul>
+<p><strong>Why 0.608 is actually okay:</strong></p>
+<p>“For account-level propensity models with the kind of features available in a CRM, AUC in the 0.60-0.70 range is typical. A lot of what determines whether a deal closes — budget timing, internal politics, competitive dynamics — isn’t in the data. The model captures the structural signals that <em>are</em> in the data, and the business metrics show it concentrates value at the top: the top 10% of scored accounts have a 55% win rate vs 36% baseline. That’s actionable.”</p>
+<p><strong>Honest framing if pushed:</strong> “AUC isn’t high enough that you’d blindly trust the model. It’s a tool that improves prioritization, not a crystal ball. That’s why I pair it with the buying group analysis — the model tells you <em>who</em> to focus on, the buying group analysis tells you <em>what to do about it</em>.”</p>
+<hr>
+</section>
+<section id="explain-precision-at-k." class="level3">
+<h3 class="anchored" data-anchor-id="explain-precision-at-k.">“Explain precision at K.”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 55% precision — more than half of them won, compared to a 36% baseline. That’s the metric that matters for marketing because their question is always ‘I have limited budget and team capacity, which accounts should I target?’ The model says: target the top of the list and you’ll hit winners at a much higher rate.”</p>
+<hr>
+</section>
+<section id="what-is-regularization-why-did-you-use-it" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-regularization-why-did-you-use-it">“What is regularization? Why did you use it?”</h3>
+<p><strong>What it is:</strong></p>
+<p>Regularization is a technique that prevents the model from overfitting — putting too much weight on any single feature or memorizing quirks of the training data. It adds a penalty to the model for large coefficients, which forces it to keep things simple.</p>
+<p><strong>L2 vs L1 (in case they ask):</strong></p>
+<ul>
+<li><strong>L2 (Ridge)</strong> — shrinks all coefficients toward zero, but keeps them all in the model. Good when you think most features have some signal.</li>
+<li><strong>L1 (Lasso)</strong> — can shrink coefficients all the way to zero, effectively removing features. Good for feature selection when you suspect many features are noise.</li>
+</ul>
+<p>“I used L2 because most of the features are grounded in real business logic — there’s a reason each one is there. I didn’t want the model to arbitrarily drop features; I wanted it to weight them appropriately.”</p>
+<p><strong>The C parameter:</strong></p>
+<p>“C controls how strong the regularization is. Lower C = stronger regularization = simpler model. I tested 0.01, 0.1, 1.0, and 10.0 through cross-validation, and 0.01 performed best — which makes sense with ~580 accounts and 49 features. The model benefits from being constrained.”</p>
+<hr>
+</section>
+<section id="what-is-cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-cross-validation">“What is cross-validation?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“Instead of evaluating the model on one fixed split of the data, cross-validation splits the training data into K chunks — I used 5. It trains on 4 chunks, evaluates on the 5th, and rotates through all 5 combinations. The average performance across all 5 gives you a more reliable estimate than a single split, because you’re not at the mercy of which particular accounts happened to land in the test set.”</p>
+<hr>
+</section>
+<section id="what-is-feature-engineering" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-feature-engineering">“What is feature engineering?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“It’s the process of turning raw data into signals the model can learn from. A company name or a job title string isn’t useful to a model. But ‘this account has 3 VP-level contacts across 4 different departments’ — that’s a signal. Feature engineering is where domain knowledge meets data science. Knowing that buying group composition matters for B2B deals is a business insight; encoding it as contact count, function diversity, and senior density is the engineering part.”</p>
+<hr>
+</section>
+<section id="whats-the-buying-group-analysis-and-why-does-it-matter" class="level3">
+<h3 class="anchored" data-anchor-id="whats-the-buying-group-analysis-and-why-does-it-matter">“What’s the buying group analysis and why does it matter?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“In B2B, deals aren’t closed by one person. A typical enterprise deal has 4-7 people involved — someone championing the deal internally, someone who can sign the check, someone evaluating the technical fit, and people influencing the decision. If any of those roles are missing, the deal stalls.</p>
+<p>I score every account’s buying group on a 0-100 scale across four dimensions: are the key roles filled, is there executive engagement, are multiple departments involved, and do we have both technical and business contacts. Accounts that score 75+ close at 51%. Accounts below 25 close at 24%. That’s a 2x difference.</p>
+<p>The gap analysis then identifies <em>what’s missing</em> at each account — ‘you need a Champion at this account’ or ‘you have no VP-level engagement here.’ That turns a model score into a specific action for the marketing team.”</p>
+<hr>
+</section>
+<section id="how-does-this-relate-to-what-you-did-at-atlassian" class="level3">
+<h3 class="anchored" data-anchor-id="how-does-this-relate-to-what-you-did-at-atlassian">“How does this relate to what you did at Atlassian?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“At Atlassian I pioneered the ICP and Buying Group analysis for the enterprise marketing org — it was a first for the team. I identified contact segments that were 5x more likely to progress through the funnel, found accounts with coverage gaps, and built enrichment strategies to fill them. That work drove $50M in estimated pipeline from contact additions and $20M in attributed bookings.</p>
+<p>This portfolio project recreates the methodology on synthetic data so I can walk through the full approach openly. The real work at Atlassian used internal data I can’t share, but the approach — scoring accounts on completeness, identifying gaps, estimating pipeline value of enrichment — is identical.”</p>
+<hr>
+</section>
+<section id="you-used-synthetic-data.-how-do-you-know-this-would-work-on-real-data" class="level3">
+<h3 class="anchored" data-anchor-id="you-used-synthetic-data.-how-do-you-know-this-would-work-on-real-data">“You used synthetic data. How do you know this would work on real data?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“Good question. The synthetic data has realistic signal strength baked in — VP presence, tech stack fit, buying group size all influence win probability, but at magnitudes you’d actually see in a real CRM, not artificially clean signal. The AUC of 0.61 reflects that — it’s not 0.95, which would be a red flag.</p>
+<p>That said, real data would add challenges: messy job titles that need normalization, missing fields, data entry inconsistencies, class imbalance. The ‘What I’d Do Differently in Production’ section of the project addresses all of those. I also talk about temporal validation — training on earlier periods and testing on later ones — which is more realistic than the random split I use here.”</p>
+<hr>
+</section>
+<section id="tell-me-about-the-streamlit-dashboard." class="level3">
+<h3 class="anchored" data-anchor-id="tell-me-about-the-streamlit-dashboard.">“Tell me about the Streamlit dashboard.”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“It’s an interactive version of the notebook outputs. Four tabs — propensity scores with filtering by segment and industry, buying group analysis with the completeness-vs-win-rate charts, a gap analysis tab that surfaces the highest-ROI enrichment targets, and model details showing feature importance and lift charts. It’s self-contained — generates the data and trains the model in-memory, no API or database needed. Runs locally or on Streamlit Cloud.”</p>
+<hr>
+</section>
+</section>
+<section id="concepts-you-should-be-comfortable-with" class="level2">
+<h2 class="anchored" data-anchor-id="concepts-you-should-be-comfortable-with">Concepts You Should Be Comfortable With</h2>
+<section id="the-ones-youll-definitely-get-asked-about" class="level3">
+<h3 class="anchored" data-anchor-id="the-ones-youll-definitely-get-asked-about">The ones you’ll definitely get asked about:</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concept</th>
+<th>One-sentence explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Logistic regression</strong></td>
+<td>A model that predicts the probability of a yes/no outcome by learning a weighted sum of input features</td>
+</tr>
+<tr class="even">
+<td><strong>AUC</strong></td>
+<td>Probability that the model ranks a random positive higher than a random negative; 0.5 = random, 1.0 = perfect</td>
+</tr>
+<tr class="odd">
+<td><strong>Precision @ K</strong></td>
+<td>Of the top K% scored items, what fraction are actually positive</td>
+</tr>
+<tr class="even">
+<td><strong>Lift</strong></td>
+<td>How much better the model is than random at a given threshold — 1.4x means 40% better</td>
+</tr>
+<tr class="odd">
+<td><strong>Regularization</strong></td>
+<td>A penalty that keeps model coefficients small, preventing overfitting</td>
+</tr>
+<tr class="even">
+<td><strong>Cross-validation</strong></td>
+<td>Evaluate model performance by rotating through multiple train/test splits</td>
+</tr>
+<tr class="odd">
+<td><strong>Feature engineering</strong></td>
+<td>Transforming raw data into numeric signals that capture domain knowledge</td>
+</tr>
+<tr class="even">
+<td><strong>Overfitting</strong></td>
+<td>When a model memorizes training data quirks instead of learning real patterns; performs well on training data but poorly on new data</td>
+</tr>
+<tr class="odd">
+<td><strong>Train/test split</strong></td>
+<td>Holding out 20% of data the model never sees during training, to get an honest performance estimate</td>
+</tr>
+<tr class="even">
+<td><strong>Stratified split</strong></td>
+<td>Ensuring the train and test sets have the same ratio of wins to losses</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-ones-you-might-get-asked-about" class="level3">
+<h3 class="anchored" data-anchor-id="the-ones-you-might-get-asked-about">The ones you might get asked about:</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concept</th>
+<th>One-sentence explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>StandardScaler</strong></td>
+<td>Centers features to mean=0 and std=1 so features on different scales (employee count vs 0/1 flags) are comparable</td>
+</tr>
+<tr class="even">
+<td><strong>One-hot encoding</strong></td>
+<td>Converting a category like “SMB/Mid-Market/Enterprise” into three separate 0/1 columns</td>
+</tr>
+<tr class="odd">
+<td><strong>Log transform</strong></td>
+<td>Compresses right-skewed data (most values small, a few huge) into a more symmetric distribution</td>
+</tr>
+<tr class="even">
+<td><strong>GridSearchCV</strong></td>
+<td>Systematically tries different hyperparameter values and picks the one with best cross-validated performance</td>
+</tr>
+<tr class="odd">
+<td><strong>Pipeline</strong></td>
+<td>Chains preprocessing (scaling) and the model together so they’re applied consistently to train and test data</td>
+</tr>
+<tr class="even">
+<td><strong>Calibration</strong></td>
+<td>Whether predicted probabilities are trustworthy — a model that says “40% chance” should be right ~40% of the time</td>
+</tr>
+<tr class="odd">
+<td><strong>ROC curve</strong></td>
+<td>Plots true positive rate vs false positive rate at every score threshold; AUC is the area under this curve</td>
+</tr>
+<tr class="even">
+<td><strong>Coefficients</strong></td>
+<td>In logistic regression, the weight assigned to each feature. Positive = increases probability, negative = decreases it</td>
+</tr>
+<tr class="odd">
+<td><strong>Point-biserial correlation</strong></td>
+<td>Correlation between a continuous variable and a binary variable — used to check feature-target relationships</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="gotchas-honest-answers" class="level2">
+<h2 class="anchored" data-anchor-id="gotchas-honest-answers">Gotchas &amp; Honest Answers</h2>
+<section id="did-you-write-all-the-code-yourself" class="level3">
+<h3 class="anchored" data-anchor-id="did-you-write-all-the-code-yourself">“Did you write all the code yourself?”</h3>
+<p><strong>Honest answer:</strong> “I built this with AI assistance — I used Claude Code as a coding partner. I directed the architecture, made the analytical decisions (what features to build, which model to use, how to evaluate), and wrote the business framing. The AI helped with implementation — writing the sklearn pipelines, generating the synthetic data, structuring the tests. This is how I work as a data scientist — I use AI tools to extend my capabilities, which is why I can ship end-to-end projects like this faster than you’d expect.”</p>
+<p><strong>Why this is fine:</strong> This is literally the skill companies are hiring for. You’re demonstrating AI-augmented productivity, not pretending to be an ML engineer.</p>
+</section>
+<section id="could-you-write-logistic-regression-from-scratch" class="level3">
+<h3 class="anchored" data-anchor-id="could-you-write-logistic-regression-from-scratch">“Could you write logistic regression from scratch?”</h3>
+<p><strong>Honest answer:</strong> “I understand the mechanics — it’s maximum likelihood estimation of a sigmoid function over a linear combination of features. I could walk through the math on a whiteboard. But in practice, nobody writes logistic regression from scratch — you use scikit-learn, and the value is in knowing <em>when</em> to use it, <em>how</em> to evaluate it, and <em>what</em> the output means for the business. That’s where I focus.”</p>
+</section>
+<section id="why-is-the-auc-only-0.61" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-the-auc-only-0.61">“Why is the AUC only 0.61?”</h3>
+<p><strong>Honest answer:</strong> “Account-level propensity models with CRM features typically land in the 0.60-0.70 range. The features that drive deal outcomes in B2B — budget timing, competitive landscape, internal champion strength — are only partially observable in CRM data. The model captures the structural signals that are available, and the business metrics show it concentrates value: top 10% accounts convert at 55% vs 36% baseline. That’s a meaningful improvement for a marketing team deciding where to spend their time.”</p>
+</section>
+<section id="this-is-synthetic-data.-isnt-that-cheating" class="level3">
+<h3 class="anchored" data-anchor-id="this-is-synthetic-data.-isnt-that-cheating">“This is synthetic data. Isn’t that cheating?”</h3>
+<p><strong>Honest answer:</strong> “The synthetic data lets me show the full methodology without exposing proprietary Atlassian data. The signals are calibrated to be realistic — the AUC isn’t 0.95, the feature correlations are modest, there’s noise. But you’re right that it’s a limitation. In the project I explicitly address what would be different with real data: title normalization, temporal validation, class imbalance, and model monitoring.”</p>
+<hr>
+</section>
+</section>
+<section id="questions-you-should-ask-that-show-you-know-this-space" class="level2">
+<h2 class="anchored" data-anchor-id="questions-you-should-ask-that-show-you-know-this-space">Questions YOU Should Ask (That Show You Know This Space)</h2>
+<ul>
+<li>“How does your team currently score or prioritize accounts? Is there a model in place, or is it rule-based?”</li>
+<li>“When a model like this ships, who consumes the output — is it the sales team directly, or does it feed into a marketing automation platform?”</li>
+<li>“How do you think about temporal validation vs random splits for models that inform forward-looking decisions?”</li>
+<li>“What’s the feedback loop look like — if the model starts degrading, how quickly would you know?”</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
