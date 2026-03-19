@@ -15,6 +15,12 @@ A propensity model and buying group framework for B2B SaaS marketing. Built on s
 
 **Stack:** Python, Pandas, scikit-learn, Matplotlib
 
+### [Job Title Normalizer](projects/title-normalizer.qmd)
+
+A multi-task neural network that classifies messy CRM job titles into standardized seniority levels and job functions. Handles real-world data noise — truncation, misspellings, abbreviations, encoding artifacts — that makes rule-based approaches break. Built as the preprocessing step for contact segmentation and buying group analysis.
+
+**Stack:** Python, PyTorch, scikit-learn, Pandas
+
 ### [Context Agent](projects/context-agent.qmd)
 
 An LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.

@@ -13,6 +13,8 @@ website:
         menu:
           - text: Lead Scoring & Buying Groups
             href: projects/lead-scoring.qmd
+          - text: Title Normalizer
+            href: projects/title-normalizer.qmd
           - text: Context Agent
             href: projects/context-agent.qmd
       - text: About

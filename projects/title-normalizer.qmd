@@ -1,0 +1,124 @@
+---
+title: "Job Title Normalizer"
+description: "A multi-task neural network that standardizes messy CRM job titles into seniority levels and job functions"
+toc-depth: 3
+---
+
+[View on GitHub](https://github.com/pfelix828/title-normalizer){.btn .btn-outline-primary}
+
+## What This Project Does
+
+CRM databases are full of job titles that look like they were typed by someone in a hurry — because they were. You get "Sr. Dir. Mktg (EMEA)", "SENIOR DIRECTOR ENGINEERING", "Snr. Direcotr, Engg" — all describing the same kind of person but completely different as text. When you need to segment contacts by seniority or function — which is the first step in building buying groups, scoring leads, or targeting campaigns — this inconsistency makes everything downstream unreliable.
+
+This project trains a neural network to classify raw, messy titles into two standardized labels simultaneously:
+
+1. **Seniority** — one of 10 levels, from Individual Contributor through C-Suite
+2. **Function** — one of 10 categories: Engineering, Data, Product, Marketing, Sales, Finance, HR, Operations, Design, Legal
+
+The model predicts both at once through a shared representation, which is more efficient and more accurate than building two separate classifiers.
+
+## Why This Matters in the Real World
+
+At Atlassian, I built contact segmentation and buying group analysis for enterprise marketing. The prerequisite to all of that work was normalizing job titles — you can't identify coverage gaps in a buying group if you don't know who's a VP vs. an IC, or who's in engineering vs. marketing. Title normalization was the critical first step.
+
+This project isolates that step as a standalone system. The seniority and function labels it produces are exactly the features that would feed into the [lead scoring and buying group models](lead-scoring.qmd) in a production pipeline.
+
+## The Data: Why CRM Noise Is Harder Than It Looks
+
+Instead of using clean, synthetic data that would make the model look artificially good, the data generator mirrors what real CRM exports actually look like. There are 15 categories of noise, all drawn from real-world data quality issues:
+
+**The obvious stuff** — abbreviations (Sr., Dir., Mgr.), case variation (UPPERCASE, lowercase, Title Case), extra whitespace, and character-swap typos.
+
+**The stuff that actually makes CRM data painful:**
+
+- **Truncation** — CRM fields have character limits. "Senior Vice President of Engineering" becomes "Senior Vice Presi..." and now you're missing the critical information
+- **Geographic qualifiers** — Someone appended "(EMEA)" or "- North America" because that's what their admin system required
+- **Credential suffixes** — "MBA", "CPA", "PMP" stuck on the end because people copy their LinkedIn bio into the title field
+- **Misspellings** — Not just swapped characters, but real mistakes: "Manger" for Manager, "Engineeer" with a triple e, "Marekting" for Marketing
+- **Word reordering** — "Director of Engineering" vs "Engineering, Director" — different CRM systems format differently
+- **Encoding artifacts** — Smart quotes, em dashes, HTML entities, non-breaking spaces from system imports
+- **Word drops** — Lazy data entry where someone typed "VP" instead of "VP of Engineering"
+
+This noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn't seen.
+
+## The Models: Why Multi-Task Learning
+
+### What Multi-Task Learning Is
+
+Instead of training one model for seniority and a separate one for function, we train **one model that predicts both simultaneously**. The key insight is that seniority and function share structure. "CTO" tells you both seniority (C-Suite) and function (Engineering) at once. "Manager" tells you seniority but not function. By sharing internal representations, the model learns this structure more efficiently.
+
+The architecture has three parts:
+
+1. **Word embeddings** — Each token in a title (after tokenization) maps to a 64-dimensional vector. During training, the model learns that "VP", "V.P.", and "Vice President" should all have similar vectors
+2. **Shared encoder** — Processes the embedded title into a fixed-size representation. This is where seniority and function signals merge
+3. **Task-specific heads** — Two separate linear layers, one for each prediction
+
+### Two Encoder Architectures
+
+**BiLSTM** reads the title as a sequence, left-to-right and right-to-left, maintaining memory of what it's seen. The bidirectional pass means "VP of Engineering" and "Engineering VP" produce similar representations.
+
+**CNN** slides filters across the title looking for local patterns — 2-word, 3-word, and 4-word combinations like "VP of", "Director of Engineering", or "Sr. Dir." It's faster and slightly more accurate here because title classification depends on local n-gram patterns more than long-range dependencies.
+
+### The Baseline: Know What Simple Gets You
+
+Before going neural, we trained **TF-IDF + Logistic Regression** — the simplest reasonable approach. TF-IDF converts titles to numeric vectors by counting weighted word frequencies. Logistic Regression draws a decision boundary. This establishes a performance floor: if the neural network can't beat this, it's not worth the complexity.
+
+## Results
+
+| Model | Seniority Acc | Function Acc | Both Correct |
+|-------|:---:|:---:|:---:|
+| **CNN** (PyTorch) | 95.2% | 93.0% | 89.0% |
+| **BiLSTM** (PyTorch) | 94.5% | 92.6% | 88.0% |
+| TF-IDF + LogReg (baseline) | 93.3% | 93.3% | 87.6% |
+
+*Trained on 16,000 synthetic titles, evaluated on 4,000 held-out.*
+
+**Why these numbers are realistic, not inflated:** The accuracy is in the high 80s to mid 90s — not 99%. That's by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. "Senior" vs "Lead" seniority is hard when the title is truncated. "Operations" vs "Engineering" function is hard when the title says "DevOps Manager" (both are reasonable). Real CRM data would likely push combined accuracy down another 5-10 points.
+
+**Where the neural models earn their keep:** The gap over TF-IDF (89% vs 87.6% combined) is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where word-level embeddings capture similarity that bag-of-words approaches miss.
+
+### Per-Class Performance
+
+The model performs best on classes with distinctive vocabulary:
+
+- **C-Suite** — near-perfect (CTO, CFO, CMO are unambiguous)
+- **Legal** — distinctive terms (Counsel, Paralegal, Compliance)
+- **Design** — UX/UI vocabulary is specific
+
+It struggles most where vocabulary overlaps:
+
+- **Operations vs Engineering** — "DevOps" sits at the boundary
+- **Individual Contributor vs Senior** — when seniority markers get truncated or misspelled
+- **HR vs Operations** — "People Operations" is an HR function despite the word "Operations"
+
+## Training: How the Model Learns
+
+### Early Stopping
+
+The model trains for up to 30 passes through the data (epochs). After each pass, we check performance on held-out data. If performance stops improving for 5 consecutive epochs (patience), training halts and we revert to the best checkpoint. This prevents the model from memorizing the training data — a problem called **overfitting** that's especially dangerous with 20,000 samples.
+
+### What the Model Learns
+
+During training, the embedding layer discovers semantic structure: abbreviations cluster with their full forms, seniority markers group together, function-specific terms form distinct neighborhoods. This learned vocabulary is the main advantage over TF-IDF, which treats every distinct string as a completely independent feature.
+
+## How This Connects to the Lead Scoring Pipeline
+
+Title normalization is Step 1 in a contact data pipeline:
+
+1. **Normalize titles** → standardized seniority and function labels (this project)
+2. **Build contact features** → VP+ count, function diversity, senior density per account
+3. **Score accounts** → propensity model using contact features + firmographics
+4. **Identify gaps** → buying group completeness analysis
+
+Without reliable title normalization, everything downstream is built on noise. If "Sr. Dir. Mktg" doesn't get classified as a senior director in marketing, the buying group analysis doesn't know there's a senior marketing leader on the account, and the gap analysis might incorrectly recommend finding one.
+
+## What I'd Do Differently in Production
+
+- **Real labeled data** — Retrain on titles from actual CRM exports (Salesforce, HubSpot). The synthetic generator gets you 80% of the way, but production titles have patterns no generator anticipates
+- **Active learning** — Flag low-confidence predictions for human review. A model that says "60% engineering, 35% data" is asking for help — route those to a human and use the corrections to retrain
+- **Fine-tuned LLM** — For the hardest 10% of titles (creative titles, non-English, multi-role), a fine-tuned language model would capture context that word embeddings miss
+- **Monitoring** — Track prediction confidence distributions over time. If a new client uses unusual title conventions, confidence will drop and you'll know to retrain
+
+## Stack
+
+Python | PyTorch | scikit-learn | Pandas | NumPy | Matplotlib | pytest

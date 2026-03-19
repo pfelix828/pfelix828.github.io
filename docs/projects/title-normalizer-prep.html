@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Interview Prep: Title Normalizer Project – Philip Felix</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-f93c2b1f3f0577f377aefa4848a86a36.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Philip Felix</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../projects/lead-scoring.html">
+ <span class="dropdown-text">Lead Scoring &amp; Buying Groups</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../projects/context-agent.html">
+ <span class="dropdown-text">Context Agent</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pfelix828"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/pfelix1"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-60-second-pitch" id="toc-the-60-second-pitch" class="nav-link" data-scroll-target="#the-60-second-pitch">The 60-Second Pitch</a>
+  <li><a href="#likely-questions-amp-how-to-answer-them" id="toc-likely-questions-amp-how-to-answer-them" class="nav-link" data-scroll-target="#likely-questions-amp-how-to-answer-them">Likely Questions &amp; How to Answer Them</a>
+  <ul class="collapse">
+    <li><a href="#walk-me-through-how-you-built-this" id="toc-walk-me-through-how-you-built-this" class="nav-link" data-scroll-target="#walk-me-through-how-you-built-this">"Walk me through how you built this."</a></li>
+    <li><a href="#why-a-neural-network-isnt-this-just-text-classification" id="toc-why-a-neural-network-isnt-this-just-text-classification" class="nav-link" data-scroll-target="#why-a-neural-network-isnt-this-just-text-classification">"Why a neural network? Isn't this just text classification?"</a></li>
+    <li><a href="#what-is-multi-task-learning" id="toc-what-is-multi-task-learning" class="nav-link" data-scroll-target="#what-is-multi-task-learning">"What is multi-task learning?"</a></li>
+    <li><a href="#explain-how-the-bilstm-works" id="toc-explain-how-the-bilstm-works" class="nav-link" data-scroll-target="#explain-how-the-bilstm-works">"Explain how the BiLSTM works."</a></li>
+    <li><a href="#what-are-word-embeddings" id="toc-what-are-word-embeddings" class="nav-link" data-scroll-target="#what-are-word-embeddings">"What are word embeddings?"</a></li>
+    <li><a href="#what-is-early-stopping" id="toc-what-is-early-stopping" class="nav-link" data-scroll-target="#what-is-early-stopping">"What is early stopping?"</a></li>
+    <li><a href="#how-did-you-handle-the-messy-data-what-kinds-of-noise" id="toc-how-did-you-handle-the-messy-data-what-kinds-of-noise" class="nav-link" data-scroll-target="#how-did-you-handle-the-messy-data-what-kinds-of-noise">"How did you handle the messy data? What kinds of noise?"</a></li>
+    <li><a href="#walk-me-through-tf-idf-and-why-you-used-it-as-a-baseline" id="toc-walk-me-through-tf-idf-and-why-you-used-it-as-a-baseline" class="nav-link" data-scroll-target="#walk-me-through-tf-idf-and-why-you-used-it-as-a-baseline">"Walk me through TF-IDF and why you used it as a baseline."</a></li>
+    <li><a href="#how-does-this-connect-to-your-atlassian-work" id="toc-how-does-this-connect-to-your-atlassian-work" class="nav-link" data-scroll-target="#how-does-this-connect-to-your-atlassian-work">"How does this connect to your Atlassian work?"</a></li>
+    <li><a href="#you-used-synthetic-data-how-realistic-is-this" id="toc-you-used-synthetic-data-how-realistic-is-this" class="nav-link" data-scroll-target="#you-used-synthetic-data-how-realistic-is-this">"You used synthetic data. How realistic is this?"</a></li>
+  </ul></li>
+  <li><a href="#concepts-you-should-be-comfortable-with" id="toc-concepts-you-should-be-comfortable-with" class="nav-link" data-scroll-target="#concepts-you-should-be-comfortable-with">Concepts You Should Be Comfortable With</a>
+  <ul class="collapse">
+    <li><a href="#the-ones-youll-definitely-get-asked-about" id="toc-the-ones-youll-definitely-get-asked-about" class="nav-link" data-scroll-target="#the-ones-youll-definitely-get-asked-about">The ones you'll definitely get asked about:</a></li>
+    <li><a href="#the-ones-you-might-get-asked-about" id="toc-the-ones-you-might-get-asked-about" class="nav-link" data-scroll-target="#the-ones-you-might-get-asked-about">The ones you might get asked about:</a></li>
+  </ul></li>
+  <li><a href="#gotchas-amp-honest-answers" id="toc-gotchas-amp-honest-answers" class="nav-link" data-scroll-target="#gotchas-amp-honest-answers">Gotchas &amp; Honest Answers</a>
+  <ul class="collapse">
+    <li><a href="#did-you-write-all-the-code-yourself" id="toc-did-you-write-all-the-code-yourself" class="nav-link" data-scroll-target="#did-you-write-all-the-code-yourself">"Did you write all the code yourself?"</a></li>
+    <li><a href="#could-you-implement-a-neural-network-from-scratch" id="toc-could-you-implement-a-neural-network-from-scratch" class="nav-link" data-scroll-target="#could-you-implement-a-neural-network-from-scratch">"Could you implement a neural network from scratch?"</a></li>
+    <li><a href="#why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher" id="toc-why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher" class="nav-link" data-scroll-target="#why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher">"Why are the accuracy numbers in the 89-95% range and not higher?"</a></li>
+    <li><a href="#a-cnn-for-text-arent-cnns-for-images" id="toc-a-cnn-for-text-arent-cnns-for-images" class="nav-link" data-scroll-target="#a-cnn-for-text-arent-cnns-for-images">"A CNN for text? Aren't CNNs for images?"</a></li>
+  </ul></li>
+  <li><a href="#questions-you-should-ask-that-show-you-know-this-space" id="toc-questions-you-should-ask-that-show-you-know-this-space" class="nav-link" data-scroll-target="#questions-you-should-ask-that-show-you-know-this-space">Questions YOU Should Ask (That Show You Know This Space)</a>
+</ul>
+</nav>
+    </div>
+<!-- main -->
+<main class=”content” id=”quarto-document-content”>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Interview Prep: Title Normalizer Project</h1>
+</div>
+<div class="quarto-title-meta">
+</div>
+</header>
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Private prep doc — not linked from site navigation.</p>
+</div>
+</div>
+
+<hr />
+<h2 id="the-60-second-pitch">The 60-Second Pitch</h2>
+<blockquote>
+<p>"I built a multi-task neural network that normalizes messy CRM job titles into standardized seniority levels and job functions — things like 'Sr. Dir. Mktg (EMEA)' becoming 'senior director, marketing.' B2B marketing teams deal with thousands of title variations from bad data entry, system imports, and free-text fields. Manual normalization doesn't scale, and rule-based approaches break on edge cases. The model handles abbreviations, misspellings, truncated fields, and all the other CRM garbage you'd expect. It predicts both seniority and function simultaneously using shared representations, and the CNN variant hits 95% on seniority and 93% on function — with intentionally noisy synthetic data designed to mirror real CRM exports. This directly supports the kind of contact segmentation and buying group analysis I did at Atlassian."</p>
+</blockquote>
+<p>Practice this until it's natural. Lead with the business problem, then the approach, then the result. Connect it to the lead scoring project — title normalization is a prerequisite for contact-level features.</p>
+<hr />
+<h2 id="likely-questions-amp-how-to-answer-them">Likely Questions &amp; How to Answer Them</h2>
+<h3 id="walk-me-through-how-you-built-this">"Walk me through how you built this."</h3>
+<p><strong>Your answer (2-3 minutes):</strong></p>
+<p>"The core problem is that CRM data is messy. You get 'Sr. Dir. of Eng', 'SENIOR DIRECTOR ENGINEERING', 'Snr. Direcotr, Engg (EMEA)' — these are all the same person's role but they look completely different to a computer. I needed to map every title to two things: a seniority level — one of ten, from individual contributor up to C-suite — and a job function — one of ten, like engineering, marketing, sales.</p>
+<p>First, I built a synthetic data generator that produces 20,000 titles with realistic noise — not toy noise. I studied what actual CRM exports look like: truncated fields from character limits, geographic qualifiers like '(EMEA)' appended, credential suffixes like 'MBA' or 'CPA' stuck on the end, common misspellings, tab characters from copy-paste, encoding artifacts. The generator layers these on stochastically so the training data reflects what the model would actually see in production.</p>
+<p>For the model, I used a multi-task architecture — one network that predicts both seniority and function through shared layers. The intuition is that learning 'this is a VP' and 'this is in marketing' are related tasks — the shared representation captures that job titles have structure. I implemented both a BiLSTM and a CNN. The BiLSTM reads the title as a sequence; the CNN looks for n-gram patterns like 'VP of' or 'Sr. Dir.' Both outperform the TF-IDF baseline, with the CNN slightly ahead.</p>
+<p>I also built a TF-IDF + Logistic Regression baseline first, because you should always know what a simple approach gives you before going neural. The baseline hits 87.6% combined accuracy; the CNN hits 89%. That gap matters more than it looks — it's concentrated in the ambiguous cases that are hardest to get right."</p>
+<p><strong>If they want more detail, they'll ask. Don't over-explain unprompted.</strong></p>
+<hr />
+<h3 id="why-a-neural-network-isnt-this-just-text-classification">"Why a neural network? Isn't this just text classification?"</h3>
+<p><strong>Your answer:</strong></p>
+<p>"It is text classification — but with two important wrinkles. First, the vocabulary is very specific and noisy. Job titles aren't natural language; they're a mix of abbreviations, acronyms, and fragments. Word embeddings learned from scratch on this data capture relationships — like 'VP', 'V.P.', and 'Vice President' all landing near each other in the embedding space — that you'd have to hand-code in a rule-based system.</p>
+<p>Second, it's multi-task. Seniority and function aren't independent — 'CTO' tells you both simultaneously, but 'Manager' only tells you seniority. Shared representations let the model use context from one task to help the other."</p>
+<p><strong>Follow-up you might get:</strong> "When would you <em>not</em> use a neural network for this?"</p>
+<blockquote>
+<p>"If the data volume were much smaller — say a few hundred titles — or if the noise were minimal, TF-IDF would be fine. The neural network earns its keep when you have high variation and enough data to learn embeddings. Below about 5,000 samples the vocabulary coverage gets too sparse."</p>
+</blockquote>
+<hr />
+<h3 id="what-is-multi-task-learning">"What is multi-task learning?"</h3>
+<p><strong>What it is (in your words):</strong></p>
+<p>Multi-task learning means training one model to do two or more things at once. Instead of building separate models for seniority and function, you build one model with a shared body and separate heads.</p>
+<ul>
+<li><strong>Shared layers</strong> learn a general representation of what a job title means</li>
+<li><strong>Task-specific heads</strong> each take that representation and make their own prediction</li>
+<li>The shared part acts as a <strong>regularizer</strong> — it has to learn features useful for both tasks, not just one, which makes it less likely to overfit</li>
+</ul>
+<p><strong>Why it matters here:</strong></p>
+<p>"Seniority and function share structure. 'Senior Director of Engineering' contains signals for both tasks in overlapping ways. A shared representation captures that structure more efficiently than two independent models. In practice it also means one model to deploy and maintain instead of two."</p>
+<hr />
+<h3 id="explain-how-the-bilstm-works">"Explain how the BiLSTM works."</h3>
+<p><strong>Your answer:</strong></p>
+<p>"LSTM stands for Long Short-Term Memory. It's a type of neural network that reads a sequence — in this case, the tokens in a job title — one at a time, maintaining a memory of what it's seen so far. The 'bi' means bidirectional — it reads the title both left-to-right and right-to-left, then combines the two.</p>
+<p>Why bidirectional? Because 'VP of Engineering' and 'Engineering VP' should both resolve to the same thing. Reading left-to-right only, the model would see these very differently. Reading both directions, it captures the same information regardless of word order.</p>
+<p>The output of the BiLSTM is a fixed-size vector — a compressed representation of the entire title. That vector feeds into two separate linear layers: one predicts seniority, one predicts function."</p>
+<p><strong>If they ask about the CNN alternative:</strong></p>
+<blockquote>
+<p>"The CNN treats the title as a fixed-width input and slides filters across it — like looking for patterns of 2 words, 3 words, and 4 words simultaneously. 'VP of' is a 2-gram, 'Director of Engineering' is a 3-gram. Each filter learns to detect a specific pattern. It's faster to train and slightly more accurate here because title classification depends more on local patterns than long-range dependencies."</p>
+</blockquote>
+<hr />
+<h3 id="what-are-word-embeddings">"What are word embeddings?"</h3>
+<p><strong>Your answer:</strong></p>
+<p>"An embedding is a way to represent a word as a list of numbers — a vector — so that similar words end up close together. The model learns these vectors during training, starting from random initializations. After training, 'Senior', 'Sr.', and 'Snr' all end up in similar positions because they appear in similar contexts.</p>
+<p>This is the key advantage over bag-of-words approaches like TF-IDF. TF-IDF treats 'VP' and 'Vice President' as completely unrelated features. Embeddings can learn that they're the same concept. In our model the embeddings are 64-dimensional — each word is represented by 64 numbers that the model optimizes during training."</p>
+<p><strong>Follow-up you might get:</strong> "Why not use pre-trained embeddings like Word2Vec or BERT?"</p>
+<blockquote>
+<p>"Job titles are a specialized vocabulary. General-purpose embeddings trained on news articles or Wikipedia don't know that 'Mgr' means 'Manager' or that 'BDR' is a sales role. Learning embeddings from scratch on domain-specific data actually works better here. If I had hundreds of thousands of titles, fine-tuning BERT could work, but for 20,000 samples, training task-specific embeddings is more practical."</p>
+</blockquote>
+<hr />
+<h3 id="what-is-early-stopping">"What is early stopping?"</h3>
+<p><strong>Your answer:</strong></p>
+<p>"Early stopping is a technique to prevent overfitting. During training, the model gets better and better on the training data — the training loss keeps going down. But at some point it starts memorizing the training data instead of learning general patterns. You can see this when the validation loss stops improving or starts going back up, even while training loss keeps dropping.</p>
+<p>Early stopping monitors the validation loss after each epoch. If it hasn't improved for a certain number of epochs — I used 5, called 'patience' — training stops and the model reverts to the best checkpoint. It's simple but effective — it means you don't have to guess how many epochs to train for."</p>
+<hr />
+<h3 id="how-did-you-handle-the-messy-data-what-kinds-of-noise">"How did you handle the messy data? What kinds of noise?"</h3>
+<p><strong>Your answer:</strong></p>
+<p>"I studied what real CRM data looks like and built a synthetic generator that mirrors it. There are about 15 categories of noise:</p>
+<p>The obvious ones — abbreviations like 'Sr.' for 'Senior', case variation, extra whitespace, and character-swap typos. But also the stuff that actually makes CRM data painful: truncation from field length limits that cuts titles mid-word, like 'Senior Vice Presi...' Geographic qualifiers that someone appended — '(EMEA)' or '- North America'. Credential suffixes like ', MBA' or ', PMP'. Common misspellings — not just swapped characters but real mistakes like 'Manger' for 'Manager' or 'Engineeer' with a triple e. Tab characters from copy-paste. HTML entities and smart quotes from encoding issues. And word reordering — 'Director of Engineering' vs 'Engineering, Director'.</p>
+<p>The noise is layered stochastically — each title gets a random subset of these applied — so the model has to be robust to combinations it hasn't seen before."</p>
+<p><strong>Why this matters for the interview:</strong></p>
+<blockquote>
+<p>"This is where domain knowledge shows. Anyone can train a text classifier. Knowing that CRM fields get truncated at 30 characters, or that someone's LinkedIn title import includes their MBA — that comes from actually working with this data."</p>
+</blockquote>
+<hr />
+<h3 id="walk-me-through-tf-idf-and-why-you-used-it-as-a-baseline">"Walk me through TF-IDF and why you used it as a baseline."</h3>
+<p><strong>Your answer:</strong></p>
+<p>"TF-IDF stands for Term Frequency-Inverse Document Frequency. It converts text into numbers by counting how often each word appears in a title, then weighting words that are rare across all titles higher than common ones. So 'Engineer' appears everywhere and gets a lower weight, while 'Compliance' is more distinctive and gets a higher weight.</p>
+<p>I used 1-grams and 2-grams — single words and word pairs — because patterns like 'Vice President' or 'Data Scientist' carry more information as pairs than as individual words.</p>
+<p>I paired TF-IDF with Logistic Regression — one for seniority, one for function — because it's the simplest reasonable approach. It gives you a performance floor. If the neural network can't beat TF-IDF, it's not worth the complexity. Ours does — 89% combined vs 87.6% — and the gap would widen on real data with higher noise and more variation."</p>
+<hr />
+<h3 id="how-does-this-connect-to-your-atlassian-work">"How does this connect to your Atlassian work?"</h3>
+<p><strong>Your answer:</strong></p>
+<p>"At Atlassian, I built the ICP and buying group analysis for enterprise marketing. The first step in that work was always contact normalization — you can't analyze a buying group if you don't know who's a VP, who's an IC, who's in engineering vs marketing. Title normalization was a critical preprocessing step.</p>
+<p>This project pulls that step out and builds it as a standalone, open system. The seniority and function labels it produces are exactly the features that feed into the lead scoring and buying group models in my other portfolio project. Together they form the pipeline: normalize titles → build contact features → score accounts → identify buying group gaps."</p>
+<hr />
+<h3 id="you-used-synthetic-data-how-realistic-is-this">"You used synthetic data. How realistic is this?"</h3>
+<p><strong>Your answer:</strong></p>
+<p>"The accuracy numbers — 89-95% depending on the task — are in a realistic range for this problem. I deliberately made the synthetic noise aggressive enough that the model doesn't hit 99%. The noise categories are drawn from real CRM data patterns.</p>
+<p>That said, real data has additional challenges. Titles that are genuinely ambiguous — 'Director' with no function context could be anyone. Creative titles — 'Growth Hacker' or 'Evangelist' — that don't map cleanly. Non-English titles. People who put their whole life story in the title field. And the class distribution would be skewed — way more ICs than C-suite.</p>
+<p>I'd expect accuracy to drop another 5-10 points on real CRM data, which would still be valuable for segmentation purposes — even 80% accuracy on automated title normalization saves hundreds of hours of manual work."</p>
+<hr />
+<h2 id="concepts-you-should-be-comfortable-with">Concepts You Should Be Comfortable With</h2>
+<h3 id="the-ones-youll-definitely-get-asked-about">The ones you'll definitely get asked about:</h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>One-sentence explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Neural network</strong></td>
+<td>A model that learns by passing data through layers of connected nodes, adjusting connection weights to minimize prediction errors</td>
+</tr>
+<tr>
+<td><strong>Multi-task learning</strong></td>
+<td>Training one model to predict multiple outputs simultaneously, sharing internal representations across tasks</td>
+</tr>
+<tr>
+<td><strong>Embeddings</strong></td>
+<td>Representing words as vectors of numbers so that similar words (Sr., Senior, Snr) end up close together</td>
+</tr>
+<tr>
+<td><strong>LSTM</strong></td>
+<td>A sequence model that reads tokens one at a time, maintaining a memory of what came before — good for ordered data</td>
+</tr>
+<tr>
+<td><strong>Bidirectional</strong></td>
+<td>Reading the sequence both forwards and backwards so word order doesn't matter</td>
+</tr>
+<tr>
+<td><strong>CNN (for text)</strong></td>
+<td>Slides fixed-width filters across text to detect local patterns like "VP of" or "Director of"</td>
+</tr>
+<tr>
+<td><strong>TF-IDF</strong></td>
+<td>Converts text to numbers by weighting words that are rare and distinctive higher than common ones</td>
+</tr>
+<tr>
+<td><strong>Logistic regression</strong></td>
+<td>A model that predicts yes/no probability from a weighted sum of features — the standard baseline</td>
+</tr>
+<tr>
+<td><strong>Early stopping</strong></td>
+<td>Halting training when the model stops improving on held-out data, preventing overfitting</td>
+</tr>
+<tr>
+<td><strong>Overfitting</strong></td>
+<td>When a model memorizes training data instead of learning general patterns — trains well, tests poorly</td>
+</tr>
+<tr>
+<td><strong>Tokenization</strong></td>
+<td>Breaking text into individual units (words, subwords, or characters) that the model processes</td>
+</tr>
+<tr>
+<td><strong>Train/test split</strong></td>
+<td>Holding out data the model never sees during training, to measure real performance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-ones-you-might-get-asked-about">The ones you might get asked about:</h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>One-sentence explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Softmax</strong></td>
+<td>Converts a model's raw output scores into probabilities that sum to 1 — used for multi-class classification</td>
+</tr>
+<tr>
+<td><strong>Cross-entropy loss</strong></td>
+<td>The math that measures how wrong the model's predicted probabilities are — lower is better</td>
+</tr>
+<tr>
+<td><strong>Dropout</strong></td>
+<td>Randomly turns off a percentage of neurons during training so the model can't rely on any single one — prevents overfitting</td>
+</tr>
+<tr>
+<td><strong>Learning rate</strong></td>
+<td>How big a step the model takes when adjusting weights — too big and it overshoots, too small and it never converges</td>
+</tr>
+<tr>
+<td><strong>Adam optimizer</strong></td>
+<td>A smart version of gradient descent that adapts the learning rate for each parameter automatically</td>
+</tr>
+<tr>
+<td><strong>Batch size</strong></td>
+<td>How many examples the model sees before updating its weights — 128 means it processes 128 titles, then adjusts</td>
+</tr>
+<tr>
+<td><strong>Epoch</strong></td>
+<td>One complete pass through all the training data</td>
+</tr>
+<tr>
+<td><strong>Padding</strong></td>
+<td>Adding placeholder tokens to make all titles the same length so they fit in a batch</td>
+</tr>
+<tr>
+<td><strong>Vocabulary</strong></td>
+<td>The set of all known tokens — words the model has seen during training. Unknown words map to a special <code>&lt;UNK&gt;</code> token</td>
+</tr>
+<tr>
+<td><strong>Baseline model</strong></td>
+<td>The simplest reasonable approach — you must beat this to justify added complexity</td>
+</tr>
+<tr>
+<td><strong>Confusion matrix</strong></td>
+<td>A table showing where the model gets confused — which classes it mixes up (e.g., "senior" vs "lead")</td>
+</tr>
+<tr>
+<td><strong>F1 score</strong></td>
+<td>The harmonic mean of precision and recall — balances false positives and false negatives into a single number</td>
+</tr>
+<tr>
+<td><strong>Precision vs recall</strong></td>
+<td>Precision = "of the ones I predicted positive, how many were right?" Recall = "of all actual positives, how many did I catch?"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="gotchas-amp-honest-answers">Gotchas &amp; Honest Answers</h2>
+<h3 id="did-you-write-all-the-code-yourself">"Did you write all the code yourself?"</h3>
+<p><strong>Honest answer:</strong> "I built this with AI assistance — Claude Code as a coding partner. I directed the architecture decisions: multi-task learning, BiLSTM vs CNN comparison, what noise categories to generate, how to evaluate. The AI helped with implementation — writing the PyTorch modules, structuring the training loop, building the data pipeline. This is how I work — I use AI tools to move faster, and the value I bring is knowing what to build and why."</p>
+<p><strong>Why this is fine:</strong> You're demonstrating judgment and domain knowledge, not typing speed. The hard part isn't writing <code>nn.LSTM()</code> — it's knowing that a multi-task architecture makes sense here and that the synthetic noise needs to mirror real CRM patterns.</p>
+<h3 id="could-you-implement-a-neural-network-from-scratch">"Could you implement a neural network from scratch?"</h3>
+<p><strong>Honest answer:</strong> "I understand the mechanics — forward pass, backpropagation, gradient descent, how loss functions drive weight updates. I could walk through it on a whiteboard. In practice, nobody implements these from scratch — you use PyTorch or TensorFlow — and the value is in architecture decisions: choosing BiLSTM vs CNN, deciding on multi-task vs separate models, knowing when neural approaches beat classical ones."</p>
+<h3 id="why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher">"Why are the accuracy numbers in the 89-95% range and not higher?"</h3>
+<p><strong>Honest answer:</strong> "By design. The synthetic noise is calibrated to be realistic — CRM data is genuinely messy. Truncated titles, misspelled words, geographic qualifiers, credential suffixes. If the model hit 99%, that would be a red flag that the data is too clean. The 89% combined accuracy means the model gets both seniority and function right on 9 out of 10 titles, which is good enough for automated segmentation. The remaining 10% would get flagged for human review in production — that's the active learning step."</p>
+<h3 id="a-cnn-for-text-arent-cnns-for-images">"A CNN for text? Aren't CNNs for images?"</h3>
+<p><strong>Honest answer:</strong> "CNNs work on any data with local patterns. In images, the patterns are spatial — edges, shapes, textures. In text, the patterns are sequential — n-grams like 'Vice President' or 'Senior Director of'. A 1D CNN slides a filter across the title looking for these patterns, the same way an image CNN slides a 2D filter across pixels. For short text classification like job titles, CNNs often outperform LSTMs because the useful signal is in local word combinations, not long-range dependencies."</p>
+<hr />
+<h2 id="questions-you-should-ask-that-show-you-know-this-space">Questions YOU Should Ask (That Show You Know This Space)</h2>
+<ul>
+<li>"How does your team currently handle title normalization — is it rule-based, a vendor solution, or manual?"</li>
+<li>"What downstream systems consume the normalized titles — does it feed into a scoring model, segmentation, or routing logic?"</li>
+<li>"How often would the model need retraining? If your company acquires a new market with different title conventions, how would you detect the drift?"</li>
+<li>"What's the cost of a wrong prediction here — is misclassifying a VP as a Director worse than the reverse for your use case?"</li>
+</ul>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

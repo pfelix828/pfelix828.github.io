@@ -1,0 +1,225 @@
+---
+title: "Interview Prep: Title Normalizer Project"
+listing: false
+search: false
+---
+
+::: {.callout-note}
+Private prep doc — not linked from site navigation.
+:::
+
+---
+
+## The 60-Second Pitch
+
+> "I built a multi-task neural network that normalizes messy CRM job titles into standardized seniority levels and job functions — things like 'Sr. Dir. Mktg (EMEA)' becoming 'senior director, marketing.' B2B marketing teams deal with thousands of title variations from bad data entry, system imports, and free-text fields. Manual normalization doesn't scale, and rule-based approaches break on edge cases. The model handles abbreviations, misspellings, truncated fields, and all the other CRM garbage you'd expect. It predicts both seniority and function simultaneously using shared representations, and the CNN variant hits 95% on seniority and 93% on function — with intentionally noisy synthetic data designed to mirror real CRM exports. This directly supports the kind of contact segmentation and buying group analysis I did at Atlassian."
+
+Practice this until it's natural. Lead with the business problem, then the approach, then the result. Connect it to the lead scoring project — title normalization is a prerequisite for contact-level features.
+
+---
+
+## Likely Questions & How to Answer Them
+
+### "Walk me through how you built this."
+
+**Your answer (2-3 minutes):**
+
+"The core problem is that CRM data is messy. You get 'Sr. Dir. of Eng', 'SENIOR DIRECTOR ENGINEERING', 'Snr. Direcotr, Engg (EMEA)' — these are all the same person's role but they look completely different to a computer. I needed to map every title to two things: a seniority level — one of ten, from individual contributor up to C-suite — and a job function — one of ten, like engineering, marketing, sales.
+
+First, I built a synthetic data generator that produces 20,000 titles with realistic noise — not toy noise. I studied what actual CRM exports look like: truncated fields from character limits, geographic qualifiers like '(EMEA)' appended, credential suffixes like 'MBA' or 'CPA' stuck on the end, common misspellings, tab characters from copy-paste, encoding artifacts. The generator layers these on stochastically so the training data reflects what the model would actually see in production.
+
+For the model, I used a multi-task architecture — one network that predicts both seniority and function through shared layers. The intuition is that learning 'this is a VP' and 'this is in marketing' are related tasks — the shared representation captures that job titles have structure. I implemented both a BiLSTM and a CNN. The BiLSTM reads the title as a sequence; the CNN looks for n-gram patterns like 'VP of' or 'Sr. Dir.' Both outperform the TF-IDF baseline, with the CNN slightly ahead.
+
+I also built a TF-IDF + Logistic Regression baseline first, because you should always know what a simple approach gives you before going neural. The baseline hits 87.6% combined accuracy; the CNN hits 89%. That gap matters more than it looks — it's concentrated in the ambiguous cases that are hardest to get right."
+
+**If they want more detail, they'll ask. Don't over-explain unprompted.**
+
+---
+
+### "Why a neural network? Isn't this just text classification?"
+
+**Your answer:**
+
+"It is text classification — but with two important wrinkles. First, the vocabulary is very specific and noisy. Job titles aren't natural language; they're a mix of abbreviations, acronyms, and fragments. Word embeddings learned from scratch on this data capture relationships — like 'VP', 'V.P.', and 'Vice President' all landing near each other in the embedding space — that you'd have to hand-code in a rule-based system.
+
+Second, it's multi-task. Seniority and function aren't independent — 'CTO' tells you both simultaneously, but 'Manager' only tells you seniority. Shared representations let the model use context from one task to help the other."
+
+**Follow-up you might get:** "When would you *not* use a neural network for this?"
+
+> "If the data volume were much smaller — say a few hundred titles — or if the noise were minimal, TF-IDF would be fine. The neural network earns its keep when you have high variation and enough data to learn embeddings. Below about 5,000 samples the vocabulary coverage gets too sparse."
+
+---
+
+### "What is multi-task learning?"
+
+**What it is (in your words):**
+
+Multi-task learning means training one model to do two or more things at once. Instead of building separate models for seniority and function, you build one model with a shared body and separate heads.
+
+- **Shared layers** learn a general representation of what a job title means
+- **Task-specific heads** each take that representation and make their own prediction
+- The shared part acts as a **regularizer** — it has to learn features useful for both tasks, not just one, which makes it less likely to overfit
+
+**Why it matters here:**
+
+"Seniority and function share structure. 'Senior Director of Engineering' contains signals for both tasks in overlapping ways. A shared representation captures that structure more efficiently than two independent models. In practice it also means one model to deploy and maintain instead of two."
+
+---
+
+### "Explain how the BiLSTM works."
+
+**Your answer:**
+
+"LSTM stands for Long Short-Term Memory. It's a type of neural network that reads a sequence — in this case, the tokens in a job title — one at a time, maintaining a memory of what it's seen so far. The 'bi' means bidirectional — it reads the title both left-to-right and right-to-left, then combines the two.
+
+Why bidirectional? Because 'VP of Engineering' and 'Engineering VP' should both resolve to the same thing. Reading left-to-right only, the model would see these very differently. Reading both directions, it captures the same information regardless of word order.
+
+The output of the BiLSTM is a fixed-size vector — a compressed representation of the entire title. That vector feeds into two separate linear layers: one predicts seniority, one predicts function."
+
+**If they ask about the CNN alternative:**
+
+> "The CNN treats the title as a fixed-width input and slides filters across it — like looking for patterns of 2 words, 3 words, and 4 words simultaneously. 'VP of' is a 2-gram, 'Director of Engineering' is a 3-gram. Each filter learns to detect a specific pattern. It's faster to train and slightly more accurate here because title classification depends more on local patterns than long-range dependencies."
+
+---
+
+### "What are word embeddings?"
+
+**Your answer:**
+
+"An embedding is a way to represent a word as a list of numbers — a vector — so that similar words end up close together. The model learns these vectors during training, starting from random initializations. After training, 'Senior', 'Sr.', and 'Snr' all end up in similar positions because they appear in similar contexts.
+
+This is the key advantage over bag-of-words approaches like TF-IDF. TF-IDF treats 'VP' and 'Vice President' as completely unrelated features. Embeddings can learn that they're the same concept. In our model the embeddings are 64-dimensional — each word is represented by 64 numbers that the model optimizes during training."
+
+**Follow-up you might get:** "Why not use pre-trained embeddings like Word2Vec or BERT?"
+
+> "Job titles are a specialized vocabulary. General-purpose embeddings trained on news articles or Wikipedia don't know that 'Mgr' means 'Manager' or that 'BDR' is a sales role. Learning embeddings from scratch on domain-specific data actually works better here. If I had hundreds of thousands of titles, fine-tuning BERT could work, but for 20,000 samples, training task-specific embeddings is more practical."
+
+---
+
+### "What is early stopping?"
+
+**Your answer:**
+
+"Early stopping is a technique to prevent overfitting. During training, the model gets better and better on the training data — the training loss keeps going down. But at some point it starts memorizing the training data instead of learning general patterns. You can see this when the validation loss stops improving or starts going back up, even while training loss keeps dropping.
+
+Early stopping monitors the validation loss after each epoch. If it hasn't improved for a certain number of epochs — I used 5, called 'patience' — training stops and the model reverts to the best checkpoint. It's simple but effective — it means you don't have to guess how many epochs to train for."
+
+---
+
+### "How did you handle the messy data? What kinds of noise?"
+
+**Your answer:**
+
+"I studied what real CRM data looks like and built a synthetic generator that mirrors it. There are about 15 categories of noise:
+
+The obvious ones — abbreviations like 'Sr.' for 'Senior', case variation, extra whitespace, and character-swap typos. But also the stuff that actually makes CRM data painful: truncation from field length limits that cuts titles mid-word, like 'Senior Vice Presi...' Geographic qualifiers that someone appended — '(EMEA)' or '- North America'. Credential suffixes like ', MBA' or ', PMP'. Common misspellings — not just swapped characters but real mistakes like 'Manger' for 'Manager' or 'Engineeer' with a triple e. Tab characters from copy-paste. HTML entities and smart quotes from encoding issues. And word reordering — 'Director of Engineering' vs 'Engineering, Director'.
+
+The noise is layered stochastically — each title gets a random subset of these applied — so the model has to be robust to combinations it hasn't seen before."
+
+**Why this matters for the interview:**
+
+> "This is where domain knowledge shows. Anyone can train a text classifier. Knowing that CRM fields get truncated at 30 characters, or that someone's LinkedIn title import includes their MBA — that comes from actually working with this data."
+
+---
+
+### "Walk me through TF-IDF and why you used it as a baseline."
+
+**Your answer:**
+
+"TF-IDF stands for Term Frequency-Inverse Document Frequency. It converts text into numbers by counting how often each word appears in a title, then weighting words that are rare across all titles higher than common ones. So 'Engineer' appears everywhere and gets a lower weight, while 'Compliance' is more distinctive and gets a higher weight.
+
+I used 1-grams and 2-grams — single words and word pairs — because patterns like 'Vice President' or 'Data Scientist' carry more information as pairs than as individual words.
+
+I paired TF-IDF with Logistic Regression — one for seniority, one for function — because it's the simplest reasonable approach. It gives you a performance floor. If the neural network can't beat TF-IDF, it's not worth the complexity. Ours does — 89% combined vs 87.6% — and the gap would widen on real data with higher noise and more variation."
+
+---
+
+### "How does this connect to your Atlassian work?"
+
+**Your answer:**
+
+"At Atlassian, I built the ICP and buying group analysis for enterprise marketing. The first step in that work was always contact normalization — you can't analyze a buying group if you don't know who's a VP, who's an IC, who's in engineering vs marketing. Title normalization was a critical preprocessing step.
+
+This project pulls that step out and builds it as a standalone, open system. The seniority and function labels it produces are exactly the features that feed into the lead scoring and buying group models in my other portfolio project. Together they form the pipeline: normalize titles → build contact features → score accounts → identify buying group gaps."
+
+---
+
+### "You used synthetic data. How realistic is this?"
+
+**Your answer:**
+
+"The accuracy numbers — 89-95% depending on the task — are in a realistic range for this problem. I deliberately made the synthetic noise aggressive enough that the model doesn't hit 99%. The noise categories are drawn from real CRM data patterns.
+
+That said, real data has additional challenges. Titles that are genuinely ambiguous — 'Director' with no function context could be anyone. Creative titles — 'Growth Hacker' or 'Evangelist' — that don't map cleanly. Non-English titles. People who put their whole life story in the title field. And the class distribution would be skewed — way more ICs than C-suite.
+
+I'd expect accuracy to drop another 5-10 points on real CRM data, which would still be valuable for segmentation purposes — even 80% accuracy on automated title normalization saves hundreds of hours of manual work."
+
+---
+
+## Concepts You Should Be Comfortable With
+
+### The ones you'll definitely get asked about:
+
+| Concept | One-sentence explanation |
+|---------|------------------------|
+| **Neural network** | A model that learns by passing data through layers of connected nodes, adjusting connection weights to minimize prediction errors |
+| **Multi-task learning** | Training one model to predict multiple outputs simultaneously, sharing internal representations across tasks |
+| **Embeddings** | Representing words as vectors of numbers so that similar words (Sr., Senior, Snr) end up close together |
+| **LSTM** | A sequence model that reads tokens one at a time, maintaining a memory of what came before — good for ordered data |
+| **Bidirectional** | Reading the sequence both forwards and backwards so word order doesn't matter |
+| **CNN (for text)** | Slides fixed-width filters across text to detect local patterns like "VP of" or "Director of" |
+| **TF-IDF** | Converts text to numbers by weighting words that are rare and distinctive higher than common ones |
+| **Logistic regression** | A model that predicts yes/no probability from a weighted sum of features — the standard baseline |
+| **Early stopping** | Halting training when the model stops improving on held-out data, preventing overfitting |
+| **Overfitting** | When a model memorizes training data instead of learning general patterns — trains well, tests poorly |
+| **Tokenization** | Breaking text into individual units (words, subwords, or characters) that the model processes |
+| **Train/test split** | Holding out data the model never sees during training, to measure real performance |
+
+### The ones you might get asked about:
+
+| Concept | One-sentence explanation |
+|---------|------------------------|
+| **Softmax** | Converts a model's raw output scores into probabilities that sum to 1 — used for multi-class classification |
+| **Cross-entropy loss** | The math that measures how wrong the model's predicted probabilities are — lower is better |
+| **Dropout** | Randomly turns off a percentage of neurons during training so the model can't rely on any single one — prevents overfitting |
+| **Learning rate** | How big a step the model takes when adjusting weights — too big and it overshoots, too small and it never converges |
+| **Adam optimizer** | A smart version of gradient descent that adapts the learning rate for each parameter automatically |
+| **Batch size** | How many examples the model sees before updating its weights — 128 means it processes 128 titles, then adjusts |
+| **Epoch** | One complete pass through all the training data |
+| **Padding** | Adding placeholder tokens to make all titles the same length so they fit in a batch |
+| **Vocabulary** | The set of all known tokens — words the model has seen during training. Unknown words map to a special `<UNK>` token |
+| **Baseline model** | The simplest reasonable approach — you must beat this to justify added complexity |
+| **Confusion matrix** | A table showing where the model gets confused — which classes it mixes up (e.g., "senior" vs "lead") |
+| **F1 score** | The harmonic mean of precision and recall — balances false positives and false negatives into a single number |
+| **Precision vs recall** | Precision = "of the ones I predicted positive, how many were right?" Recall = "of all actual positives, how many did I catch?" |
+
+---
+
+## Gotchas & Honest Answers
+
+### "Did you write all the code yourself?"
+
+**Honest answer:** "I built this with AI assistance — Claude Code as a coding partner. I directed the architecture decisions: multi-task learning, BiLSTM vs CNN comparison, what noise categories to generate, how to evaluate. The AI helped with implementation — writing the PyTorch modules, structuring the training loop, building the data pipeline. This is how I work — I use AI tools to move faster, and the value I bring is knowing what to build and why."
+
+**Why this is fine:** You're demonstrating judgment and domain knowledge, not typing speed. The hard part isn't writing `nn.LSTM()` — it's knowing that a multi-task architecture makes sense here and that the synthetic noise needs to mirror real CRM patterns.
+
+### "Could you implement a neural network from scratch?"
+
+**Honest answer:** "I understand the mechanics — forward pass, backpropagation, gradient descent, how loss functions drive weight updates. I could walk through it on a whiteboard. In practice, nobody implements these from scratch — you use PyTorch or TensorFlow — and the value is in architecture decisions: choosing BiLSTM vs CNN, deciding on multi-task vs separate models, knowing when neural approaches beat classical ones."
+
+### "Why are the accuracy numbers in the 89-95% range and not higher?"
+
+**Honest answer:** "By design. The synthetic noise is calibrated to be realistic — CRM data is genuinely messy. Truncated titles, misspelled words, geographic qualifiers, credential suffixes. If the model hit 99%, that would be a red flag that the data is too clean. The 89% combined accuracy means the model gets both seniority and function right on 9 out of 10 titles, which is good enough for automated segmentation. The remaining 10% would get flagged for human review in production — that's the active learning step."
+
+### "A CNN for text? Aren't CNNs for images?"
+
+**Honest answer:** "CNNs work on any data with local patterns. In images, the patterns are spatial — edges, shapes, textures. In text, the patterns are sequential — n-grams like 'Vice President' or 'Senior Director of'. A 1D CNN slides a filter across the title looking for these patterns, the same way an image CNN slides a 2D filter across pixels. For short text classification like job titles, CNNs often outperform LSTMs because the useful signal is in local word combinations, not long-range dependencies."
+
+---
+
+## Questions YOU Should Ask (That Show You Know This Space)
+
+- "How does your team currently handle title normalization — is it rule-based, a vendor solution, or manual?"
+- "What downstream systems consume the normalized titles — does it feed into a scoring model, segmentation, or routing logic?"
+- "How often would the model need retraining? If your company acquires a new market with different title conventions, how would you detect the drift?"
+- "What's the cost of a wrong prediction here — is misclassifying a VP as a Director worse than the reverse for your use case?"
