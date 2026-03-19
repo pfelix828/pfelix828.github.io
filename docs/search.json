@@ -21,41 +21,6 @@
     "text": "Education\n\nB.A. Psychology — UC Santa Barbara\nPost-Baccalaureate, Mathematics — City University of New York"
   },
   {
-    "objectID": "projects/context-agent.html",
-    "href": "projects/context-agent.html",
-    "title": "Context Agent",
-    "section": "",
-    "text": "View on GitHub"
-  },
-  {
-    "objectID": "projects/context-agent.html#the-problem",
-    "href": "projects/context-agent.html#the-problem",
-    "title": "Context Agent",
-    "section": "The Problem",
-    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nContext Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
-  },
-  {
-    "objectID": "projects/context-agent.html#how-it-works",
-    "href": "projects/context-agent.html#how-it-works",
-    "title": "Context Agent",
-    "section": "How It Works",
-    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
-  },
-  {
-    "objectID": "projects/context-agent.html#technical-decisions",
-    "href": "projects/context-agent.html#technical-decisions",
-    "title": "Context Agent",
-    "section": "Technical Decisions",
-    "text": "Technical Decisions\n\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.\nTool use over RAG — The agent needs to act (run queries, generate charts), not just retrieve information. Tool use gives it the ability to reason and execute."
-  },
-  {
-    "objectID": "projects/context-agent.html#stack",
-    "href": "projects/context-agent.html#stack",
-    "title": "Context Agent",
-    "section": "Stack",
-    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
-  },
-  {
     "objectID": "projects/lead-scoring.html",
     "href": "projects/lead-scoring.html",
     "title": "Lead Scoring & Buying Group Identification",
@@ -140,6 +105,111 @@
     "text": "Stack\nPython | Pandas | scikit-learn | Matplotlib | Plotly | Streamlit | Jupyter"
   },
   {
+    "objectID": "projects/context-agent.html",
+    "href": "projects/context-agent.html",
+    "title": "Context Agent",
+    "section": "",
+    "text": "View on GitHub"
+  },
+  {
+    "objectID": "projects/context-agent.html#the-problem",
+    "href": "projects/context-agent.html#the-problem",
+    "title": "Context Agent",
+    "section": "The Problem",
+    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nContext Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
+  },
+  {
+    "objectID": "projects/context-agent.html#how-it-works",
+    "href": "projects/context-agent.html#how-it-works",
+    "title": "Context Agent",
+    "section": "How It Works",
+    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
+  },
+  {
+    "objectID": "projects/context-agent.html#technical-decisions",
+    "href": "projects/context-agent.html#technical-decisions",
+    "title": "Context Agent",
+    "section": "Technical Decisions",
+    "text": "Technical Decisions\n\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.\nTool use over RAG — The agent needs to act (run queries, generate charts), not just retrieve information. Tool use gives it the ability to reason and execute."
+  },
+  {
+    "objectID": "projects/context-agent.html#stack",
+    "href": "projects/context-agent.html#stack",
+    "title": "Context Agent",
+    "section": "Stack",
+    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
+  },
+  {
+    "objectID": "projects/title-normalizer.html",
+    "href": "projects/title-normalizer.html",
+    "title": "Job Title Normalizer",
+    "section": "",
+    "text": "View on GitHub"
+  },
+  {
+    "objectID": "projects/title-normalizer.html#what-this-project-does",
+    "href": "projects/title-normalizer.html#what-this-project-does",
+    "title": "Job Title Normalizer",
+    "section": "What This Project Does",
+    "text": "What This Project Does\nCRM databases are full of job titles that look like they were typed by someone in a hurry — because they were. You get “Sr. Dir. Mktg (EMEA)”, “SENIOR DIRECTOR ENGINEERING”, “Snr. Direcotr, Engg” — all describing the same kind of person but completely different as text. When you need to segment contacts by seniority or function — which is the first step in building buying groups, scoring leads, or targeting campaigns — this inconsistency makes everything downstream unreliable.\nThis project trains a neural network to classify raw, messy titles into two standardized labels simultaneously:\n\nSeniority — one of 10 levels, from Individual Contributor through C-Suite\nFunction — one of 10 categories: Engineering, Data, Product, Marketing, Sales, Finance, HR, Operations, Design, Legal\n\nThe model predicts both at once through a shared representation, which is more efficient and more accurate than building two separate classifiers."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
+    "href": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
+    "title": "Job Title Normalizer",
+    "section": "Why This Matters in the Real World",
+    "text": "Why This Matters in the Real World\nAt Atlassian, I built contact segmentation and buying group analysis for enterprise marketing. The prerequisite to all of that work was normalizing job titles — you can’t identify coverage gaps in a buying group if you don’t know who’s a VP vs. an IC, or who’s in engineering vs. marketing. Title normalization was the critical first step.\nThis project isolates that step as a standalone system. The seniority and function labels it produces are exactly the features that would feed into the lead scoring and buying group models in a production pipeline."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
+    "href": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
+    "title": "Job Title Normalizer",
+    "section": "The Data: Why CRM Noise Is Harder Than It Looks",
+    "text": "The Data: Why CRM Noise Is Harder Than It Looks\nInstead of using clean, synthetic data that would make the model look artificially good, the data generator mirrors what real CRM exports actually look like. There are 15 categories of noise, all drawn from real-world data quality issues:\nThe obvious stuff — abbreviations (Sr., Dir., Mgr.), case variation (UPPERCASE, lowercase, Title Case), extra whitespace, and character-swap typos.\nThe stuff that actually makes CRM data painful:\n\nTruncation — CRM fields have character limits. “Senior Vice President of Engineering” becomes “Senior Vice Presi…” and now you’re missing the critical information\nGeographic qualifiers — Someone appended “(EMEA)” or “- North America” because that’s what their admin system required\nCredential suffixes — “MBA”, “CPA”, “PMP” stuck on the end because people copy their LinkedIn bio into the title field\nMisspellings — Not just swapped characters, but real mistakes: “Manger” for Manager, “Engineeer” with a triple e, “Marekting” for Marketing\nWord reordering — “Director of Engineering” vs “Engineering, Director” — different CRM systems format differently\nEncoding artifacts — Smart quotes, em dashes, HTML entities, non-breaking spaces from system imports\nWord drops — Lazy data entry where someone typed “VP” instead of “VP of Engineering”\n\nThis noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn’t seen."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#the-models-why-multi-task-learning",
+    "href": "projects/title-normalizer.html#the-models-why-multi-task-learning",
+    "title": "Job Title Normalizer",
+    "section": "The Models: Why Multi-Task Learning",
+    "text": "The Models: Why Multi-Task Learning\n\nWhat Multi-Task Learning Is\nInstead of training one model for seniority and a separate one for function, we train one model that predicts both simultaneously. The key insight is that seniority and function share structure. “CTO” tells you both seniority (C-Suite) and function (Engineering) at once. “Manager” tells you seniority but not function. By sharing internal representations, the model learns this structure more efficiently.\nThe architecture has three parts:\n\nWord embeddings — Each token in a title (after tokenization) maps to a 64-dimensional vector. During training, the model learns that “VP”, “V.P.”, and “Vice President” should all have similar vectors\nShared encoder — Processes the embedded title into a fixed-size representation. This is where seniority and function signals merge\nTask-specific heads — Two separate linear layers, one for each prediction\n\n\n\nTwo Encoder Architectures\nBiLSTM reads the title as a sequence, left-to-right and right-to-left, maintaining memory of what it’s seen. The bidirectional pass means “VP of Engineering” and “Engineering VP” produce similar representations.\nCNN slides filters across the title looking for local patterns — 2-word, 3-word, and 4-word combinations like “VP of”, “Director of Engineering”, or “Sr. Dir.” It’s faster and slightly more accurate here because title classification depends on local n-gram patterns more than long-range dependencies.\n\n\nThe Baseline: Know What Simple Gets You\nBefore going neural, we trained TF-IDF + Logistic Regression — the simplest reasonable approach. TF-IDF converts titles to numeric vectors by counting weighted word frequencies. Logistic Regression draws a decision boundary. This establishes a performance floor: if the neural network can’t beat this, it’s not worth the complexity."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#results",
+    "href": "projects/title-normalizer.html#results",
+    "title": "Job Title Normalizer",
+    "section": "Results",
+    "text": "Results\n\n\n\nModel\nSeniority Acc\nFunction Acc\nBoth Correct\n\n\n\n\nCNN (PyTorch)\n95.2%\n93.0%\n89.0%\n\n\nBiLSTM (PyTorch)\n94.5%\n92.6%\n88.0%\n\n\nTF-IDF + LogReg (baseline)\n93.3%\n93.3%\n87.6%\n\n\n\nTrained on 16,000 synthetic titles, evaluated on 4,000 held-out.\nWhy these numbers are realistic, not inflated: The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “Operations” vs “Engineering” function is hard when the title says “DevOps Manager” (both are reasonable). Real CRM data would likely push combined accuracy down another 5-10 points.\nWhere the neural models earn their keep: The gap over TF-IDF (89% vs 87.6% combined) is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where word-level embeddings capture similarity that bag-of-words approaches miss.\n\nPer-Class Performance\nThe model performs best on classes with distinctive vocabulary:\n\nC-Suite — near-perfect (CTO, CFO, CMO are unambiguous)\nLegal — distinctive terms (Counsel, Paralegal, Compliance)\nDesign — UX/UI vocabulary is specific\n\nIt struggles most where vocabulary overlaps:\n\nOperations vs Engineering — “DevOps” sits at the boundary\nIndividual Contributor vs Senior — when seniority markers get truncated or misspelled\nHR vs Operations — “People Operations” is an HR function despite the word “Operations”"
+  },
+  {
+    "objectID": "projects/title-normalizer.html#training-how-the-model-learns",
+    "href": "projects/title-normalizer.html#training-how-the-model-learns",
+    "title": "Job Title Normalizer",
+    "section": "Training: How the Model Learns",
+    "text": "Training: How the Model Learns\n\nEarly Stopping\nThe model trains for up to 30 passes through the data (epochs). After each pass, we check performance on held-out data. If performance stops improving for 5 consecutive epochs (patience), training halts and we revert to the best checkpoint. This prevents the model from memorizing the training data — a problem called overfitting that’s especially dangerous with 20,000 samples.\n\n\nWhat the Model Learns\nDuring training, the embedding layer discovers semantic structure: abbreviations cluster with their full forms, seniority markers group together, function-specific terms form distinct neighborhoods. This learned vocabulary is the main advantage over TF-IDF, which treats every distinct string as a completely independent feature."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
+    "href": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
+    "title": "Job Title Normalizer",
+    "section": "How This Connects to the Lead Scoring Pipeline",
+    "text": "How This Connects to the Lead Scoring Pipeline\nTitle normalization is Step 1 in a contact data pipeline:\n\nNormalize titles → standardized seniority and function labels (this project)\nBuild contact features → VP+ count, function diversity, senior density per account\nScore accounts → propensity model using contact features + firmographics\nIdentify gaps → buying group completeness analysis\n\nWithout reliable title normalization, everything downstream is built on noise. If “Sr. Dir. Mktg” doesn’t get classified as a senior director in marketing, the buying group analysis doesn’t know there’s a senior marketing leader on the account, and the gap analysis might incorrectly recommend finding one."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#what-id-do-differently-in-production",
+    "href": "projects/title-normalizer.html#what-id-do-differently-in-production",
+    "title": "Job Title Normalizer",
+    "section": "What I’d Do Differently in Production",
+    "text": "What I’d Do Differently in Production\n\nReal labeled data — Retrain on titles from actual CRM exports (Salesforce, HubSpot). The synthetic generator gets you 80% of the way, but production titles have patterns no generator anticipates\nActive learning — Flag low-confidence predictions for human review. A model that says “60% engineering, 35% data” is asking for help — route those to a human and use the corrections to retrain\nFine-tuned LLM — For the hardest 10% of titles (creative titles, non-English, multi-role), a fine-tuned language model would capture context that word embeddings miss\nMonitoring — Track prediction confidence distributions over time. If a new client uses unusual title conventions, confidence will drop and you’ll know to retrain"
+  },
+  {
+    "objectID": "projects/title-normalizer.html#stack",
+    "href": "projects/title-normalizer.html#stack",
+    "title": "Job Title Normalizer",
+    "section": "Stack",
+    "text": "Stack\nPython | PyTorch | scikit-learn | Pandas | NumPy | Matplotlib | pytest"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Philip Felix",
@@ -151,7 +221,7 @@
     "href": "index.html#featured-projects",
     "title": "Philip Felix",
     "section": "Featured Projects",
-    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nA propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.\nStack: Python, Pandas, scikit-learn, Matplotlib\n\n\nContext Agent\nAn LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.\nStack: Python, Claude API, DuckDB, Streamlit"
+    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nA propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.\nStack: Python, Pandas, scikit-learn, Matplotlib\n\n\nJob Title Normalizer\nA multi-task neural network that classifies messy CRM job titles into standardized seniority levels and job functions. Handles real-world data noise — truncation, misspellings, abbreviations, encoding artifacts — that makes rule-based approaches break. Built as the preprocessing step for contact segmentation and buying group analysis.\nStack: Python, PyTorch, scikit-learn, Pandas\n\n\nContext Agent\nAn LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.\nStack: Python, Claude API, DuckDB, Streamlit"
   },
   {
     "objectID": "index.html#get-in-touch",
