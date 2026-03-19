@@ -249,6 +249,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Nomenclature and definitions</strong> — what your team means by “MQL,” “pipeline,” “closed-won,” segment names, and metric definitions</li>
 <li><strong>Query patterns</strong> — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed</li>
 <li><strong>Best practices</strong> — how your team structures analyses, naming conventions, how to document findings</li>
+<li><strong>Visualization standards</strong> — a preamble that enforces your company’s brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. We standardized on Plotly with a preamble that aligned to Atlassian’s viz requirements — every chart the LLM produced looked like it came from the team, not from a chatbot</li>
 </ul>
 <p><strong>How to format them:</strong> Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.</p>
 <p><strong>The unlock:</strong> When a team member asks the LLM to query a table, the LLM already knows the join conditions, the gotchas, and the right metric definitions. The analysis comes back correct the first time instead of requiring three rounds of debugging.</p>
