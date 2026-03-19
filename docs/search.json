@@ -93,35 +93,35 @@
   {
     "objectID": "projects/context-agent.html",
     "href": "projects/context-agent.html",
-    "title": "Context Agent",
+    "title": "Adaptive Analyst Agent",
     "section": "",
     "text": "View on GitHub"
   },
   {
     "objectID": "projects/context-agent.html#the-problem",
     "href": "projects/context-agent.html#the-problem",
-    "title": "Context Agent",
+    "title": "Adaptive Analyst Agent",
     "section": "The Problem",
-    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nContext Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
+    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nAdaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
   },
   {
     "objectID": "projects/context-agent.html#how-it-works",
     "href": "projects/context-agent.html#how-it-works",
-    "title": "Context Agent",
+    "title": "Adaptive Analyst Agent",
     "section": "How It Works",
     "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
   },
   {
     "objectID": "projects/context-agent.html#technical-decisions",
     "href": "projects/context-agent.html#technical-decisions",
-    "title": "Context Agent",
+    "title": "Adaptive Analyst Agent",
     "section": "Technical Decisions",
     "text": "Technical Decisions\n\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.\nTool use over RAG — The agent needs to act (run queries, generate charts), not just retrieve information. Tool use gives it the ability to reason and execute."
   },
   {
     "objectID": "projects/context-agent.html#stack",
     "href": "projects/context-agent.html#stack",
-    "title": "Context Agent",
+    "title": "Adaptive Analyst Agent",
     "section": "Stack",
     "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
   },
@@ -263,7 +263,7 @@
     "href": "index.html#featured-projects",
     "title": "Philip Felix",
     "section": "Featured Projects",
-    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nA propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.\nStack: Python, Pandas, scikit-learn, Matplotlib\n\n\nJob Title Normalizer\nA multi-task neural network that classifies messy CRM job titles into standardized seniority levels and job functions. Handles real-world data noise — truncation, misspellings, abbreviations, encoding artifacts — that makes rule-based approaches break. Built as the preprocessing step for contact segmentation and buying group analysis.\nStack: Python, PyTorch, scikit-learn, Pandas\n\n\nAI Adoption Playbook\nA practical framework for taking a data science org from zero LLM experience to AI-augmented workflows. Based on leading AI adoption across a 40+ person data org at Atlassian — covering MCP integrations, knowledge files, onboarding playbooks, and the sequencing that makes adoption stick.\nStack: Claude, MCP, Cursor, Databricks CLI, Confluence, Jira\n\n\nContext Agent\nAn LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.\nStack: Python, Claude API, DuckDB, Streamlit"
+    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nA propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.\nStack: Python, Pandas, scikit-learn, Matplotlib\n\n\nJob Title Normalizer\nA multi-task neural network that classifies messy CRM job titles into standardized seniority levels and job functions. Handles real-world data noise — truncation, misspellings, abbreviations, encoding artifacts — that makes rule-based approaches break. Built as the preprocessing step for contact segmentation and buying group analysis.\nStack: Python, PyTorch, scikit-learn, Pandas\n\n\nAI Adoption Playbook\nA practical framework for taking a data science org from zero LLM experience to AI-augmented workflows. Based on leading AI adoption across a 40+ person data org at Atlassian — covering MCP integrations, knowledge files, onboarding playbooks, and the sequencing that makes adoption stick.\nStack: Claude, MCP, Cursor, Databricks CLI, Confluence, Jira\n\n\nAdaptive Analyst Agent\nAn LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.\nStack: Python, Claude API, DuckDB, Streamlit"
   },
   {
     "objectID": "index.html#get-in-touch",

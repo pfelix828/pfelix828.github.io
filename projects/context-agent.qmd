@@ -1,5 +1,5 @@
 ---
-title: "Context Agent"
+title: "Adaptive Analyst Agent"
 description: "An LLM-powered data analyst that adapts to stakeholder context"
 ---
 
@@ -9,7 +9,7 @@ description: "An LLM-powered data analyst that adapts to stakeholder context"
 
 Data teams answer the same business questions differently depending on who's asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the *context* is what changes.
 
-Context Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it's talking to.
+Adaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it's talking to.
 
 ## How It Works
 

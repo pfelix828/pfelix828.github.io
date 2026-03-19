@@ -25,7 +25,7 @@ A practical framework for taking a data science org from zero LLM experience to 
 
 **Stack:** Claude, MCP, Cursor, Databricks CLI, Confluence, Jira
 
-### [Context Agent](projects/context-agent.qmd)
+### [Adaptive Analyst Agent](projects/context-agent.qmd)
 
 An LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.
 

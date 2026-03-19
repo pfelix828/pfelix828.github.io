@@ -17,7 +17,7 @@ website:
             href: projects/title-normalizer.qmd
           - text: AI Adoption Playbook
             href: projects/ai-adoption-playbook.qmd
-          - text: Context Agent
+          - text: Adaptive Analyst Agent
             href: projects/context-agent.qmd
       - text: About
         href: about.qmd
