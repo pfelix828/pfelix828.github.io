@@ -1,9 +1,9 @@
 ---
 title: "Philip Felix"
-subtitle: "AI Enablement Specialist & Data Scientist"
+subtitle: "Senior Data Scientist | AI Enablement"
 ---
 
-AI enablement specialist and data scientist with 10+ years of experience across enterprise SaaS (Atlassian), fintech (Square), and healthtech (ZocDoc). Led AI adoption across a 40+ person data org — designed repeatable LLM workflows, stood up MCP-based integrations with internal tools, and enabled teams through hands-on training and onboarding programs. Built LLM-powered prototypes for business stakeholders and improved a production scoring model that drove $20M+ in bookings at Atlassian. Strongest at identifying high-impact AI use cases, building proofs of concept, and communicating effectively to technical and non-technical stakeholders.
+Senior Data Scientist with 10+ years of experience across enterprise SaaS (Atlassian), fintech (Square), and healthtech (ZocDoc). Led AI adoption across a 40+ person data org — designed repeatable LLM workflows, stood up MCP-based integrations, and enabled teams through hands-on training. Improved a production scoring model that drove $20M+ in bookings and built LLM-powered prototypes for business stakeholders. Strongest at identifying high-impact use cases, building proofs of concept, and communicating effectively to technical and non-technical stakeholders.
 
 ## Featured Projects
 
