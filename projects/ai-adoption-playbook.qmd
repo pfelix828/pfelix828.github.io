@@ -1,0 +1,123 @@
+---
+title: "AI Adoption Playbook for Data Science Teams"
+description: "A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows"
+toc-depth: 3
+---
+
+[View on GitHub](https://github.com/pfelix828){.btn .btn-outline-primary}
+
+## The Problem
+
+Most data science teams know AI is important but don't know where to start. They've used ChatGPT for quick questions or their company's internal LLM product, but they haven't integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.
+
+At Atlassian, I led AI adoption across a 40+ person data science org. Most of the team's only AI experience was using Rovo, Atlassian's internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team's best practices and table documentation.
+
+This playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive.
+
+## The Framework
+
+AI adoption for a DS team isn't a training session. It's a sequence of unlocks, where each step builds on the last. Skip a step and people get stuck. Get the order right and each unlock makes the next one obvious.
+
+### Step 1: Get People Into the Terminal
+
+**The problem you're solving:** Most data scientists live in notebooks and GUIs. They've never run an LLM from the command line, installed a CLI tool, or configured an MCP server. This is the single biggest blocker — not skepticism about AI, but unfamiliarity with the environment where AI tools actually work.
+
+**What to do:**
+
+- Walk people through terminal basics if needed — many data scientists are strong in Python and SQL but have never configured a CLI tool
+- Install an AI-enabled code editor (Cursor, VS Code with extensions, or a CLI-based LLM tool)
+- Get them to run their first LLM interaction from the terminal, not a web browser
+- Make it hands-on — do this in 1:1 sessions, not a slide deck. The "aha moment" comes from seeing it work on their own machine
+
+**Why this matters:** Every subsequent step depends on being comfortable running AI tools locally. If someone can't get past terminal setup, nothing else in this playbook works.
+
+**Common blocker:** Time. People know they should learn this but can't carve out the hours. The solution is to make it feel small — a 30-minute 1:1 where you set everything up together. Once they see the capabilities, they find the time on their own.
+
+### Step 2: Connect the LLM to Internal Tools via MCP
+
+**The problem you're solving:** A standalone LLM can answer questions and write code, but it can't interact with your company's systems. MCP (Model Context Protocol) connections turn the LLM from a chatbot into a tool that can read from and write to the systems your team actually uses.
+
+**What to connect:**
+
+- **Documentation tools** (Confluence, Notion, Google Docs) — the LLM can read existing docs for context and write analysis summaries directly
+- **Project management** (Jira, Linear, Asana) — the LLM can create tickets, update status, and pull context about what the team is working on
+- **Code repositories** (Bitbucket, GitHub) — the LLM can read the codebase, understand your data models, and write code that follows your team's patterns
+- **Data platforms** (Databricks CLI, Snowflake CLI) — the LLM can query your data warehouse using natural language and run analysis on the results
+
+**The unlock:** Once the LLM is connected to Confluence and your data warehouse, a data scientist can say "query the marketing attribution table for Q4 campaign performance, analyze the results, and write a summary to Confluence." That workflow — which normally takes hours of writing SQL, interpreting results, and formatting a doc — becomes a conversation.
+
+**How to do it:**
+
+- Set up MCP servers for each tool your team uses
+- Test each connection yourself first — work out the gotchas before asking the team to try
+- Start with the tools people use daily (documentation and code repos before project management)
+- Create a simple install guide with copy-paste commands — remove every possible friction point
+
+### Step 3: Build Knowledge Files That Encode Team Expertise
+
+**The problem you're solving:** Every data science team has tribal knowledge — which tables to use, which joins are tricky, what the column names actually mean, which metrics are the "real" ones. This knowledge lives in people's heads, scattered Confluence pages, and Slack threads. New team members spend months learning it. LLMs don't have it at all.
+
+**What to build:**
+
+- **Table documentation** — which tables exist, what they contain, key columns, common joins, and known gotchas ("this table has duplicates on account_id if you don't filter by is_current")
+- **Nomenclature and definitions** — what your team means by "MQL," "pipeline," "closed-won," segment names, and metric definitions
+- **Query patterns** — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed
+- **Best practices** — how your team structures analyses, naming conventions, how to document findings
+
+**How to format them:** Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.
+
+**The unlock:** When a team member asks the LLM to query a table, the LLM already knows the join conditions, the gotchas, and the right metric definitions. The analysis comes back correct the first time instead of requiring three rounds of debugging.
+
+### Step 4: Create Standardized Skills and Workflows
+
+**The problem you're solving:** Once people have MCP connections and knowledge files, they'll start building their own workflows. Some will be great. Many will reinvent the wheel. Without standardization, you get 40 people doing the same thing 40 different ways.
+
+**What to standardize:**
+
+- **Analysis workflow** — a standard pattern for how to use the LLM to run a data analysis: query the data, validate the results, generate visualizations, write a summary
+- **Documentation workflow** — how to have the LLM write findings to Confluence in a consistent format
+- **Code review workflow** — how to use the LLM to review SQL and Python against team standards
+- **Onboarding workflow** — how a new team member sets up their AI tools on day one
+
+**How to distribute:** Build these as skills or templates that people can reference or invoke. Share them in a central location (a Confluence page, a repo, a shared config file). Make them easy to copy and modify.
+
+### Step 5: Measure and Iterate
+
+**The problem you're solving:** "Are people actually using this?" and "Is it making us more productive?" are hard to answer without intentional measurement.
+
+**What to track:**
+
+- **Adoption breadth** — how many team members have completed setup and are actively using AI tools
+- **Use case coverage** — which workflows are people using AI for, and which are they still doing manually
+- **Quality signals** — are LLM-assisted analyses catching errors that manual work would miss? Are summaries being accepted or rewritten?
+- **Qualitative feedback** — regular check-ins to understand what's working and what's frustrating
+
+**What not to do:** Don't try to measure "time saved" precisely. It's nearly impossible to A/B test individual productivity, and the numbers will be challenged. Instead, track adoption and collect stories — "I used to spend 2 hours writing this Confluence summary, now I describe what I want and review the output in 15 minutes."
+
+## Common Pitfalls
+
+### "Let's do a training session"
+Group training sessions are useful for awareness but don't drive adoption. The actual unlock happens in 1:1 sessions where you sit with someone, set up their tools, and run through a workflow on their real data. Budget time for this — it's the highest-leverage activity.
+
+### Starting with the wrong use case
+Don't start with the most complex workflow. Start with the most repetitive one — the thing everyone does weekly that's tedious but not risky. Documentation, data validation, and exploratory queries are good first use cases. Production model training is not.
+
+### Underestimating terminal unfamiliarity
+Data scientists who work exclusively in Jupyter notebooks and Tableau may have never configured a CLI tool. Don't assume this is trivial. Walk people through it.
+
+### No knowledge files
+Without knowledge files, the LLM will write plausible-looking queries against the wrong tables with the wrong join conditions. The output looks professional but is wrong. Knowledge files are the difference between an LLM that's useful and one that's dangerous.
+
+### Trying to measure ROI too early
+AI adoption is an infrastructure investment, not a feature launch. The ROI comes from compounding efficiency gains over months, not from a single measurable event. Track adoption and let the stories accumulate.
+
+## What I'd Do Differently Next Time
+
+- **Start with MCP connections earlier.** Terminal setup + MCP connections should happen in the same session. The MCP connections are what make the whole thing feel magical — without them, it's just another chatbot.
+- **Build knowledge files before training anyone.** Having accurate table documentation and query patterns ready before the first 1:1 means the team's first experience with AI tools produces correct results, which builds trust.
+- **Create a buddy system.** Pair early adopters with skeptics. Peer enablement scales better than one person doing every 1:1.
+- **Record the 1:1 sessions.** The same questions come up every time. A library of short walkthroughs would have saved significant time.
+
+## Stack
+
+Claude (Anthropic) | MCP (Model Context Protocol) | Cursor | VS Code | Databricks CLI | Confluence | Jira | Bitbucket | Python | SQL

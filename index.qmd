@@ -21,6 +21,12 @@ A multi-task neural network that classifies messy CRM job titles into standardiz
 
 **Stack:** Python, PyTorch, scikit-learn, Pandas
 
+### [AI Adoption Playbook](projects/ai-adoption-playbook.qmd)
+
+A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows. Based on leading AI adoption across a 40+ person data org at Atlassian — covering MCP integrations, knowledge files, onboarding playbooks, and the sequencing that makes adoption stick.
+
+**Stack:** Claude, MCP, Cursor, Databricks CLI, Confluence, Jira
+
 ### [Context Agent](projects/context-agent.qmd)
 
 An LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.
