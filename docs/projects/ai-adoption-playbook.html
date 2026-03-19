@@ -164,6 +164,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#starting-with-the-wrong-use-case" id="toc-starting-with-the-wrong-use-case" class="nav-link" data-scroll-target="#starting-with-the-wrong-use-case">Starting with the wrong use case</a></li>
   <li><a href="#underestimating-terminal-unfamiliarity" id="toc-underestimating-terminal-unfamiliarity" class="nav-link" data-scroll-target="#underestimating-terminal-unfamiliarity">Underestimating terminal unfamiliarity</a></li>
   <li><a href="#no-knowledge-files" id="toc-no-knowledge-files" class="nav-link" data-scroll-target="#no-knowledge-files">No knowledge files</a></li>
+  <li><a href="#trusting-llm-output-without-qa" id="toc-trusting-llm-output-without-qa" class="nav-link" data-scroll-target="#trusting-llm-output-without-qa">Trusting LLM output without QA</a></li>
   <li><a href="#trying-to-measure-roi-too-early" id="toc-trying-to-measure-roi-too-early" class="nav-link" data-scroll-target="#trying-to-measure-roi-too-early">Trying to measure ROI too early</a></li>
   </ul></li>
   <li><a href="#what-id-do-differently-next-time" id="toc-what-id-do-differently-next-time" class="nav-link" data-scroll-target="#what-id-do-differently-next-time">What I’d Do Differently Next Time</a></li>
@@ -296,6 +297,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="no-knowledge-files" class="level3">
 <h3 class="anchored" data-anchor-id="no-knowledge-files">No knowledge files</h3>
 <p>Without knowledge files, the LLM will write plausible-looking queries against the wrong tables with the wrong join conditions. The output looks professional but is wrong. Knowledge files are the difference between an LLM that’s useful and one that’s dangerous.</p>
+</section>
+<section id="trusting-llm-output-without-qa" class="level3">
+<h3 class="anchored" data-anchor-id="trusting-llm-output-without-qa">Trusting LLM output without QA</h3>
+<p>The LLM will write SQL that looks correct but joins on the wrong key. It will generate analysis that cites a metric definition it made up. It will produce a chart with the right format but the wrong data. Knowledge files reduce this significantly — accurate table documentation and query patterns mean fewer hallucinations — but they don’t eliminate it. A data scientist still needs to review every query, validate the numbers, and sanity-check the conclusions. The LLM is a force multiplier, not a replacement for judgment. We never reached a point where output could be trusted blindly, and any adoption framework that promises otherwise is selling something.</p>
 </section>
 <section id="trying-to-measure-roi-too-early" class="level3">
 <h3 class="anchored" data-anchor-id="trying-to-measure-roi-too-early">Trying to measure ROI too early</h3>

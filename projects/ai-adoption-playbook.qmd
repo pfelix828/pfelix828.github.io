@@ -109,6 +109,9 @@ Data scientists who work exclusively in Jupyter notebooks and Tableau may have n
 ### No knowledge files
 Without knowledge files, the LLM will write plausible-looking queries against the wrong tables with the wrong join conditions. The output looks professional but is wrong. Knowledge files are the difference between an LLM that's useful and one that's dangerous.
 
+### Trusting LLM output without QA
+The LLM will write SQL that looks correct but joins on the wrong key. It will generate analysis that cites a metric definition it made up. It will produce a chart with the right format but the wrong data. Knowledge files reduce this significantly — accurate table documentation and query patterns mean fewer hallucinations — but they don't eliminate it. A data scientist still needs to review every query, validate the numbers, and sanity-check the conclusions. The LLM is a force multiplier, not a replacement for judgment. We never reached a point where output could be trusted blindly, and any adoption framework that promises otherwise is selling something.
+
 ### Trying to measure ROI too early
 AI adoption is an infrastructure investment, not a feature launch. The ROI comes from compounding efficiency gains over months, not from a single measurable event. Track adoption and let the stories accumulate.
 
