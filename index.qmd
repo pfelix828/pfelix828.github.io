@@ -3,7 +3,7 @@ title: "Philip Felix"
 subtitle: "Senior Data Scientist | AI Enablement"
 ---
 
-Senior Data Scientist with 10+ years of experience across enterprise SaaS (Atlassian), fintech (Square), and healthtech (ZocDoc). Led AI adoption across a 40+ person data org — designed repeatable LLM workflows, stood up MCP-based integrations, and enabled teams through hands-on training. Improved a production scoring model that drove $20M+ in bookings and built LLM-powered prototypes for business stakeholders. Strongest at identifying high-impact use cases, building proofs of concept, and communicating effectively to technical and non-technical stakeholders.
+Senior Data Scientist with 10+ years of experience across enterprise SaaS (Atlassian), fintech (Square), and healthtech (ZocDoc). Led AI adoption across a 30+ person data org — designed repeatable LLM workflows, stood up MCP-based integrations, and enabled teams through hands-on training. Built targeting and measurement frameworks that generated $50M in pipeline and $20M in bookings, and developed LLM-powered tools for marketing stakeholders. Strongest at identifying high-impact use cases, building proofs of concept, and communicating effectively to technical and non-technical stakeholders.
 
 ## Featured Projects
 
@@ -21,7 +21,7 @@ A multi-task neural network that classifies messy CRM job titles into standardiz
 
 ### [AI Adoption Playbook](projects/ai-adoption-playbook.qmd)
 
-A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows. Based on leading AI adoption across a 40+ person data org at Atlassian — covering MCP integrations, knowledge files, onboarding playbooks, and the sequencing that makes adoption stick.
+A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows. Based on leading AI adoption across a 30+ person data org at Atlassian — covering MCP integrations, knowledge files, onboarding playbooks, and the sequencing that makes adoption stick.
 
 **Stack:** Claude, MCP, Cursor, Databricks CLI, Confluence, Jira
 
