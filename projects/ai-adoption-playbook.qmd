@@ -4,13 +4,11 @@ description: "A practical framework for taking a data science org from zero LLM 
 toc-depth: 3
 ---
 
-[View on GitHub](https://github.com/pfelix828){.btn .btn-outline-primary}
-
 ## The Problem
 
 Most data science teams know AI is important but don't know where to start. They've used ChatGPT for quick questions or their company's internal LLM product, but they haven't integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.
 
-At Atlassian, I led AI adoption across a 40+ person data science org. Most of the team's only AI experience was using Rovo, Atlassian's internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team's best practices and table documentation.
+At Atlassian, I led AI adoption across a 30+ person data org. Most of the team's only AI experience was using Rovo, Atlassian's internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team's best practices and table documentation.
 
 This playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive.
 

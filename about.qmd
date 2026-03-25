@@ -14,7 +14,7 @@ I'm a Senior Data Scientist based in San Francisco with 10+ years of progressive
 
 ## Skills
 
-**Languages:** Python (Pandas, NumPy, scikit-learn), SQL
+**Languages:** Python (Pandas, NumPy, scikit-learn, PyTorch), SQL
 
 **Platforms:** Snowflake, Databricks, Marketo, Salesforce, AWS, GCP, Airflow
 

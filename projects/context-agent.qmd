@@ -26,11 +26,22 @@ The agent uses Claude's tool use capabilities to:
 - **Execution layer** — Sandboxed SQL and Python execution via DuckDB
 - **UI** — Streamlit app for interactive exploration
 
-## Technical Decisions
+## In Action
 
+Same question, different stakeholder — the agent adapts automatically:
+
+- **Executive asks "How is pipeline trending?"** → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.
+- **Marketing asks "How is pipeline trending?"** → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.
+
+The underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed.
+
+## Key Design Choices
+
+- **Tool use over RAG** — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to *act* (run queries, generate charts), not just retrieve static content.
+- **Read-only database as primary security layer** — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.
+- **Full context loading vs. selective retrieval** — Stakeholder profiles and domain knowledge are loaded entirely into the prompt rather than retrieved via similarity search. This is pragmatic for the current scale (a handful of profiles, a few hundred lines of domain context) and avoids the retrieval failures that plague RAG on small corpora.
 - **DuckDB over SQLite** — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.
 - **Markdown for context** — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.
-- **Tool use over RAG** — The agent needs to *act* (run queries, generate charts), not just retrieve information. Tool use gives it the ability to reason and execute.
 
 ## Stack
 

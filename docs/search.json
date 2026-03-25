@@ -11,7 +11,7 @@
     "href": "about.html#skills",
     "title": "About",
     "section": "Skills",
-    "text": "Skills\nLanguages: Python (Pandas, NumPy, scikit-learn), SQL\nPlatforms: Snowflake, Databricks, Marketo, Salesforce, AWS, GCP, Airflow\nMethods: Propensity Modeling, Segmentation & Targeting, Lift Analysis, A/B Testing, Experimentation Design\nAI/LLM: LLMs, RAG, Prompt Engineering, Agentic Systems\nVisualization: Tableau, Streamlit, Matplotlib"
+    "text": "Skills\nLanguages: Python (Pandas, NumPy, scikit-learn, PyTorch), SQL\nPlatforms: Snowflake, Databricks, Marketo, Salesforce, AWS, GCP, Airflow\nMethods: Propensity Modeling, Segmentation & Targeting, Lift Analysis, A/B Testing, Experimentation Design\nAI/LLM: LLMs, RAG, Prompt Engineering, Agentic Systems\nVisualization: Tableau, Streamlit, Matplotlib"
   },
   {
     "objectID": "about.html#education",
@@ -112,11 +112,18 @@
     "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
   },
   {
-    "objectID": "projects/context-agent.html#technical-decisions",
-    "href": "projects/context-agent.html#technical-decisions",
+    "objectID": "projects/context-agent.html#in-action",
+    "href": "projects/context-agent.html#in-action",
     "title": "Adaptive Analyst Agent",
-    "section": "Technical Decisions",
-    "text": "Technical Decisions\n\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.\nTool use over RAG — The agent needs to act (run queries, generate charts), not just retrieve information. Tool use gives it the ability to reason and execute."
+    "section": "In Action",
+    "text": "In Action\nSame question, different stakeholder — the agent adapts automatically:\n\nExecutive asks “How is pipeline trending?” → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.\nMarketing asks “How is pipeline trending?” → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.\n\nThe underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed."
+  },
+  {
+    "objectID": "projects/context-agent.html#key-design-choices",
+    "href": "projects/context-agent.html#key-design-choices",
+    "title": "Adaptive Analyst Agent",
+    "section": "Key Design Choices",
+    "text": "Key Design Choices\n\nTool use over RAG — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to act (run queries, generate charts), not just retrieve static content.\nRead-only database as primary security layer — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.\nFull context loading vs. selective retrieval — Stakeholder profiles and domain knowledge are loaded entirely into the prompt rather than retrieved via similarity search. This is pragmatic for the current scale (a handful of profiles, a few hundred lines of domain context) and avoids the retrieval failures that plague RAG on small corpora.\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation."
   },
   {
     "objectID": "projects/context-agent.html#stack",
@@ -214,14 +221,14 @@
     "href": "projects/ai-adoption-playbook.html",
     "title": "AI Adoption Playbook for Data Science Teams",
     "section": "",
-    "text": "View on GitHub"
+    "text": "Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
   },
   {
     "objectID": "projects/ai-adoption-playbook.html#the-problem",
     "href": "projects/ai-adoption-playbook.html#the-problem",
     "title": "AI Adoption Playbook for Data Science Teams",
-    "section": "The Problem",
-    "text": "The Problem\nMost data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 40+ person data science org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
+    "section": "",
+    "text": "Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
   },
   {
     "objectID": "projects/ai-adoption-playbook.html#the-framework",
