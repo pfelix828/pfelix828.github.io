@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Philip Felix"
-  description: "Senior Data Scientist | Analytics, Experimentation & AI-Augmented Workflows"
+  description: "Senior Data Scientist in San Francisco"
   navbar:
     left:
       - text: Home
@@ -28,7 +28,7 @@ website:
         href: https://linkedin.com/in/pfelix1
 
   page-footer:
-    center: "Built with [Quarto](https://quarto.org)"
+    center: "Philip Felix — San Francisco"
 
 format:
   html:

@@ -1,38 +1,40 @@
 ---
 title: "Philip Felix"
-subtitle: "Senior Data Scientist | AI Enablement"
+subtitle: "Senior Data Scientist"
 ---
 
-Senior Data Scientist with 10+ years of experience across enterprise SaaS (Atlassian), fintech (Square), and healthtech (ZocDoc). Led AI adoption across a 30+ person data org — designed repeatable LLM workflows, stood up MCP-based integrations, and enabled teams through hands-on training. Built targeting and measurement frameworks that generated $50M in pipeline and $20M in bookings, and developed LLM-powered tools for marketing stakeholders. Strongest at identifying high-impact use cases, building proofs of concept, and communicating effectively to technical and non-technical stakeholders.
+I build models that help marketing teams figure out who to talk to and what to say. Most recently at Atlassian, where I spent 6 years working on targeting, segmentation, and contact strategy for the enterprise GTM org. That work drove $20M in bookings and surfaced $50M in recoverable pipeline.
+
+I also became the person who got our 30-person data org actually using AI. Not a slide deck about AI strategy. Hands-on: terminal setup, MCP connections, knowledge files, 1:1 sessions until people stopped asking me for help and started building their own workflows.
+
+Before Atlassian, I was at Square during the hardware transition years (swipe → chip → contactless), and before that I was doing ops at ZocDoc. I have a psychology degree, a math post-bacc, and a teaching stint at General Assembly that permanently ruined my ability to write jargon without flinching.
 
 ## Featured Projects
 
 ### [Lead Scoring & Buying Group Identification](projects/lead-scoring.qmd)
 
-A propensity model and buying group framework for B2B SaaS marketing. Built on synthetic data mirroring real GTM workflows — logistic regression for lead scoring, plus a buying group completeness framework that identifies coverage gaps and estimates enrichment pipeline value.
+You have 1,500 accounts and can only engage 200 this quarter. Which 200? This project builds a propensity model to answer that, plus a buying group analyzer that figures out *why* good accounts aren't closing and who's missing from the deal.
 
-**Stack:** Python, Pandas, scikit-learn, Matplotlib
+Python, Pandas, scikit-learn, Streamlit
 
 ### [Job Title Normalizer](projects/title-normalizer.qmd)
 
-A multi-task neural network that classifies messy CRM job titles into standardized seniority levels and job functions. Handles real-world data noise — truncation, misspellings, abbreviations, encoding artifacts — that makes rule-based approaches break. Built as the preprocessing step for contact segmentation and buying group analysis.
+CRM job titles are a mess. "Sr. Dir. Mktg (EMEA)" and "Senior Director of Marketing" are the same person. This multi-task PyTorch classifier standardizes them into seniority levels and job functions, handling 15 categories of real-world CRM noise that break rule-based approaches.
 
-**Stack:** Python, PyTorch, scikit-learn, Pandas
+Python, PyTorch, scikit-learn
 
 ### [AI Adoption Playbook](projects/ai-adoption-playbook.qmd)
 
-A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows. Based on leading AI adoption across a 30+ person data org at Atlassian — covering MCP integrations, knowledge files, onboarding playbooks, and the sequencing that makes adoption stick.
+How I took a 30-person data org from "what's an MCP server?" to running LLM-assisted analyses in weeks. Not theory. The actual steps, in order, with the blockers I hit and what I'd do differently.
 
-**Stack:** Claude, MCP, Cursor, Databricks CLI, Confluence, Jira
+Claude, MCP, Cursor, Databricks CLI
 
 ### [Adaptive Analyst Agent](projects/context-agent.qmd)
 
-An LLM-powered data analyst that adapts its analysis to different stakeholder contexts. Built with Claude API tool use, DuckDB, and Streamlit.
+An LLM-powered analyst that answers the same business question differently depending on who's asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.
 
-**Stack:** Python, Claude API, DuckDB, Streamlit
+Python, Claude API, DuckDB, Streamlit
 
 ## Get in Touch
 
-- [GitHub](https://github.com/pfelix828)
-- [LinkedIn](https://linkedin.com/in/pfelix1)
-- [Email](mailto:pfelix828@gmail.com)
+I'm currently looking for senior data science roles. If you're hiring or just want to talk shop: [pfelix828@gmail.com](mailto:pfelix828@gmail.com)
