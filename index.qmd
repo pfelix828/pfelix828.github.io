@@ -3,7 +3,7 @@ title: "Philip Felix"
 subtitle: "Senior Data Scientist"
 ---
 
-I build models that help marketing teams figure out who to talk to and what to say. Most recently at Atlassian, where I spent 6 years working on targeting, segmentation, and contact strategy for the enterprise GTM org. That work drove $20M in bookings and surfaced $50M in recoverable pipeline.
+I make marketing teams smarter about who they're going after and whether it's working. Targeting, segmentation, reporting that people actually use, and the causal analysis to prove what's driving revenue vs. what's just correlated with it. Most recently at Atlassian, where I spent 6 years in the GTM data science org — started on Events analytics during the shift to remote, then moved into targeting, contact health, and the ICP/Buying Group work that drove $20M in bookings and surfaced $50M in recoverable pipeline.
 
 I also became the person who got our 30-person data org actually using AI. Not a slide deck about AI strategy. Hands-on: terminal setup, MCP connections, knowledge files, 1:1 sessions until people stopped asking me for help and started building their own workflows.
 
