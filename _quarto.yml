@@ -19,6 +19,8 @@ website:
             href: projects/ai-adoption-playbook.qmd
           - text: Adaptive Analyst Agent
             href: projects/context-agent.qmd
+          - text: Marketing Measurement Under Hypergrowth
+            href: projects/marketing-measurement.qmd
       - text: About
         href: about.qmd
     right:

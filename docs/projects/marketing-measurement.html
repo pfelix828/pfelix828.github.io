@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="An LLM-powered data analyst that adapts to stakeholder context">
+<meta name="description" content="An interactive simulator for marketing measurement challenges at a company growing from $1B to $30B in 15 months">
 
-<title>Adaptive Analyst Agent – Philip Felix</title>
+<title>Marketing Measurement Under Hypergrowth – Philip Felix</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -153,13 +153,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-problem" id="toc-the-problem" class="nav-link active" data-scroll-target="#the-problem">The Problem</a></li>
-  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How It Works</a>
+  <li><a href="#what-this-project-does" id="toc-what-this-project-does" class="nav-link active" data-scroll-target="#what-this-project-does">What This Project Does</a></li>
+  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters">Why This Matters</a></li>
+  <li><a href="#whats-inside" id="toc-whats-inside" class="nav-link" data-scroll-target="#whats-inside">What’s Inside</a></li>
+  <li><a href="#key-numbers" id="toc-key-numbers" class="nav-link" data-scroll-target="#key-numbers">Key Numbers</a></li>
+  <li><a href="#the-approach" id="toc-the-approach" class="nav-link" data-scroll-target="#the-approach">The Approach</a>
   <ul class="collapse">
-  <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture">Architecture</a></li>
+  <li><a href="#simulation-engine-python" id="toc-simulation-engine-python" class="nav-link" data-scroll-target="#simulation-engine-python">Simulation Engine (Python)</a></li>
+  <li><a href="#interactive-app-next.js" id="toc-interactive-app-next.js" class="nav-link" data-scroll-target="#interactive-app-next.js">Interactive App (Next.js)</a></li>
   </ul></li>
-  <li><a href="#in-action" id="toc-in-action" class="nav-link" data-scroll-target="#in-action">In Action</a></li>
-  <li><a href="#key-design-choices" id="toc-key-design-choices" class="nav-link" data-scroll-target="#key-design-choices">Key Design Choices</a></li>
+  <li><a href="#what-id-do-differently-in-production" id="toc-what-id-do-differently-in-production" class="nav-link" data-scroll-target="#what-id-do-differently-in-production">What I’d Do Differently in Production</a></li>
   <li><a href="#stack" id="toc-stack" class="nav-link" data-scroll-target="#stack">Stack</a></li>
   </ul>
 </nav>
@@ -169,12 +172,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Adaptive Analyst Agent</h1>
+<h1 class="title">Marketing Measurement Under Hypergrowth</h1>
 </div>
 
 <div>
   <div class="description">
-    An LLM-powered data analyst that adapts to stakeholder context
+    An interactive simulator for marketing measurement challenges at a company growing from $1B to $30B in 15 months
   </div>
 </div>
 
@@ -191,52 +194,110 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://github.com/pfelix828/context-agent" class="btn btn-outline-primary">View on GitHub</a></p>
-<section id="the-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-problem">The Problem</h2>
-<p>Data teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the <em>context</em> is what changes.</p>
-<p>Adaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to.</p>
+<p><a href="https://github.com/pfelix828/marketing-measurement" class="btn btn-outline-primary">View on GitHub</a> <a href="https://marketing-measurement.vercel.app" class="btn btn-outline-primary">Live App</a></p>
+<section id="what-this-project-does" class="level2">
+<h2 class="anchored" data-anchor-id="what-this-project-does">What This Project Does</h2>
+<p>When a company grows from $1B to $30B in revenue over 15 months, almost entirely through organic adoption, every standard marketing measurement approach breaks. Attribution models overcredit by 3-9x. Blended CAC looks like $0.62 when incremental CAC is actually $37 — a 60x gap. A naive before/after analysis shows 28.6% lift, but 27.6 percentage points of that is organic growth and only 1.1% is true marketing impact.</p>
+<p>This project builds an interactive application that simulates these dynamics and walks through how to measure marketing’s real contribution when organic growth overwhelms paid signal.</p>
 </section>
-<section id="how-it-works" class="level2">
-<h2 class="anchored" data-anchor-id="how-it-works">How It Works</h2>
-<p>The agent uses Claude’s tool use capabilities to:</p>
-<ol type="1">
-<li><strong>Load stakeholder context</strong> — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences</li>
-<li><strong>Query data</strong> — Execute SQL against a DuckDB database with synthetic GTM data</li>
-<li><strong>Adapt the analysis</strong> — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context</li>
-</ol>
-<section id="architecture" class="level3">
-<h3 class="anchored" data-anchor-id="architecture">Architecture</h3>
+<section id="why-this-matters" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-matters">Why This Matters</h2>
+<p>Most marketing measurement frameworks assume you can isolate paid impact cleanly. At hypergrowth scale with product-led growth, that assumption collapses. The organic wave is so large that every channel looks like it’s working — attribution systems assign credit to marketing touches that would have converted anyway.</p>
+<p>This project works through the problem from first principles: what breaks at scale, what methods still work, and how to build a measurement roadmap that separates real signal from noise.</p>
+</section>
+<section id="whats-inside" class="level2">
+<h2 class="anchored" data-anchor-id="whats-inside">What’s Inside</h2>
+<p>The app has 12 pages organized around a 20-minute walkthrough:</p>
+<p><strong>Primary flow:</strong></p>
 <ul>
-<li><strong>Agent loop</strong> — Claude API with tool use for multi-step reasoning</li>
-<li><strong>Context system</strong> — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)</li>
-<li><strong>Execution layer</strong> — Sandboxed SQL and Python execution via DuckDB</li>
-<li><strong>UI</strong> — Streamlit app for interactive exploration</li>
+<li><strong>Overview</strong> — The measurement problem at hypergrowth scale</li>
+<li><strong>Measurement Framework</strong> — Why standard approaches fail and what replaces them</li>
+<li><strong>Method Comparison</strong> — MMM, incrementality testing, and attribution side by side, with honest assessments of where each breaks</li>
+<li><strong>Experiment Designer</strong> — Interactive tool for designing incrementality tests with configurable alpha, power, traffic splits, CUPED, and feasibility checks against real daily traffic</li>
+<li><strong>Cross-Motion Analysis</strong> — How self-serve, sales-assisted, and enterprise motions interact and cannibalize</li>
+<li><strong>User Journey</strong> — Activation funnels calibrated to real product flows</li>
+<li><strong>Decision Framework</strong> — Business-question-driven recommendations with a phased Day 1 measurement roadmap</li>
+<li><strong>Executive Summary</strong> — Three things leadership needs to know, no fluff</li>
+</ul>
+<p><strong>Supporting pages:</strong> Growth Simulator, PLG Adoption Model, Dynamic Cohorts, Data &amp; Assumptions</p>
+</section>
+<section id="key-numbers" class="level2">
+<h2 class="anchored" data-anchor-id="key-numbers">Key Numbers</h2>
+<p>All numbers come from a simulation engine calibrated to publicly reported data, then pressure-tested:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Revenue growth</td>
+<td>$1B (Jan 2025) to $30B (Apr 2026)</td>
+</tr>
+<tr class="even">
+<td>Daily signups</td>
+<td>80K to 3.5M projected</td>
+</tr>
+<tr class="odd">
+<td>Organic share</td>
+<td>~97%</td>
+</tr>
+<tr class="even">
+<td>Blended CAC</td>
+<td>$0.62</td>
+</tr>
+<tr class="odd">
+<td>Incremental CAC</td>
+<td>$37</td>
+</tr>
+<tr class="even">
+<td>CAC gap</td>
+<td>~60x</td>
+</tr>
+<tr class="odd">
+<td>Attribution overcrediting</td>
+<td>3-9x per channel</td>
+</tr>
+<tr class="even">
+<td>Naive lift</td>
+<td>28.6% (27.6% organic + 1.1% true marketing)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-approach" class="level2">
+<h2 class="anchored" data-anchor-id="the-approach">The Approach</h2>
+<section id="simulation-engine-python" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-engine-python">Simulation Engine (Python)</h3>
+<p>The analytical backbone is a Python package with 11 modules and 33 passing tests that models:</p>
+<ul>
+<li><strong>Growth dynamics</strong> — S-curve adoption with organic vs.&nbsp;paid decomposition</li>
+<li><strong>Channel simulation</strong> — Paid search, social, content, events, partnerships — each with realistic diminishing returns</li>
+<li><strong>Attribution models</strong> — Last-touch, multi-touch, and time-decay, all of which overcredit at different rates</li>
+<li><strong>MMM (Marketing Mix Modeling)</strong> — Simulates media mix models with adstock and saturation, demonstrating omitted variable bias when organic growth isn’t properly controlled</li>
+<li><strong>Incrementality testing</strong> — Geo-holdout and synthetic control experiments with realistic power calculations</li>
+<li><strong>Cohort analysis</strong> — Retention curves, LTV projections, and dynamic cohort behavior under hypergrowth</li>
 </ul>
 </section>
+<section id="interactive-app-next.js" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-app-next.js">Interactive App (Next.js)</h3>
+<p>The frontend is a Next.js app with TypeScript, Visx + Recharts for visualization, and Tailwind + shadcn/ui for the interface. Every chart is interactive — you can adjust parameters and see how measurement breaks or holds up under different assumptions.</p>
 </section>
-<section id="in-action" class="level2">
-<h2 class="anchored" data-anchor-id="in-action">In Action</h2>
-<p>Same question, different stakeholder — the agent adapts automatically:</p>
-<ul>
-<li><strong>Executive asks “How is pipeline trending?”</strong> → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.</li>
-<li><strong>Marketing asks “How is pipeline trending?”</strong> → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.</li>
-</ul>
-<p>The underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed.</p>
 </section>
-<section id="key-design-choices" class="level2">
-<h2 class="anchored" data-anchor-id="key-design-choices">Key Design Choices</h2>
+<section id="what-id-do-differently-in-production" class="level2">
+<h2 class="anchored" data-anchor-id="what-id-do-differently-in-production">What I’d Do Differently in Production</h2>
 <ul>
-<li><strong>Tool use over RAG</strong> — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to <em>act</em> (run queries, generate charts), not just retrieve static content.</li>
-<li><strong>Read-only database as primary security layer</strong> — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.</li>
-<li><strong>Structured context loading, not RAG</strong> — The project uses structured context loading — stakeholder profiles and domain knowledge loaded into the system prompt — not retrieval from a vector store. It’s technically closer to context injection than RAG. The design choice was intentional: for a small corpus of stakeholder profiles, full context loading is simpler and more reliable than embedding-based retrieval.</li>
-<li><strong>DuckDB over SQLite</strong> — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.</li>
-<li><strong>Markdown for context</strong> — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation.</li>
+<li><strong>Real data ingestion</strong> — Connect to actual ad platform APIs and warehouse data instead of simulation</li>
+<li><strong>Bayesian MMM</strong> — Replace the frequentist simulation with a proper Bayesian model (PyMC or Lightweight MMM) for uncertainty quantification</li>
+<li><strong>Automated experimentation</strong> — Build a pipeline that continuously runs geo-holdout tests and updates incrementality estimates</li>
+<li><strong>Causal inference layer</strong> — Add difference-in-differences and synthetic control methods for quasi-experimental measurement when true experiments aren’t feasible</li>
 </ul>
 </section>
 <section id="stack" class="level2">
 <h2 class="anchored" data-anchor-id="stack">Stack</h2>
-<p>Python | Claude API | DuckDB | Streamlit | Pandas | Plotly</p>
+<p>Python | Next.js | TypeScript | Visx | Recharts | Tailwind | shadcn/ui | Vercel</p>
 
 
 </section>

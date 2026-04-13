@@ -14,116 +14,46 @@
     "text": "Education\n\nB.A. Psychology — UC Santa Barbara\nPost-Baccalaureate, Mathematics — City University of New York"
   },
   {
-    "objectID": "projects/title-normalizer.html",
-    "href": "projects/title-normalizer.html",
-    "title": "Job Title Normalizer",
+    "objectID": "projects/ai-adoption-playbook.html",
+    "href": "projects/ai-adoption-playbook.html",
+    "title": "AI Adoption Playbook for Data Science Teams",
     "section": "",
-    "text": "View on GitHub"
+    "text": "Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
   },
   {
-    "objectID": "projects/title-normalizer.html#what-this-project-does",
-    "href": "projects/title-normalizer.html#what-this-project-does",
-    "title": "Job Title Normalizer",
-    "section": "What This Project Does",
-    "text": "What This Project Does\nCRM databases are full of job titles that look like they were typed by someone in a hurry — because they were. You get “Sr. Dir. Mktg (EMEA)”, “SENIOR DIRECTOR ENGINEERING”, “Snr. Direcotr, Engg” — all describing the same kind of person but completely different as text. When you need to segment contacts by seniority or function — which is the first step in building buying groups, scoring leads, or targeting campaigns — this inconsistency makes everything downstream unreliable.\nThis project trains a neural network to classify raw, messy titles into two standardized labels simultaneously:\n\nSeniority — one of 10 levels, from Individual Contributor through C-Suite\nFunction — one of 10 categories: Engineering, Data, Product, Marketing, Sales, Finance, HR, Operations, Design, Legal\n\nThe model predicts both at once through a shared representation, which is more efficient and more accurate than building two separate classifiers."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
-    "href": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
-    "title": "Job Title Normalizer",
-    "section": "Why This Matters in the Real World",
-    "text": "Why This Matters in the Real World\nAt Atlassian, I built contact segmentation and buying group analysis for enterprise marketing. The prerequisite to all of that work was normalizing job titles — you can’t identify coverage gaps in a buying group if you don’t know who’s a VP vs. an IC, or who’s in engineering vs. marketing. Title normalization was the critical first step.\nThis project isolates that step as a standalone system. The seniority and function labels it produces are exactly the features that would feed into the lead scoring and buying group models in a production pipeline."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
-    "href": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
-    "title": "Job Title Normalizer",
-    "section": "The Data: Why CRM Noise Is Harder Than It Looks",
-    "text": "The Data: Why CRM Noise Is Harder Than It Looks\nInstead of using clean, synthetic data that would make the model look artificially good, the data generator mirrors what real CRM exports actually look like. There are 15 categories of noise, all drawn from real-world data quality issues:\nThe obvious stuff — abbreviations (Sr., Dir., Mgr.), case variation (UPPERCASE, lowercase, Title Case), extra whitespace, and character-swap typos.\nThe stuff that actually makes CRM data painful:\n\nTruncation — CRM fields have character limits. “Senior Vice President of Engineering” becomes “Senior Vice Presi…” and now you’re missing the critical information\nGeographic qualifiers — Someone appended “(EMEA)” or “- North America” because that’s what their admin system required\nCredential suffixes — “MBA”, “CPA”, “PMP” stuck on the end because people copy their LinkedIn bio into the title field\nMisspellings — Not just swapped characters, but real mistakes: “Manger” for Manager, “Engineeer” with a triple e, “Marekting” for Marketing\nWord reordering — “Director of Engineering” vs “Engineering, Director” — different CRM systems format differently\nEncoding artifacts — Smart quotes, em dashes, HTML entities, non-breaking spaces from system imports\nWord drops — Lazy data entry where someone typed “VP” instead of “VP of Engineering”\n\nThis noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn’t seen."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#the-models-why-multi-task-learning",
-    "href": "projects/title-normalizer.html#the-models-why-multi-task-learning",
-    "title": "Job Title Normalizer",
-    "section": "The Models: Why Multi-Task Learning",
-    "text": "The Models: Why Multi-Task Learning\n\nWhat Multi-Task Learning Is\nInstead of training one model for seniority and a separate one for function, we train one model that predicts both simultaneously. The key insight is that seniority and function share structure. “CTO” tells you both seniority (C-Suite) and function (Engineering) at once. “Manager” tells you seniority but not function. By sharing internal representations, the model learns this structure more efficiently.\nThe architecture has three parts:\n\nWord embeddings — Each token in a title (after tokenization) maps to a 64-dimensional vector. During training, the model learns that “VP”, “V.P.”, and “Vice President” should all have similar vectors\nShared encoder — Processes the embedded title into a fixed-size representation. This is where seniority and function signals merge\nTask-specific heads — Two separate linear layers, one for each prediction\n\n\n\nTwo Encoder Architectures\nBiLSTM reads the title as a sequence, left-to-right and right-to-left, maintaining memory of what it’s seen. The bidirectional pass means “VP of Engineering” and “Engineering VP” produce similar representations.\nCNN slides filters across the title looking for local patterns — 2-word, 3-word, and 4-word combinations like “VP of”, “Director of Engineering”, or “Sr. Dir.” It’s faster and slightly more accurate here because title classification depends on local n-gram patterns more than long-range dependencies.\n\n\nThe Baseline: Know What Simple Gets You\nBefore going neural, we trained TF-IDF + Logistic Regression — the simplest reasonable approach. TF-IDF converts titles to numeric vectors by counting weighted word frequencies. Logistic Regression draws a decision boundary. This establishes a performance floor: if the neural network can’t beat this, it’s not worth the complexity."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#results",
-    "href": "projects/title-normalizer.html#results",
-    "title": "Job Title Normalizer",
-    "section": "Results",
-    "text": "Results\n\n\n\nModel\nSeniority Acc\nFunction Acc\nBoth Correct\n\n\n\n\nCNN (PyTorch)\n95.2%\n93.0%\n89.0%\n\n\nBiLSTM (PyTorch)\n94.5%\n92.6%\n88.0%\n\n\nTF-IDF + LogReg (baseline)\n93.3%\n93.3%\n87.6%\n\n\n\nTrained on 16,000 synthetic titles, evaluated on 4,000 held-out.\nWhy these numbers are realistic, not inflated: The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “Operations” vs “Engineering” function is hard when the title says “DevOps Manager” (both are reasonable). Real CRM data would likely push combined accuracy down another 5-10 points.\nWhere the neural models earn their keep: The gap over TF-IDF (89% vs 87.6% combined) is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where word-level embeddings capture similarity that bag-of-words approaches miss.\n\nPer-Class Performance\nThe model performs best on classes with distinctive vocabulary:\n\nC-Suite — near-perfect (CTO, CFO, CMO are unambiguous)\nLegal — distinctive terms (Counsel, Paralegal, Compliance)\nDesign — UX/UI vocabulary is specific\n\nIt struggles most where vocabulary overlaps:\n\nOperations vs Engineering — “DevOps” sits at the boundary\nIndividual Contributor vs Senior — when seniority markers get truncated or misspelled\nHR vs Operations — “People Operations” is an HR function despite the word “Operations”"
-  },
-  {
-    "objectID": "projects/title-normalizer.html#training-how-the-model-learns",
-    "href": "projects/title-normalizer.html#training-how-the-model-learns",
-    "title": "Job Title Normalizer",
-    "section": "Training: How the Model Learns",
-    "text": "Training: How the Model Learns\n\nEarly Stopping\nThe model trains for up to 30 passes through the data (epochs). After each pass, we check performance on held-out data. If performance stops improving for 5 consecutive epochs (patience), training halts and we revert to the best checkpoint. This prevents the model from memorizing the training data — a problem called overfitting that’s especially dangerous with 20,000 samples.\n\n\nWhat the Model Learns\nDuring training, the embedding layer discovers semantic structure: abbreviations cluster with their full forms, seniority markers group together, function-specific terms form distinct neighborhoods. This learned vocabulary is the main advantage over TF-IDF, which treats every distinct string as a completely independent feature."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
-    "href": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
-    "title": "Job Title Normalizer",
-    "section": "How This Connects to the Lead Scoring Pipeline",
-    "text": "How This Connects to the Lead Scoring Pipeline\nTitle normalization is Step 1 in a contact data pipeline:\n\nNormalize titles → standardized seniority and function labels (this project)\nBuild contact features → VP+ count, function diversity, senior density per account\nScore accounts → propensity model using contact features + firmographics\nIdentify gaps → buying group completeness analysis\n\nWithout reliable title normalization, everything downstream is built on noise. If “Sr. Dir. Mktg” doesn’t get classified as a senior director in marketing, the buying group analysis doesn’t know there’s a senior marketing leader on the account, and the gap analysis might incorrectly recommend finding one."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#what-id-do-differently-in-production",
-    "href": "projects/title-normalizer.html#what-id-do-differently-in-production",
-    "title": "Job Title Normalizer",
-    "section": "What I’d Do Differently in Production",
-    "text": "What I’d Do Differently in Production\n\nReal labeled data — Retrain on titles from actual CRM exports (Salesforce, HubSpot). The synthetic generator gets you 80% of the way, but production titles have patterns no generator anticipates\nActive learning — Flag low-confidence predictions for human review. A model that says “60% engineering, 35% data” is asking for help — route those to a human and use the corrections to retrain\nFine-tuned LLM — For the hardest 10% of titles (creative titles, non-English, multi-role), a fine-tuned language model would capture context that word embeddings miss\nMonitoring — Track prediction confidence distributions over time. If a new client uses unusual title conventions, confidence will drop and you’ll know to retrain"
-  },
-  {
-    "objectID": "projects/title-normalizer.html#stack",
-    "href": "projects/title-normalizer.html#stack",
-    "title": "Job Title Normalizer",
-    "section": "Stack",
-    "text": "Stack\nPython | PyTorch | scikit-learn | Pandas | NumPy | Matplotlib | pytest"
-  },
-  {
-    "objectID": "projects/context-agent.html",
-    "href": "projects/context-agent.html",
-    "title": "Adaptive Analyst Agent",
+    "objectID": "projects/ai-adoption-playbook.html#the-problem",
+    "href": "projects/ai-adoption-playbook.html#the-problem",
+    "title": "AI Adoption Playbook for Data Science Teams",
     "section": "",
-    "text": "View on GitHub"
+    "text": "Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
   },
   {
-    "objectID": "projects/context-agent.html#the-problem",
-    "href": "projects/context-agent.html#the-problem",
-    "title": "Adaptive Analyst Agent",
-    "section": "The Problem",
-    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nAdaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
+    "objectID": "projects/ai-adoption-playbook.html#the-framework",
+    "href": "projects/ai-adoption-playbook.html#the-framework",
+    "title": "AI Adoption Playbook for Data Science Teams",
+    "section": "The Framework",
+    "text": "The Framework\nAI adoption for a DS team isn’t a training session. It’s a sequence of unlocks, where each step builds on the last. Skip a step and people get stuck. Get the order right and each unlock makes the next one obvious.\n\nStep 1: Get People Into the Terminal\nThe problem you’re solving: Most data scientists live in notebooks and GUIs. They’ve never run an LLM from the command line, installed a CLI tool, or configured an MCP server. This is the single biggest blocker — not skepticism about AI, but unfamiliarity with the environment where AI tools actually work.\nWhat to do:\n\nWalk people through terminal basics if needed — many data scientists are strong in Python and SQL but have never configured a CLI tool\nInstall an AI-enabled code editor (Cursor, VS Code with extensions, or a CLI-based LLM tool)\nGet them to run their first LLM interaction from the terminal, not a web browser\nMake it hands-on — do this in 1:1 sessions, not a slide deck. The “aha moment” comes from seeing it work on their own machine\n\nWhy this matters: Every subsequent step depends on being comfortable running AI tools locally. If someone can’t get past terminal setup, nothing else in this playbook works.\nCommon blocker: Time. People know they should learn this but can’t carve out the hours. The solution is to make it feel small — a 30-minute 1:1 where you set everything up together. Once they see the capabilities, they find the time on their own.\n\n\nStep 2: Connect the LLM to Internal Tools via MCP\nThe problem you’re solving: A standalone LLM can answer questions and write code, but it can’t interact with your company’s systems. MCP (Model Context Protocol) connections turn the LLM from a chatbot into a tool that can read from and write to the systems your team actually uses.\nWhat to connect:\n\nDocumentation tools (Confluence, Notion, Google Docs) — the LLM can read existing docs for context and write analysis summaries directly\nProject management (Jira, Linear, Asana) — the LLM can create tickets, update status, and pull context about what the team is working on\nCode repositories (Bitbucket, GitHub) — the LLM can read the codebase, understand your data models, and write code that follows your team’s patterns\nData platforms (Databricks CLI, Snowflake CLI) — the LLM can query your data warehouse using natural language and run analysis on the results\n\nThe unlock: Once the LLM is connected to Confluence and your data warehouse, a data scientist can say “query the marketing attribution table for Q4 campaign performance, analyze the results, and write a summary to Confluence.” That workflow — which normally takes hours of writing SQL, interpreting results, and formatting a doc — becomes a conversation.\nHow to do it:\n\nSet up MCP servers for each tool your team uses\nTest each connection yourself first — work out the gotchas before asking the team to try\nStart with the tools people use daily (documentation and code repos before project management)\nCreate a simple install guide with copy-paste commands — remove every possible friction point\n\n\n\nStep 3: Build Knowledge Files That Encode Team Expertise\nThe problem you’re solving: Every data science team has tribal knowledge — which tables to use, which joins are tricky, what the column names actually mean, which metrics are the “real” ones. This knowledge lives in people’s heads, scattered Confluence pages, and Slack threads. New team members spend months learning it. LLMs don’t have it at all.\nWhat to build:\n\nTable documentation — which tables exist, what they contain, key columns, common joins, and known gotchas (“this table has duplicates on account_id if you don’t filter by is_current”)\nNomenclature and definitions — what your team means by “MQL,” “pipeline,” “closed-won,” segment names, and metric definitions\nQuery patterns — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed\nBest practices — how your team structures analyses, naming conventions, how to document findings\nVisualization standards — a preamble that enforces your company’s brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. We standardized on Plotly with a preamble that aligned to Atlassian’s viz requirements — every chart the LLM produced looked like it came from the team, not from a chatbot\n\nHow to format them: Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.\nThe unlock: When a team member asks the LLM to query a table, the LLM already knows the join conditions, the gotchas, and the right metric definitions. The analysis comes back correct the first time instead of requiring three rounds of debugging.\n\n\nStep 4: Create Standardized Skills and Workflows\nThe problem you’re solving: Once people have MCP connections and knowledge files, they’ll start building their own workflows. Some will be great. Many will reinvent the wheel. Without standardization, you get 40 people doing the same thing 40 different ways.\nWhat to standardize:\n\nAnalysis workflow — a standard pattern for how to use the LLM to run a data analysis: query the data, validate the results, generate visualizations, write a summary\nDocumentation workflow — how to have the LLM write findings to Confluence in a consistent format\nCode review workflow — how to use the LLM to review SQL and Python against team standards\nOnboarding workflow — how a new team member sets up their AI tools on day one\n\nHow to distribute: Build these as skills or templates that people can reference or invoke. Share them in a central location (a Confluence page, a repo, a shared config file). Make them easy to copy and modify.\n\n\nStep 5: Measure and Iterate\nThe problem you’re solving: “Are people actually using this?” and “Is it making us more productive?” are hard to answer without intentional measurement.\nWhat to track:\n\nAdoption breadth — how many team members have completed setup and are actively using AI tools\nUse case coverage — which workflows are people using AI for, and which are they still doing manually\nQuality signals — are LLM-assisted analyses catching errors that manual work would miss? Are summaries being accepted or rewritten?\nQualitative feedback — regular check-ins to understand what’s working and what’s frustrating\n\nWhat not to do: Don’t try to measure “time saved” precisely. It’s nearly impossible to A/B test individual productivity, and the numbers will be challenged. Instead, track adoption and collect stories — “I used to spend 2 hours writing this Confluence summary, now I describe what I want and review the output in 15 minutes.”"
   },
   {
-    "objectID": "projects/context-agent.html#how-it-works",
-    "href": "projects/context-agent.html#how-it-works",
-    "title": "Adaptive Analyst Agent",
-    "section": "How It Works",
-    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
+    "objectID": "projects/ai-adoption-playbook.html#common-pitfalls",
+    "href": "projects/ai-adoption-playbook.html#common-pitfalls",
+    "title": "AI Adoption Playbook for Data Science Teams",
+    "section": "Common Pitfalls",
+    "text": "Common Pitfalls\n\n“Let’s do a training session”\nGroup training sessions are useful for awareness but don’t drive adoption. The actual unlock happens in 1:1 sessions where you sit with someone, set up their tools, and run through a workflow on their real data. Budget time for this — it’s the highest-leverage activity.\n\n\nStarting with the wrong use case\nDon’t start with the most complex workflow. Start with the most repetitive one — the thing everyone does weekly that’s tedious but not risky. Documentation, data validation, and exploratory queries are good first use cases. Production model training is not.\n\n\nUnderestimating terminal unfamiliarity\nData scientists who work exclusively in Jupyter notebooks and Tableau may have never configured a CLI tool. Don’t assume this is trivial. Walk people through it.\n\n\nNo knowledge files\nWithout knowledge files, the LLM will write plausible-looking queries against the wrong tables with the wrong join conditions. The output looks professional but is wrong. Knowledge files are the difference between an LLM that’s useful and one that’s dangerous.\n\n\nTrusting LLM output without QA\nThe LLM will write SQL that looks correct but joins on the wrong key. It will generate analysis that cites a metric definition it made up. It will produce a chart with the right format but the wrong data. Knowledge files reduce this significantly — accurate table documentation and query patterns mean fewer hallucinations — but they don’t eliminate it. A data scientist still needs to review every query, validate the numbers, and sanity-check the conclusions. The LLM is a force multiplier, not a replacement for judgment. We never reached a point where output could be trusted blindly, and any adoption framework that promises otherwise is selling something.\n\n\nTrying to measure ROI too early\nAI adoption is an infrastructure investment, not a feature launch. The ROI comes from compounding efficiency gains over months, not from a single measurable event. Track adoption and let the stories accumulate."
   },
   {
-    "objectID": "projects/context-agent.html#in-action",
-    "href": "projects/context-agent.html#in-action",
-    "title": "Adaptive Analyst Agent",
-    "section": "In Action",
-    "text": "In Action\nSame question, different stakeholder — the agent adapts automatically:\n\nExecutive asks “How is pipeline trending?” → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.\nMarketing asks “How is pipeline trending?” → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.\n\nThe underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed."
+    "objectID": "projects/ai-adoption-playbook.html#what-id-do-differently-next-time",
+    "href": "projects/ai-adoption-playbook.html#what-id-do-differently-next-time",
+    "title": "AI Adoption Playbook for Data Science Teams",
+    "section": "What I’d Do Differently Next Time",
+    "text": "What I’d Do Differently Next Time\n\nStart with MCP connections earlier. Terminal setup + MCP connections should happen in the same session. The MCP connections are what make the whole thing feel magical — without them, it’s just another chatbot.\nBuild knowledge files before training anyone. Having accurate table documentation and query patterns ready before the first 1:1 means the team’s first experience with AI tools produces correct results, which builds trust.\nCreate a buddy system. Pair early adopters with skeptics. Peer enablement scales better than one person doing every 1:1.\nRecord the 1:1 sessions. The same questions come up every time. A library of short walkthroughs would have saved significant time."
   },
   {
-    "objectID": "projects/context-agent.html#key-design-choices",
-    "href": "projects/context-agent.html#key-design-choices",
-    "title": "Adaptive Analyst Agent",
-    "section": "Key Design Choices",
-    "text": "Key Design Choices\n\nTool use over RAG — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to act (run queries, generate charts), not just retrieve static content.\nRead-only database as primary security layer — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.\nStructured context loading, not RAG — The project uses structured context loading — stakeholder profiles and domain knowledge loaded into the system prompt — not retrieval from a vector store. It’s technically closer to context injection than RAG. The design choice was intentional: for a small corpus of stakeholder profiles, full context loading is simpler and more reliable than embedding-based retrieval.\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation."
-  },
-  {
-    "objectID": "projects/context-agent.html#stack",
-    "href": "projects/context-agent.html#stack",
-    "title": "Adaptive Analyst Agent",
+    "objectID": "projects/ai-adoption-playbook.html#stack",
+    "href": "projects/ai-adoption-playbook.html#stack",
+    "title": "AI Adoption Playbook for Data Science Teams",
     "section": "Stack",
-    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
+    "text": "Stack\nClaude (Anthropic) | MCP (Model Context Protocol) | Cursor | VS Code | Databricks CLI | Confluence | Jira | Bitbucket | Python | SQL"
   },
   {
     "objectID": "projects/lead-scoring.html",
@@ -210,46 +140,172 @@
     "text": "Stack\nPython | Pandas | scikit-learn | Matplotlib | Plotly | Streamlit | Jupyter"
   },
   {
-    "objectID": "projects/ai-adoption-playbook.html",
-    "href": "projects/ai-adoption-playbook.html",
-    "title": "AI Adoption Playbook for Data Science Teams",
+    "objectID": "projects/context-agent.html",
+    "href": "projects/context-agent.html",
+    "title": "Adaptive Analyst Agent",
     "section": "",
-    "text": "Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
+    "text": "View on GitHub"
   },
   {
-    "objectID": "projects/ai-adoption-playbook.html#the-problem",
-    "href": "projects/ai-adoption-playbook.html#the-problem",
-    "title": "AI Adoption Playbook for Data Science Teams",
-    "section": "",
-    "text": "Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.\nAt Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.\nThis playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive."
+    "objectID": "projects/context-agent.html#the-problem",
+    "href": "projects/context-agent.html#the-problem",
+    "title": "Adaptive Analyst Agent",
+    "section": "The Problem",
+    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nAdaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
   },
   {
-    "objectID": "projects/ai-adoption-playbook.html#the-framework",
-    "href": "projects/ai-adoption-playbook.html#the-framework",
-    "title": "AI Adoption Playbook for Data Science Teams",
-    "section": "The Framework",
-    "text": "The Framework\nAI adoption for a DS team isn’t a training session. It’s a sequence of unlocks, where each step builds on the last. Skip a step and people get stuck. Get the order right and each unlock makes the next one obvious.\n\nStep 1: Get People Into the Terminal\nThe problem you’re solving: Most data scientists live in notebooks and GUIs. They’ve never run an LLM from the command line, installed a CLI tool, or configured an MCP server. This is the single biggest blocker — not skepticism about AI, but unfamiliarity with the environment where AI tools actually work.\nWhat to do:\n\nWalk people through terminal basics if needed — many data scientists are strong in Python and SQL but have never configured a CLI tool\nInstall an AI-enabled code editor (Cursor, VS Code with extensions, or a CLI-based LLM tool)\nGet them to run their first LLM interaction from the terminal, not a web browser\nMake it hands-on — do this in 1:1 sessions, not a slide deck. The “aha moment” comes from seeing it work on their own machine\n\nWhy this matters: Every subsequent step depends on being comfortable running AI tools locally. If someone can’t get past terminal setup, nothing else in this playbook works.\nCommon blocker: Time. People know they should learn this but can’t carve out the hours. The solution is to make it feel small — a 30-minute 1:1 where you set everything up together. Once they see the capabilities, they find the time on their own.\n\n\nStep 2: Connect the LLM to Internal Tools via MCP\nThe problem you’re solving: A standalone LLM can answer questions and write code, but it can’t interact with your company’s systems. MCP (Model Context Protocol) connections turn the LLM from a chatbot into a tool that can read from and write to the systems your team actually uses.\nWhat to connect:\n\nDocumentation tools (Confluence, Notion, Google Docs) — the LLM can read existing docs for context and write analysis summaries directly\nProject management (Jira, Linear, Asana) — the LLM can create tickets, update status, and pull context about what the team is working on\nCode repositories (Bitbucket, GitHub) — the LLM can read the codebase, understand your data models, and write code that follows your team’s patterns\nData platforms (Databricks CLI, Snowflake CLI) — the LLM can query your data warehouse using natural language and run analysis on the results\n\nThe unlock: Once the LLM is connected to Confluence and your data warehouse, a data scientist can say “query the marketing attribution table for Q4 campaign performance, analyze the results, and write a summary to Confluence.” That workflow — which normally takes hours of writing SQL, interpreting results, and formatting a doc — becomes a conversation.\nHow to do it:\n\nSet up MCP servers for each tool your team uses\nTest each connection yourself first — work out the gotchas before asking the team to try\nStart with the tools people use daily (documentation and code repos before project management)\nCreate a simple install guide with copy-paste commands — remove every possible friction point\n\n\n\nStep 3: Build Knowledge Files That Encode Team Expertise\nThe problem you’re solving: Every data science team has tribal knowledge — which tables to use, which joins are tricky, what the column names actually mean, which metrics are the “real” ones. This knowledge lives in people’s heads, scattered Confluence pages, and Slack threads. New team members spend months learning it. LLMs don’t have it at all.\nWhat to build:\n\nTable documentation — which tables exist, what they contain, key columns, common joins, and known gotchas (“this table has duplicates on account_id if you don’t filter by is_current”)\nNomenclature and definitions — what your team means by “MQL,” “pipeline,” “closed-won,” segment names, and metric definitions\nQuery patterns — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed\nBest practices — how your team structures analyses, naming conventions, how to document findings\nVisualization standards — a preamble that enforces your company’s brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. We standardized on Plotly with a preamble that aligned to Atlassian’s viz requirements — every chart the LLM produced looked like it came from the team, not from a chatbot\n\nHow to format them: Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.\nThe unlock: When a team member asks the LLM to query a table, the LLM already knows the join conditions, the gotchas, and the right metric definitions. The analysis comes back correct the first time instead of requiring three rounds of debugging.\n\n\nStep 4: Create Standardized Skills and Workflows\nThe problem you’re solving: Once people have MCP connections and knowledge files, they’ll start building their own workflows. Some will be great. Many will reinvent the wheel. Without standardization, you get 40 people doing the same thing 40 different ways.\nWhat to standardize:\n\nAnalysis workflow — a standard pattern for how to use the LLM to run a data analysis: query the data, validate the results, generate visualizations, write a summary\nDocumentation workflow — how to have the LLM write findings to Confluence in a consistent format\nCode review workflow — how to use the LLM to review SQL and Python against team standards\nOnboarding workflow — how a new team member sets up their AI tools on day one\n\nHow to distribute: Build these as skills or templates that people can reference or invoke. Share them in a central location (a Confluence page, a repo, a shared config file). Make them easy to copy and modify.\n\n\nStep 5: Measure and Iterate\nThe problem you’re solving: “Are people actually using this?” and “Is it making us more productive?” are hard to answer without intentional measurement.\nWhat to track:\n\nAdoption breadth — how many team members have completed setup and are actively using AI tools\nUse case coverage — which workflows are people using AI for, and which are they still doing manually\nQuality signals — are LLM-assisted analyses catching errors that manual work would miss? Are summaries being accepted or rewritten?\nQualitative feedback — regular check-ins to understand what’s working and what’s frustrating\n\nWhat not to do: Don’t try to measure “time saved” precisely. It’s nearly impossible to A/B test individual productivity, and the numbers will be challenged. Instead, track adoption and collect stories — “I used to spend 2 hours writing this Confluence summary, now I describe what I want and review the output in 15 minutes.”"
+    "objectID": "projects/context-agent.html#how-it-works",
+    "href": "projects/context-agent.html#how-it-works",
+    "title": "Adaptive Analyst Agent",
+    "section": "How It Works",
+    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
   },
   {
-    "objectID": "projects/ai-adoption-playbook.html#common-pitfalls",
-    "href": "projects/ai-adoption-playbook.html#common-pitfalls",
-    "title": "AI Adoption Playbook for Data Science Teams",
-    "section": "Common Pitfalls",
-    "text": "Common Pitfalls\n\n“Let’s do a training session”\nGroup training sessions are useful for awareness but don’t drive adoption. The actual unlock happens in 1:1 sessions where you sit with someone, set up their tools, and run through a workflow on their real data. Budget time for this — it’s the highest-leverage activity.\n\n\nStarting with the wrong use case\nDon’t start with the most complex workflow. Start with the most repetitive one — the thing everyone does weekly that’s tedious but not risky. Documentation, data validation, and exploratory queries are good first use cases. Production model training is not.\n\n\nUnderestimating terminal unfamiliarity\nData scientists who work exclusively in Jupyter notebooks and Tableau may have never configured a CLI tool. Don’t assume this is trivial. Walk people through it.\n\n\nNo knowledge files\nWithout knowledge files, the LLM will write plausible-looking queries against the wrong tables with the wrong join conditions. The output looks professional but is wrong. Knowledge files are the difference between an LLM that’s useful and one that’s dangerous.\n\n\nTrusting LLM output without QA\nThe LLM will write SQL that looks correct but joins on the wrong key. It will generate analysis that cites a metric definition it made up. It will produce a chart with the right format but the wrong data. Knowledge files reduce this significantly — accurate table documentation and query patterns mean fewer hallucinations — but they don’t eliminate it. A data scientist still needs to review every query, validate the numbers, and sanity-check the conclusions. The LLM is a force multiplier, not a replacement for judgment. We never reached a point where output could be trusted blindly, and any adoption framework that promises otherwise is selling something.\n\n\nTrying to measure ROI too early\nAI adoption is an infrastructure investment, not a feature launch. The ROI comes from compounding efficiency gains over months, not from a single measurable event. Track adoption and let the stories accumulate."
+    "objectID": "projects/context-agent.html#in-action",
+    "href": "projects/context-agent.html#in-action",
+    "title": "Adaptive Analyst Agent",
+    "section": "In Action",
+    "text": "In Action\nSame question, different stakeholder — the agent adapts automatically:\n\nExecutive asks “How is pipeline trending?” → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.\nMarketing asks “How is pipeline trending?” → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.\n\nThe underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed."
   },
   {
-    "objectID": "projects/ai-adoption-playbook.html#what-id-do-differently-next-time",
-    "href": "projects/ai-adoption-playbook.html#what-id-do-differently-next-time",
-    "title": "AI Adoption Playbook for Data Science Teams",
-    "section": "What I’d Do Differently Next Time",
-    "text": "What I’d Do Differently Next Time\n\nStart with MCP connections earlier. Terminal setup + MCP connections should happen in the same session. The MCP connections are what make the whole thing feel magical — without them, it’s just another chatbot.\nBuild knowledge files before training anyone. Having accurate table documentation and query patterns ready before the first 1:1 means the team’s first experience with AI tools produces correct results, which builds trust.\nCreate a buddy system. Pair early adopters with skeptics. Peer enablement scales better than one person doing every 1:1.\nRecord the 1:1 sessions. The same questions come up every time. A library of short walkthroughs would have saved significant time."
+    "objectID": "projects/context-agent.html#key-design-choices",
+    "href": "projects/context-agent.html#key-design-choices",
+    "title": "Adaptive Analyst Agent",
+    "section": "Key Design Choices",
+    "text": "Key Design Choices\n\nTool use over RAG — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to act (run queries, generate charts), not just retrieve static content.\nRead-only database as primary security layer — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.\nStructured context loading, not RAG — The project uses structured context loading — stakeholder profiles and domain knowledge loaded into the system prompt — not retrieval from a vector store. It’s technically closer to context injection than RAG. The design choice was intentional: for a small corpus of stakeholder profiles, full context loading is simpler and more reliable than embedding-based retrieval.\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation."
   },
   {
-    "objectID": "projects/ai-adoption-playbook.html#stack",
-    "href": "projects/ai-adoption-playbook.html#stack",
-    "title": "AI Adoption Playbook for Data Science Teams",
+    "objectID": "projects/context-agent.html#stack",
+    "href": "projects/context-agent.html#stack",
+    "title": "Adaptive Analyst Agent",
     "section": "Stack",
-    "text": "Stack\nClaude (Anthropic) | MCP (Model Context Protocol) | Cursor | VS Code | Databricks CLI | Confluence | Jira | Bitbucket | Python | SQL"
+    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
+  },
+  {
+    "objectID": "projects/title-normalizer.html",
+    "href": "projects/title-normalizer.html",
+    "title": "Job Title Normalizer",
+    "section": "",
+    "text": "View on GitHub"
+  },
+  {
+    "objectID": "projects/title-normalizer.html#what-this-project-does",
+    "href": "projects/title-normalizer.html#what-this-project-does",
+    "title": "Job Title Normalizer",
+    "section": "What This Project Does",
+    "text": "What This Project Does\nCRM databases are full of job titles that look like they were typed by someone in a hurry — because they were. You get “Sr. Dir. Mktg (EMEA)”, “SENIOR DIRECTOR ENGINEERING”, “Snr. Direcotr, Engg” — all describing the same kind of person but completely different as text. When you need to segment contacts by seniority or function — which is the first step in building buying groups, scoring leads, or targeting campaigns — this inconsistency makes everything downstream unreliable.\nThis project trains a neural network to classify raw, messy titles into two standardized labels simultaneously:\n\nSeniority — one of 10 levels, from Individual Contributor through C-Suite\nFunction — one of 10 categories: Engineering, Data, Product, Marketing, Sales, Finance, HR, Operations, Design, Legal\n\nThe model predicts both at once through a shared representation, which is more efficient and more accurate than building two separate classifiers."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
+    "href": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
+    "title": "Job Title Normalizer",
+    "section": "Why This Matters in the Real World",
+    "text": "Why This Matters in the Real World\nAt Atlassian, I built contact segmentation and buying group analysis for enterprise marketing. The prerequisite to all of that work was normalizing job titles — you can’t identify coverage gaps in a buying group if you don’t know who’s a VP vs. an IC, or who’s in engineering vs. marketing. Title normalization was the critical first step.\nThis project isolates that step as a standalone system. The seniority and function labels it produces are exactly the features that would feed into the lead scoring and buying group models in a production pipeline."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
+    "href": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
+    "title": "Job Title Normalizer",
+    "section": "The Data: Why CRM Noise Is Harder Than It Looks",
+    "text": "The Data: Why CRM Noise Is Harder Than It Looks\nInstead of using clean, synthetic data that would make the model look artificially good, the data generator mirrors what real CRM exports actually look like. There are 15 categories of noise, all drawn from real-world data quality issues:\nThe obvious stuff — abbreviations (Sr., Dir., Mgr.), case variation (UPPERCASE, lowercase, Title Case), extra whitespace, and character-swap typos.\nThe stuff that actually makes CRM data painful:\n\nTruncation — CRM fields have character limits. “Senior Vice President of Engineering” becomes “Senior Vice Presi…” and now you’re missing the critical information\nGeographic qualifiers — Someone appended “(EMEA)” or “- North America” because that’s what their admin system required\nCredential suffixes — “MBA”, “CPA”, “PMP” stuck on the end because people copy their LinkedIn bio into the title field\nMisspellings — Not just swapped characters, but real mistakes: “Manger” for Manager, “Engineeer” with a triple e, “Marekting” for Marketing\nWord reordering — “Director of Engineering” vs “Engineering, Director” — different CRM systems format differently\nEncoding artifacts — Smart quotes, em dashes, HTML entities, non-breaking spaces from system imports\nWord drops — Lazy data entry where someone typed “VP” instead of “VP of Engineering”\n\nThis noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn’t seen."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#the-models-why-multi-task-learning",
+    "href": "projects/title-normalizer.html#the-models-why-multi-task-learning",
+    "title": "Job Title Normalizer",
+    "section": "The Models: Why Multi-Task Learning",
+    "text": "The Models: Why Multi-Task Learning\n\nWhat Multi-Task Learning Is\nInstead of training one model for seniority and a separate one for function, we train one model that predicts both simultaneously. The key insight is that seniority and function share structure. “CTO” tells you both seniority (C-Suite) and function (Engineering) at once. “Manager” tells you seniority but not function. By sharing internal representations, the model learns this structure more efficiently.\nThe architecture has three parts:\n\nWord embeddings — Each token in a title (after tokenization) maps to a 64-dimensional vector. During training, the model learns that “VP”, “V.P.”, and “Vice President” should all have similar vectors\nShared encoder — Processes the embedded title into a fixed-size representation. This is where seniority and function signals merge\nTask-specific heads — Two separate linear layers, one for each prediction\n\n\n\nTwo Encoder Architectures\nBiLSTM reads the title as a sequence, left-to-right and right-to-left, maintaining memory of what it’s seen. The bidirectional pass means “VP of Engineering” and “Engineering VP” produce similar representations.\nCNN slides filters across the title looking for local patterns — 2-word, 3-word, and 4-word combinations like “VP of”, “Director of Engineering”, or “Sr. Dir.” It’s faster and slightly more accurate here because title classification depends on local n-gram patterns more than long-range dependencies.\n\n\nThe Baseline: Know What Simple Gets You\nBefore going neural, we trained TF-IDF + Logistic Regression — the simplest reasonable approach. TF-IDF converts titles to numeric vectors by counting weighted word frequencies. Logistic Regression draws a decision boundary. This establishes a performance floor: if the neural network can’t beat this, it’s not worth the complexity."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#results",
+    "href": "projects/title-normalizer.html#results",
+    "title": "Job Title Normalizer",
+    "section": "Results",
+    "text": "Results\n\n\n\nModel\nSeniority Acc\nFunction Acc\nBoth Correct\n\n\n\n\nCNN (PyTorch)\n95.2%\n93.0%\n89.0%\n\n\nBiLSTM (PyTorch)\n94.5%\n92.6%\n88.0%\n\n\nTF-IDF + LogReg (baseline)\n93.3%\n93.3%\n87.6%\n\n\n\nTrained on 16,000 synthetic titles, evaluated on 4,000 held-out.\nWhy these numbers are realistic, not inflated: The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “Operations” vs “Engineering” function is hard when the title says “DevOps Manager” (both are reasonable). Real CRM data would likely push combined accuracy down another 5-10 points.\nWhere the neural models earn their keep: The gap over TF-IDF (89% vs 87.6% combined) is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where word-level embeddings capture similarity that bag-of-words approaches miss.\n\nPer-Class Performance\nThe model performs best on classes with distinctive vocabulary:\n\nC-Suite — near-perfect (CTO, CFO, CMO are unambiguous)\nLegal — distinctive terms (Counsel, Paralegal, Compliance)\nDesign — UX/UI vocabulary is specific\n\nIt struggles most where vocabulary overlaps:\n\nOperations vs Engineering — “DevOps” sits at the boundary\nIndividual Contributor vs Senior — when seniority markers get truncated or misspelled\nHR vs Operations — “People Operations” is an HR function despite the word “Operations”"
+  },
+  {
+    "objectID": "projects/title-normalizer.html#training-how-the-model-learns",
+    "href": "projects/title-normalizer.html#training-how-the-model-learns",
+    "title": "Job Title Normalizer",
+    "section": "Training: How the Model Learns",
+    "text": "Training: How the Model Learns\n\nEarly Stopping\nThe model trains for up to 30 passes through the data (epochs). After each pass, we check performance on held-out data. If performance stops improving for 5 consecutive epochs (patience), training halts and we revert to the best checkpoint. This prevents the model from memorizing the training data — a problem called overfitting that’s especially dangerous with 20,000 samples.\n\n\nWhat the Model Learns\nDuring training, the embedding layer discovers semantic structure: abbreviations cluster with their full forms, seniority markers group together, function-specific terms form distinct neighborhoods. This learned vocabulary is the main advantage over TF-IDF, which treats every distinct string as a completely independent feature."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
+    "href": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
+    "title": "Job Title Normalizer",
+    "section": "How This Connects to the Lead Scoring Pipeline",
+    "text": "How This Connects to the Lead Scoring Pipeline\nTitle normalization is Step 1 in a contact data pipeline:\n\nNormalize titles → standardized seniority and function labels (this project)\nBuild contact features → VP+ count, function diversity, senior density per account\nScore accounts → propensity model using contact features + firmographics\nIdentify gaps → buying group completeness analysis\n\nWithout reliable title normalization, everything downstream is built on noise. If “Sr. Dir. Mktg” doesn’t get classified as a senior director in marketing, the buying group analysis doesn’t know there’s a senior marketing leader on the account, and the gap analysis might incorrectly recommend finding one."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#what-id-do-differently-in-production",
+    "href": "projects/title-normalizer.html#what-id-do-differently-in-production",
+    "title": "Job Title Normalizer",
+    "section": "What I’d Do Differently in Production",
+    "text": "What I’d Do Differently in Production\n\nReal labeled data — Retrain on titles from actual CRM exports (Salesforce, HubSpot). The synthetic generator gets you 80% of the way, but production titles have patterns no generator anticipates\nActive learning — Flag low-confidence predictions for human review. A model that says “60% engineering, 35% data” is asking for help — route those to a human and use the corrections to retrain\nFine-tuned LLM — For the hardest 10% of titles (creative titles, non-English, multi-role), a fine-tuned language model would capture context that word embeddings miss\nMonitoring — Track prediction confidence distributions over time. If a new client uses unusual title conventions, confidence will drop and you’ll know to retrain"
+  },
+  {
+    "objectID": "projects/title-normalizer.html#stack",
+    "href": "projects/title-normalizer.html#stack",
+    "title": "Job Title Normalizer",
+    "section": "Stack",
+    "text": "Stack\nPython | PyTorch | scikit-learn | Pandas | NumPy | Matplotlib | pytest"
+  },
+  {
+    "objectID": "projects/marketing-measurement.html",
+    "href": "projects/marketing-measurement.html",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "",
+    "text": "View on GitHub Live App"
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#what-this-project-does",
+    "href": "projects/marketing-measurement.html#what-this-project-does",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "What This Project Does",
+    "text": "What This Project Does\nWhen a company grows from $1B to $30B in revenue over 15 months, almost entirely through organic adoption, every standard marketing measurement approach breaks. Attribution models overcredit by 3-9x. Blended CAC looks like $0.62 when incremental CAC is actually $37 — a 60x gap. A naive before/after analysis shows 28.6% lift, but 27.6 percentage points of that is organic growth and only 1.1% is true marketing impact.\nThis project builds an interactive application that simulates these dynamics and walks through how to measure marketing’s real contribution when organic growth overwhelms paid signal."
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#why-this-matters",
+    "href": "projects/marketing-measurement.html#why-this-matters",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "Why This Matters",
+    "text": "Why This Matters\nMost marketing measurement frameworks assume you can isolate paid impact cleanly. At hypergrowth scale with product-led growth, that assumption collapses. The organic wave is so large that every channel looks like it’s working — attribution systems assign credit to marketing touches that would have converted anyway.\nThis project works through the problem from first principles: what breaks at scale, what methods still work, and how to build a measurement roadmap that separates real signal from noise."
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#whats-inside",
+    "href": "projects/marketing-measurement.html#whats-inside",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "What’s Inside",
+    "text": "What’s Inside\nThe app has 12 pages organized around a 20-minute walkthrough:\nPrimary flow:\n\nOverview — The measurement problem at hypergrowth scale\nMeasurement Framework — Why standard approaches fail and what replaces them\nMethod Comparison — MMM, incrementality testing, and attribution side by side, with honest assessments of where each breaks\nExperiment Designer — Interactive tool for designing incrementality tests with configurable alpha, power, traffic splits, CUPED, and feasibility checks against real daily traffic\nCross-Motion Analysis — How self-serve, sales-assisted, and enterprise motions interact and cannibalize\nUser Journey — Activation funnels calibrated to real product flows\nDecision Framework — Business-question-driven recommendations with a phased Day 1 measurement roadmap\nExecutive Summary — Three things leadership needs to know, no fluff\n\nSupporting pages: Growth Simulator, PLG Adoption Model, Dynamic Cohorts, Data & Assumptions"
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#key-numbers",
+    "href": "projects/marketing-measurement.html#key-numbers",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "Key Numbers",
+    "text": "Key Numbers\nAll numbers come from a simulation engine calibrated to publicly reported data, then pressure-tested:\n\n\n\nMetric\nValue\n\n\n\n\nRevenue growth\n$1B (Jan 2025) to $30B (Apr 2026)\n\n\nDaily signups\n80K to 3.5M projected\n\n\nOrganic share\n~97%\n\n\nBlended CAC\n$0.62\n\n\nIncremental CAC\n$37\n\n\nCAC gap\n~60x\n\n\nAttribution overcrediting\n3-9x per channel\n\n\nNaive lift\n28.6% (27.6% organic + 1.1% true marketing)"
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#the-approach",
+    "href": "projects/marketing-measurement.html#the-approach",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "The Approach",
+    "text": "The Approach\n\nSimulation Engine (Python)\nThe analytical backbone is a Python package with 11 modules and 33 passing tests that models:\n\nGrowth dynamics — S-curve adoption with organic vs. paid decomposition\nChannel simulation — Paid search, social, content, events, partnerships — each with realistic diminishing returns\nAttribution models — Last-touch, multi-touch, and time-decay, all of which overcredit at different rates\nMMM (Marketing Mix Modeling) — Simulates media mix models with adstock and saturation, demonstrating omitted variable bias when organic growth isn’t properly controlled\nIncrementality testing — Geo-holdout and synthetic control experiments with realistic power calculations\nCohort analysis — Retention curves, LTV projections, and dynamic cohort behavior under hypergrowth\n\n\n\nInteractive App (Next.js)\nThe frontend is a Next.js app with TypeScript, Visx + Recharts for visualization, and Tailwind + shadcn/ui for the interface. Every chart is interactive — you can adjust parameters and see how measurement breaks or holds up under different assumptions."
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#what-id-do-differently-in-production",
+    "href": "projects/marketing-measurement.html#what-id-do-differently-in-production",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "What I’d Do Differently in Production",
+    "text": "What I’d Do Differently in Production\n\nReal data ingestion — Connect to actual ad platform APIs and warehouse data instead of simulation\nBayesian MMM — Replace the frequentist simulation with a proper Bayesian model (PyMC or Lightweight MMM) for uncertainty quantification\nAutomated experimentation — Build a pipeline that continuously runs geo-holdout tests and updates incrementality estimates\nCausal inference layer — Add difference-in-differences and synthetic control methods for quasi-experimental measurement when true experiments aren’t feasible"
+  },
+  {
+    "objectID": "projects/marketing-measurement.html#stack",
+    "href": "projects/marketing-measurement.html#stack",
+    "title": "Marketing Measurement Under Hypergrowth",
+    "section": "Stack",
+    "text": "Stack\nPython | Next.js | TypeScript | Visx | Recharts | Tailwind | shadcn/ui | Vercel"
   },
   {
     "objectID": "index.html",
@@ -263,7 +319,7 @@
     "href": "index.html#featured-projects",
     "title": "Philip Felix",
     "section": "Featured Projects",
-    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nYou have 1,500 accounts and can only engage 200 this quarter. Which 200? This project builds a propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren’t closing and who’s missing from the deal.\nPython, Pandas, scikit-learn, Streamlit\n\n\nJob Title Normalizer\nCRM job titles are a mess. “Sr. Dir. Mktg (EMEA)” and “Senior Director of Marketing” are the same person. This multi-task PyTorch classifier standardizes them into seniority levels and job functions, handling 15 categories of real-world CRM noise that break rule-based approaches.\nPython, PyTorch, scikit-learn\n\n\nAI Adoption Playbook\nHow I took a 30-person data org from “what’s an MCP server?” to running LLM-assisted analyses in weeks. Not theory. The actual steps, in order, with the blockers I hit and what I’d do differently.\nClaude, MCP, Cursor, Databricks CLI\n\n\nAdaptive Analyst Agent\nAn LLM-powered analyst that answers the same business question differently depending on who’s asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.\nPython, Claude API, DuckDB, Streamlit"
+    "text": "Featured Projects\n\nLead Scoring & Buying Group Identification\nYou have 1,500 accounts and can only engage 200 this quarter. Which 200? This project builds a propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren’t closing and who’s missing from the deal.\nPython, Pandas, scikit-learn, Streamlit\n\n\nJob Title Normalizer\nCRM job titles are a mess. “Sr. Dir. Mktg (EMEA)” and “Senior Director of Marketing” are the same person. This multi-task PyTorch classifier standardizes them into seniority levels and job functions, handling 15 categories of real-world CRM noise that break rule-based approaches.\nPython, PyTorch, scikit-learn\n\n\nAI Adoption Playbook\nHow I took a 30-person data org from “what’s an MCP server?” to running LLM-assisted analyses in weeks. Not theory. The actual steps, in order, with the blockers I hit and what I’d do differently.\nClaude, MCP, Cursor, Databricks CLI\n\n\nAdaptive Analyst Agent\nAn LLM-powered analyst that answers the same business question differently depending on who’s asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.\nPython, Claude API, DuckDB, Streamlit\n\n\nMarketing Measurement Under Hypergrowth\nWhen a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. This interactive app simulates those dynamics — showing why attribution overcredits by 3-9x, why blended and incremental CAC diverge by 60x, and how to build a measurement stack that separates real signal from noise.\nPython, Next.js, TypeScript, Visx, Recharts"
   },
   {
     "objectID": "index.html#get-in-touch",

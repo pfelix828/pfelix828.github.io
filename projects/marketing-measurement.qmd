@@ -1,0 +1,79 @@
+---
+title: "Marketing Measurement Under Hypergrowth"
+description: "An interactive simulator for marketing measurement challenges at a company growing from $1B to $30B in 15 months"
+toc-depth: 3
+---
+
+[View on GitHub](https://github.com/pfelix828/marketing-measurement){.btn .btn-outline-primary} [Live App](https://marketing-measurement.vercel.app){.btn .btn-outline-primary}
+
+## What This Project Does
+
+When a company grows from $1B to $30B in revenue over 15 months, almost entirely through organic adoption, every standard marketing measurement approach breaks. Attribution models overcredit by 3-9x. Blended CAC looks like $0.62 when incremental CAC is actually $37 — a 60x gap. A naive before/after analysis shows 28.6% lift, but 27.6 percentage points of that is organic growth and only 1.1% is true marketing impact.
+
+This project builds an interactive application that simulates these dynamics and walks through how to measure marketing's real contribution when organic growth overwhelms paid signal.
+
+## Why This Matters
+
+Most marketing measurement frameworks assume you can isolate paid impact cleanly. At hypergrowth scale with product-led growth, that assumption collapses. The organic wave is so large that every channel looks like it's working — attribution systems assign credit to marketing touches that would have converted anyway.
+
+This project works through the problem from first principles: what breaks at scale, what methods still work, and how to build a measurement roadmap that separates real signal from noise.
+
+## What's Inside
+
+The app has 12 pages organized around a 20-minute walkthrough:
+
+**Primary flow:**
+
+- **Overview** — The measurement problem at hypergrowth scale
+- **Measurement Framework** — Why standard approaches fail and what replaces them
+- **Method Comparison** — MMM, incrementality testing, and attribution side by side, with honest assessments of where each breaks
+- **Experiment Designer** — Interactive tool for designing incrementality tests with configurable alpha, power, traffic splits, CUPED, and feasibility checks against real daily traffic
+- **Cross-Motion Analysis** — How self-serve, sales-assisted, and enterprise motions interact and cannibalize
+- **User Journey** — Activation funnels calibrated to real product flows
+- **Decision Framework** — Business-question-driven recommendations with a phased Day 1 measurement roadmap
+- **Executive Summary** — Three things leadership needs to know, no fluff
+
+**Supporting pages:** Growth Simulator, PLG Adoption Model, Dynamic Cohorts, Data & Assumptions
+
+## Key Numbers
+
+All numbers come from a simulation engine calibrated to publicly reported data, then pressure-tested:
+
+| Metric | Value |
+|--------|-------|
+| Revenue growth | $1B (Jan 2025) to $30B (Apr 2026) |
+| Daily signups | 80K to 3.5M projected |
+| Organic share | ~97% |
+| Blended CAC | $0.62 |
+| Incremental CAC | $37 |
+| CAC gap | ~60x |
+| Attribution overcrediting | 3-9x per channel |
+| Naive lift | 28.6% (27.6% organic + 1.1% true marketing) |
+
+## The Approach
+
+### Simulation Engine (Python)
+
+The analytical backbone is a Python package with 11 modules and 33 passing tests that models:
+
+- **Growth dynamics** — S-curve adoption with organic vs. paid decomposition
+- **Channel simulation** — Paid search, social, content, events, partnerships — each with realistic diminishing returns
+- **Attribution models** — Last-touch, multi-touch, and time-decay, all of which overcredit at different rates
+- **MMM (Marketing Mix Modeling)** — Simulates media mix models with adstock and saturation, demonstrating omitted variable bias when organic growth isn't properly controlled
+- **Incrementality testing** — Geo-holdout and synthetic control experiments with realistic power calculations
+- **Cohort analysis** — Retention curves, LTV projections, and dynamic cohort behavior under hypergrowth
+
+### Interactive App (Next.js)
+
+The frontend is a Next.js app with TypeScript, Visx + Recharts for visualization, and Tailwind + shadcn/ui for the interface. Every chart is interactive — you can adjust parameters and see how measurement breaks or holds up under different assumptions.
+
+## What I'd Do Differently in Production
+
+- **Real data ingestion** — Connect to actual ad platform APIs and warehouse data instead of simulation
+- **Bayesian MMM** — Replace the frequentist simulation with a proper Bayesian model (PyMC or Lightweight MMM) for uncertainty quantification
+- **Automated experimentation** — Build a pipeline that continuously runs geo-holdout tests and updates incrementality estimates
+- **Causal inference layer** — Add difference-in-differences and synthetic control methods for quasi-experimental measurement when true experiments aren't feasible
+
+## Stack
+
+Python | Next.js | TypeScript | Visx | Recharts | Tailwind | shadcn/ui | Vercel
