@@ -90,7 +90,7 @@ body {
 // ---- Hero section ----
 
 .hero-section {
-  padding: 4rem 0 3rem;
+  padding: 4rem 0 1rem;
   max-width: 720px;
 
   h1 {
@@ -154,6 +154,8 @@ body {
   display: flex;
   flex-direction: column;
   background: #f5f2ee;
+  position: relative;
+  cursor: pointer;
 
   &:hover {
     border-color: #d97757;
@@ -170,6 +172,16 @@ body {
     a {
       color: #2d2d2d;
       text-decoration: none;
+
+      // Stretch the link to cover the entire card
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
 
       &:hover {
         color: #c4613d;

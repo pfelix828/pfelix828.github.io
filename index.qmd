@@ -30,7 +30,7 @@ Projects
 [Lead Scoring & Buying Group Identification](projects/lead-scoring.qmd)
 :::
 ::: {.project-card-description}
-You have 1,500 accounts and can only engage 200 this quarter. Which 200? A propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren't closing and who's missing from the deal.
+You have 100K accounts and can only engage a few thousand this quarter. Which ones? A propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren't closing and who's missing from the deal.
 :::
 ::: {.project-card-stack}
 Python · Pandas · scikit-learn · Streamlit
