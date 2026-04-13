@@ -12,7 +12,7 @@ Private prep doc — not linked from site navigation.
 
 ## The 60-Second Pitch
 
-> "I built an end-to-end lead scoring system for B2B SaaS marketing. It takes CRM data — accounts, contacts, deal history — and does two things: first, it scores every account on how likely they are to close, using a logistic regression model. Second, it analyzes the buying group at each account — who's involved in the deal, what roles they play — and identifies specific coverage gaps. The punchline is that accounts with complete buying groups close at 2x the rate of those with gaps, and the gap analysis identifies specific enrichment targets with estimated pipeline value. It mirrors what I built at Atlassian, where the same methodology drove $50M in pipeline from contact enrichment."
+> "I built an end-to-end lead scoring system for B2B SaaS marketing. It takes CRM data — accounts, contacts, deal history — and does two things: first, it scores every account on how likely they are to close, using a logistic regression model. Second, it analyzes the buying group at each account — who's involved in the deal, what roles they play — and identifies specific coverage gaps. The punchline is that accounts with complete buying groups close at 2x the rate of those with gaps, and the gap analysis identifies specific enrichment targets with a framework for estimating pipeline value. It mirrors similar work I did at Atlassian, where I built the company's first ICP and buying group analysis for the enterprise marketing org."
 
 Practice this until it's natural. Hit the business framing first, then the method, then the result.
 
@@ -26,11 +26,13 @@ Practice this until it's natural. Hit the business framing first, then the metho
 
 "I started with the data. In a real CRM you have four key tables — accounts with firmographic data like company size and industry, contacts with their job titles and seniority levels, opportunities which are the actual deals in progress, and then a bridge table that tells you which contacts are involved in which deals and what role they play — Champion, Decision Maker, Evaluator, and so on.
 
-The feature engineering is where most of the value comes from. I built features at three levels. First, account-level stuff — company size, industry, tech stack. Second, contact composition — rolling up who we know at each account. How many VPs do we have? Are we talking to multiple departments or just one? Third, and this is the strongest signal — the buying group features. How many people are on the deal, what roles are filled, do we have both technical and business contacts engaged.
+The feature engineering is where most of the value comes from. I built features at two levels for the propensity model, and a third level for the buying group analysis. First, account-level stuff — company size, industry, tech stack. Second, contact composition — rolling up who we know at each account. How many VPs do we have? Are we talking to multiple departments or just one? These are pre-deal features — they come from the contacts table, not from deal outcomes, so there's no target leakage.
+
+I deliberately kept the buying group features — how many people are on the deal, what roles are filled — separate from the propensity model. Those features come from the same deals whose outcome is the target variable, so including them would be target leakage. They're used in the buying group analysis instead, where they're descriptive rather than predictive.
 
 For the model, I used logistic regression. I also trained a Random Forest to benchmark, and the performance difference was marginal, so I went with logistic regression because the coefficients are directly interpretable — you can tell marketing 'VP engagement is your strongest signal' and they can act on that.
 
-For evaluation, I focused on business metrics — lift charts, precision at the top 10%, revenue capture curves — because AUC alone doesn't answer the question marketing actually cares about, which is 'if I can only target 100 accounts, which ones?'"
+For evaluation, I focused on business metrics — lift charts, precision at the top 10%, revenue capture curves — because AUC alone doesn't answer the question marketing actually cares about, which is 'if I can only target 100 accounts, which ones?' I also added bootstrap confidence intervals for AUC and precision@10% so the numbers come with uncertainty estimates, not just point values."
 
 **If they want more detail, they'll ask. Don't over-explain unprompted.**
 
@@ -70,7 +72,7 @@ AUC stands for Area Under the ROC Curve. Here's the intuition: if you pick one a
 
 **Your answer:**
 
-"Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 55% precision — more than half of them won, compared to a 36% baseline. That's the metric that matters for marketing because their question is always 'I have limited budget and team capacity, which accounts should I target?' The model says: target the top of the list and you'll hit winners at a much higher rate."
+"Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 55% precision — more than half of them won, compared to a 36% baseline. At the top 20%, precision drops to about 35% — slightly below baseline. That tells you the model's discriminative power is concentrated in the top decile. The practical takeaway: the model is best at identifying your *strongest* prospects, not at ranking the entire pipeline. That's fine for marketing because their question is usually 'which 100 accounts should I target?' not 'rank all 1,500.'"
 
 ---
 
@@ -117,7 +119,9 @@ Regularization is a technique that prevents the model from overfitting — putti
 
 I score every account's buying group on a 0-100 scale across four dimensions: are the key roles filled, is there executive engagement, are multiple departments involved, and do we have both technical and business contacts. Accounts that score 75+ close at 51%. Accounts below 25 close at 24%. That's a 2x difference.
 
-The gap analysis then identifies *what's missing* at each account — 'you need a Champion at this account' or 'you have no VP-level engagement here.' That turns a model score into a specific action for the marketing team."
+The gap analysis then identifies *what's missing* at each account — 'you need a Champion at this account' or 'you have no VP-level engagement here.' That turns a model score into a specific action for the marketing team.
+
+The last step is sizing the opportunity. Under illustrative assumptions — a deal size of about 2% of account revenue, a 10 percentage-point win rate uplift from filling gaps — the gap accounts represent roughly $286M in addressable pipeline. Those specific assumptions would need calibration against real historical data in production, but the framework for sizing the opportunity is the actual value. It translates the analysis into a business case executives can evaluate with their own numbers."
 
 ---
 
@@ -125,9 +129,9 @@ The gap analysis then identifies *what's missing* at each account — 'you need 
 
 **Your answer:**
 
-"At Atlassian I pioneered the ICP and Buying Group analysis for the enterprise marketing org — it was a first for the team. I identified contact segments that were 5x more likely to progress through the funnel, found accounts with coverage gaps, and built enrichment strategies to fill them. That work drove $50M in estimated pipeline from contact additions and $20M in attributed bookings.
+"At Atlassian I pioneered the ICP and Buying Group analysis for the enterprise marketing org — it was a first for the team. I identified contact segments that were 5x more likely to progress through the funnel, found accounts with coverage gaps, and built enrichment strategies that informed marketing's contact acquisition priorities.
 
-This portfolio project recreates the methodology on synthetic data so I can walk through the full approach openly. The real work at Atlassian used internal data I can't share, but the approach — scoring accounts on completeness, identifying gaps, estimating pipeline value of enrichment — is identical."
+This portfolio project recreates that methodology on synthetic data so I can walk through the full approach openly. The real work at Atlassian used internal data I can't share, but the approach — scoring accounts on completeness, identifying gaps, building a framework for estimating the pipeline value of enrichment — is the same."
 
 ---
 
@@ -135,9 +139,9 @@ This portfolio project recreates the methodology on synthetic data so I can walk
 
 **Your answer:**
 
-"Good question. The synthetic data has realistic signal strength baked in — VP presence, tech stack fit, buying group size all influence win probability, but at magnitudes you'd actually see in a real CRM, not artificially clean signal. The AUC of 0.61 reflects that — it's not 0.95, which would be a red flag.
+"I want to be upfront about what the synthetic data does and doesn't prove. The data generator embeds known signals at controlled strengths — VP presence, tech stack fit, buying group size all boost win probability. The model's job is to recover those signals from the feature matrix. So this validates that the pipeline works end-to-end — the feature engineering, model training, and evaluation all do what they should. It demonstrates methodology, not empirical discovery.
 
-That said, real data would add challenges: messy job titles that need normalization, missing fields, data entry inconsistencies, class imbalance. The 'What I'd Do Differently in Production' section of the project addresses all of those. I also talk about temporal validation — training on earlier periods and testing on later ones — which is more realistic than the random split I use here."
+The AUC of 0.61 reflects realistic signal strength — it's not 0.95, which would be a red flag. Real data would add challenges: messy job titles that need normalization, missing fields, data entry inconsistencies, confounders, and temporal dynamics. The project addresses all of those in the production considerations. But the engineering and evaluation framework — the feature hierarchy, the target leakage separation, the business metrics — that carries over directly."
 
 ---
 
@@ -200,7 +204,7 @@ That said, real data would add challenges: messy job titles that need normalizat
 
 ### "This is synthetic data. Isn't that cheating?"
 
-**Honest answer:** "The synthetic data lets me show the full methodology without exposing proprietary Atlassian data. The signals are calibrated to be realistic — the AUC isn't 0.95, the feature correlations are modest, there's noise. But you're right that it's a limitation. In the project I explicitly address what would be different with real data: title normalization, temporal validation, class imbalance, and model monitoring."
+**Honest answer:** "The synthetic data lets me show the full methodology without exposing proprietary Atlassian data. I'm upfront in the project that the data generator embeds signals the model then recovers — so this validates the pipeline, not discovery. The signals are calibrated to realistic strengths — the AUC is 0.61, not 0.95. Real data would add noise, confounders, and temporal dynamics. The project explicitly addresses what would change: title normalization, temporal validation, class imbalance, model monitoring, and A/B testing the model against a control group."
 
 ---
 

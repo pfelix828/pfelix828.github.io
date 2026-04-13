@@ -169,6 +169,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
   <li><a href="#per-class-performance" id="toc-per-class-performance" class="nav-link" data-scroll-target="#per-class-performance">Per-Class Performance</a></li>
+  <li><a href="#taxonomy-decisions-worth-noting" id="toc-taxonomy-decisions-worth-noting" class="nav-link" data-scroll-target="#taxonomy-decisions-worth-noting">Taxonomy Decisions Worth Noting</a></li>
   </ul></li>
   <li><a href="#training-how-the-model-learns" id="toc-training-how-the-model-learns" class="nav-link" data-scroll-target="#training-how-the-model-learns">Training: How the Model Learns</a>
   <ul class="collapse">
@@ -239,6 +240,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Word drops</strong> — Lazy data entry where someone typed “VP” instead of “VP of Engineering”</li>
 </ul>
 <p>This noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn’t seen.</p>
+<p><strong>An important limitation:</strong> All noise is applied to a fixed set of ~500 canonical title templates across 10 functions. The model never encounters a title structure it hasn’t seen some variant of. Real CRM data includes titles outside any taxonomy — “Chief Evangelist,” “Growth Hacker,” “Sustainability Officer” — plus non-English titles and hybrid roles like “Marketing Engineer” that blend functions. This synthetic setup validates the pipeline and architecture, but production accuracy would likely drop 5-10 points until the model is retrained on real labeled data.</p>
 </section>
 <section id="the-models-why-multi-task-learning" class="level2">
 <h2 class="anchored" data-anchor-id="the-models-why-multi-task-learning">The Models: Why Multi-Task Learning</h2>
@@ -294,9 +296,10 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p><em>Trained on 16,000 synthetic titles, evaluated on 4,000 held-out.</em></p>
-<p><strong>Why these numbers are realistic, not inflated:</strong> The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “Operations” vs “Engineering” function is hard when the title says “DevOps Manager” (both are reasonable). Real CRM data would likely push combined accuracy down another 5-10 points.</p>
-<p><strong>Where the neural models earn their keep:</strong> The gap over TF-IDF (89% vs 87.6% combined) is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where word-level embeddings capture similarity that bag-of-words approaches miss.</p>
+<p><em>20,000 synthetic titles total, split 70/15/15: 14,000 train, 3,000 validation (for early stopping), 3,000 held-out test.</em></p>
+<p><strong>Why these numbers are realistic, not inflated:</strong> The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “HR” vs “Operations” is hard when the title says “People Operations Manager.” Real CRM data would likely push combined accuracy down another 5-10 points, as it introduces title structures and vocabulary the model has never seen.</p>
+<p><strong>Honestly assessing the neural network’s value:</strong> The gap over TF-IDF (89.0% vs 87.6% combined) is 1.4 percentage points. That’s real but small — and it comes with real costs: PyTorch dependencies, embedding layers, training loops, and GPU for scale. TF-IDF + LogReg trains in seconds, needs no GPU, and is trivially deployable.</p>
+<p>So when is the neural network worth it? At scale. On a database of 100K contacts, 1.4 percentage points is ~1,400 additional correct classifications. The gap is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where learned embeddings capture similarity that bag-of-words misses. In production, I’d start with TF-IDF as a fast baseline and upgrade to the CNN only if the error cases at the margin are costing downstream analysis quality.</p>
 <section id="per-class-performance" class="level3">
 <h3 class="anchored" data-anchor-id="per-class-performance">Per-Class Performance</h3>
 <p>The model performs best on classes with distinctive vocabulary:</p>
@@ -307,10 +310,16 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>It struggles most where vocabulary overlaps:</p>
 <ul>
-<li><strong>Operations vs Engineering</strong> — “DevOps” sits at the boundary</li>
-<li><strong>Individual Contributor vs Senior</strong> — when seniority markers get truncated or misspelled</li>
+<li><strong>Individual Contributor vs Senior</strong> — when seniority markers get truncated or misspelled, the model loses the only signal distinguishing the two</li>
 <li><strong>HR vs Operations</strong> — “People Operations” is an HR function despite the word “Operations”</li>
+<li><strong>Operations vs Engineering</strong> — In real CRM data, “DevOps” sits at the boundary between these functions. In this synthetic dataset, DevOps titles are consistently labeled under Engineering, so the model learns them cleanly — but this is a taxonomy decision that different companies would make differently.</li>
 </ul>
+</section>
+<section id="taxonomy-decisions-worth-noting" class="level3">
+<h3 class="anchored" data-anchor-id="taxonomy-decisions-worth-noting">Taxonomy Decisions Worth Noting</h3>
+<p>Two deliberate choices in the classification schema:</p>
+<p><strong>“Product Manager” is labeled as Individual Contributor.</strong> This is counterintuitive — the title contains “Manager.” But in most tech companies, “Product Manager” is a function descriptor, not a seniority marker. A PM is an IC role; the people-management equivalent is “Director of Product” or “VP of Product.” This is the exact kind of taxonomy ambiguity that makes title normalization hard in practice — “Manager” means different things depending on context.</p>
+<p><strong>Some seniority/function combinations don’t exist in the training data.</strong> Functions like Design and Legal don’t have SVP-level templates, because those titles are rare in practice. This means the model has never seen “SVP of Design” and would misclassify it. In production, this would be caught by confidence monitoring — the model would output a low-confidence prediction, flagging it for human review.</p>
 </section>
 </section>
 <section id="training-how-the-model-learns" class="level2">

@@ -165,6 +165,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#you-mentioned-two-model-types-whats-the-difference" id="toc-you-mentioned-two-model-types-whats-the-difference" class="nav-link" data-scroll-target="#you-mentioned-two-model-types-whats-the-difference">“You mentioned two model types — what’s the difference?”</a></li>
   <li><a href="#how-does-the-model-learn-that-sr.-and-senior-mean-the-same-thing" id="toc-how-does-the-model-learn-that-sr.-and-senior-mean-the-same-thing" class="nav-link" data-scroll-target="#how-does-the-model-learn-that-sr.-and-senior-mean-the-same-thing">“How does the model learn that ‘Sr.’ and ‘Senior’ mean the same thing?”</a></li>
   <li><a href="#how-did-you-handle-the-messy-data-what-kinds-of-noise" id="toc-how-did-you-handle-the-messy-data-what-kinds-of-noise" class="nav-link" data-scroll-target="#how-did-you-handle-the-messy-data-what-kinds-of-noise">“How did you handle the messy data? What kinds of noise?”</a></li>
+  <li><a href="#why-is-product-manager-labeled-as-individual-contributor" id="toc-why-is-product-manager-labeled-as-individual-contributor" class="nav-link" data-scroll-target="#why-is-product-manager-labeled-as-individual-contributor">“Why is Product Manager labeled as Individual Contributor?”</a></li>
+  <li><a href="#what-happens-if-someone-has-a-title-the-model-has-never-seen" id="toc-what-happens-if-someone-has-a-title-the-model-has-never-seen" class="nav-link" data-scroll-target="#what-happens-if-someone-has-a-title-the-model-has-never-seen">“What happens if someone has a title the model has never seen?”</a></li>
   <li><a href="#whats-the-baseline-and-why-did-you-build-it" id="toc-whats-the-baseline-and-why-did-you-build-it" class="nav-link" data-scroll-target="#whats-the-baseline-and-why-did-you-build-it">“What’s the baseline and why did you build it?”</a></li>
   <li><a href="#how-does-this-connect-to-your-atlassian-work" id="toc-how-does-this-connect-to-your-atlassian-work" class="nav-link" data-scroll-target="#how-does-this-connect-to-your-atlassian-work">“How does this connect to your Atlassian work?”</a></li>
   <li><a href="#you-used-synthetic-data.-how-realistic-is-this" id="toc-you-used-synthetic-data.-how-realistic-is-this" class="nav-link" data-scroll-target="#you-used-synthetic-data.-how-realistic-is-this">“You used synthetic data. How realistic is this?”</a></li>
@@ -180,6 +182,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#did-you-write-all-the-code-yourself" id="toc-did-you-write-all-the-code-yourself" class="nav-link" data-scroll-target="#did-you-write-all-the-code-yourself">“Did you write all the code yourself?”</a></li>
   <li><a href="#could-you-explain-how-the-neural-network-works-under-the-hood" id="toc-could-you-explain-how-the-neural-network-works-under-the-hood" class="nav-link" data-scroll-target="#could-you-explain-how-the-neural-network-works-under-the-hood">“Could you explain how the neural network works under the hood?”</a></li>
   <li><a href="#why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher" id="toc-why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher" class="nav-link" data-scroll-target="#why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher">“Why are the accuracy numbers in the 89-95% range and not higher?”</a></li>
+  <li><a href="#is-the-neural-network-really-worth-it-over-the-baseline" id="toc-is-the-neural-network-really-worth-it-over-the-baseline" class="nav-link" data-scroll-target="#is-the-neural-network-really-worth-it-over-the-baseline">“Is the neural network really worth it over the baseline?”</a></li>
   <li><a href="#this-is-synthetic-data.-isnt-that-cheating" id="toc-this-is-synthetic-data.-isnt-that-cheating" class="nav-link" data-scroll-target="#this-is-synthetic-data.-isnt-that-cheating">“This is synthetic data. Isn’t that cheating?”</a></li>
   </ul></li>
   <li><a href="#questions-you-should-ask-that-show-you-know-this-space" id="toc-questions-you-should-ask-that-show-you-know-this-space" class="nav-link" data-scroll-target="#questions-you-should-ask-that-show-you-know-this-space">Questions YOU Should Ask (That Show You Know This Space)</a></li>
@@ -285,7 +288,7 @@ Note
 <p><strong>Your answer:</strong></p>
 <p>“I studied what real CRM exports look like and built a generator that creates the same kinds of problems. About 15 categories of noise:</p>
 <p>The easy stuff — abbreviations like ‘Sr.’ for ‘Senior’, random capitalization, extra spaces, and typos where letters get swapped.</p>
-<p>But also the stuff that actually makes CRM data painful: titles that got cut off mid-word because the CRM field only allows 30 characters — so ‘Senior Vice President of Engineering’ becomes ‘Senior Vice Presi…’ and now you’re missing the key information. Geographic tags that got appended — ‘(EMEA)’ or ‘- North America.’ People putting their credentials after their title — ‘, MBA’ or ‘, PMP.’ Real misspellings that aren’t just letter swaps — ‘Manger’ instead of ‘Manager’, ‘Engineeer’ with a triple e. Words in the wrong order. Copy-paste junk from system imports.</p>
+<p>But also the stuff that actually makes CRM data painful: titles that got cut off mid-word because the CRM field only allows 30 characters — so ‘Senior Vice President of Engineering’ becomes ‘Senior Vice Presi…’ and now you’re missing the key information. Geographic tags that got appended — ‘(EMEA)’ or ‘- North America.’ People putting their credentials after their title — ‘, MBA’ or ‘, PMP.’ Real misspellings that aren’t just letter swaps — ‘Manger’ instead of ‘Manager’, ‘Engineeer’ with a triple e. Words in the wrong order. Copy-paste junk from system imports — tab characters and em dashes that come from pasting out of Word docs or web forms. The tokenizer specifically handles those edge cases.</p>
 <p>Each fake title gets a random mix of these problems, so the model has to handle combinations it hasn’t seen before.”</p>
 <p><strong>Why this matters for the interview:</strong></p>
 <blockquote class="blockquote">
@@ -293,11 +296,27 @@ Note
 </blockquote>
 <hr>
 </section>
+<section id="why-is-product-manager-labeled-as-individual-contributor" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-product-manager-labeled-as-individual-contributor">“Why is Product Manager labeled as Individual Contributor?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“Great catch — this is actually a deliberate taxonomy decision that shows why title normalization is hard. In most tech companies, ‘Product Manager’ is a function descriptor, not a seniority marker. A PM is an IC role — the people-management equivalent is ‘Director of Product’ or ‘VP of Product.’ Same with ‘Social Media Manager’ in marketing — the word ‘Manager’ describes what you manage, not that you manage people.</p>
+<p>This is the exact kind of ambiguity that makes title normalization genuinely difficult. ‘Manager’ means different things in different contexts. In production, you’d want to surface these edge cases through confidence monitoring and get human input to calibrate the taxonomy for each company’s conventions.”</p>
+<hr>
+</section>
+<section id="what-happens-if-someone-has-a-title-the-model-has-never-seen" class="level3">
+<h3 class="anchored" data-anchor-id="what-happens-if-someone-has-a-title-the-model-has-never-seen">“What happens if someone has a title the model has never seen?”</h3>
+<p><strong>Your answer:</strong></p>
+<p>“It would misclassify or give a low-confidence prediction. Some seniority/function combinations don’t even exist in the training data — there’s no ‘SVP of Design’ template, because that title is rare in practice. So the model has literally never seen that pattern.</p>
+<p>In production, this is why confidence monitoring matters. The model outputs probability distributions, not just labels. If it says ‘45% VP, 40% Director,’ that’s a signal to route to human review. I’d implement active learning — flag low-confidence predictions, have humans correct them, and use those corrections to retrain. Over time, the model covers more and more of the edge cases it initially missed.”</p>
+<hr>
+</section>
 <section id="whats-the-baseline-and-why-did-you-build-it" class="level3">
 <h3 class="anchored" data-anchor-id="whats-the-baseline-and-why-did-you-build-it">“What’s the baseline and why did you build it?”</h3>
 <p><strong>Your answer:</strong></p>
 <p>“Before building anything complex, I built the simplest thing that could possibly work. I used a standard technique that converts each title into a list of numbers based on which words appear in it, weighting rare words higher than common ones. Then I used a basic statistical model to predict from those numbers. This is called TF-IDF with Logistic Regression — it’s a well-known, off-the-shelf approach.</p>
-<p>The reason you always do this first is so you have something to compare against. If my fancier model can’t beat this simple one, then it’s not worth the complexity. My neural network does beat it — 89% vs 87.6% on getting both seniority and function right — and the gap is biggest on the hardest, messiest titles.”</p>
+<p>The reason you always do this first is so you have something to compare against. The neural network beats it — 89% vs 87.6% on getting both predictions right — but I want to be honest: that’s a 1.4 percentage point gap. TF-IDF trains in seconds, needs no GPU, and is trivially deployable. The neural network requires PyTorch, embedding layers, and a training loop.</p>
+<p>So when is the complexity worth it? At scale. On a database of 100K contacts, 1.4 percentage points is ~1,400 additional correct classifications. And the gap is concentrated in the hardest cases — abbreviated titles, misspellings, reordered titles — where learned embeddings capture similarity that bag-of-words misses. In production, I’d start with TF-IDF and upgrade to the CNN only if those marginal error cases matter for downstream analysis quality.”</p>
+<p><strong>This is a strong talking point.</strong> It shows you think about cost-benefit tradeoffs, not just accuracy numbers. If they push on it, say: “I’d rather ship a simple model that works than spend weeks optimizing a neural network for 1.4 points.”</p>
 <hr>
 </section>
 <section id="how-does-this-connect-to-your-atlassian-work" class="level3">
@@ -311,15 +330,16 @@ Note
 <h3 class="anchored" data-anchor-id="you-used-synthetic-data.-how-realistic-is-this">“You used synthetic data. How realistic is this?”</h3>
 <p><strong>Your answer:</strong></p>
 <p>“The accuracy numbers — 89-95% depending on which prediction — are in a realistic range. I deliberately made the noise aggressive enough that the model doesn’t hit 99%, because that would mean the data is too clean compared to reality.</p>
-<p>That said, real data has additional challenges I didn’t simulate. Titles that are genuinely ambiguous — ‘Director’ with no context could be any function. Creative startup titles — ‘Growth Hacker’ or ‘Evangelist’ — that don’t map cleanly to standard categories. Non-English titles. And the distribution would be skewed — way more individual contributors than C-suite executives.</p>
-<p>I’d expect accuracy to drop another 5-10 points on real CRM data, which would still be valuable — even 80% accuracy on automated title normalization saves hundreds of hours of manual work per quarter.”</p>
+<p>The biggest limitation is that all noise is applied to a fixed set of about 500 canonical title templates. The model never encounters a title structure it hasn’t seen some variant of. Real CRM data includes titles outside any taxonomy — ‘Chief Evangelist,’ ‘Growth Hacker,’ ‘Sustainability Officer’ — plus non-English titles, hybrid roles like ‘Marketing Engineer,’ and genuinely ambiguous titles like ‘Director’ with no function context. The distribution would also be heavily skewed — way more ICs than C-suite.</p>
+<p>I’d expect accuracy to drop 5-10 points on real CRM data. That’s still valuable — even 80% accuracy on automated title normalization saves hundreds of hours of manual work per quarter. And you’d route the low-confidence predictions to human review through active learning.”</p>
 <hr>
 </section>
 <section id="how-do-you-know-the-model-isnt-just-memorizing-the-training-data" class="level3">
 <h3 class="anchored" data-anchor-id="how-do-you-know-the-model-isnt-just-memorizing-the-training-data">“How do you know the model isn’t just memorizing the training data?”</h3>
 <p><strong>Your answer:</strong></p>
-<p>“Two safeguards. First, I hold out 20% of the data — 4,000 titles — that the model never sees during training. The accuracy numbers I report are all on this held-out data, so they reflect how the model performs on titles it hasn’t encountered before.</p>
-<p>Second, I use a technique called early stopping. During training, I check performance on the held-out data after every pass. If the model stops improving for 5 rounds in a row, I stop training and roll back to the best version. This prevents the model from training too long and starting to memorize quirks of the training data instead of learning general patterns.”</p>
+<p>“Three safeguards. First, I use a proper three-way split: training data, a validation set, and a held-out test set. The model trains on the training set, the validation set is used to decide when to stop training, and the test set is only used once at the end for the final accuracy numbers. This prevents any information from the evaluation leaking into the training process.</p>
+<p>Second, I use early stopping. During training, I check performance on the validation set after every pass. If the model stops improving for 5 rounds in a row, I stop training and roll back to the best version. This prevents the model from training too long and starting to memorize quirks of the training data instead of learning general patterns.</p>
+<p>Third, the accuracy numbers I report are all on the held-out test set — data the model never saw during training <em>or</em> during the early stopping decisions. That gives you the most honest estimate of real-world performance.”</p>
 <hr>
 </section>
 </section>
@@ -352,8 +372,8 @@ Note
 <td>“When the model memorizes the training examples instead of learning general patterns. It gets great scores on data it’s seen, but falls apart on new data. Like studying only the practice test and bombing the real exam.”</td>
 </tr>
 <tr class="even">
-<td><strong>Train/test split</strong></td>
-<td>“Setting aside 20% of the data that the model never sees during training. You use this to get an honest measure of how well it actually works on new data.”</td>
+<td><strong>Train/validation/test split</strong></td>
+<td>“A three-way split. The model trains on the training set, the validation set decides when to stop training (early stopping), and the test set is only touched once at the end for final evaluation. This prevents any evaluation leakage into training.”</td>
 </tr>
 <tr class="odd">
 <td><strong>Baseline</strong></td>
@@ -436,9 +456,13 @@ Note
 <h3 class="anchored" data-anchor-id="why-are-the-accuracy-numbers-in-the-89-95-range-and-not-higher">“Why are the accuracy numbers in the 89-95% range and not higher?”</h3>
 <p><strong>Honest answer:</strong> “By design. The training data includes aggressive noise — truncated titles, real misspellings, geographic tags, credential suffixes — because that’s what real CRM data looks like. If the model hit 99%, it would mean my test data was unrealistically clean. 89% combined accuracy means the model gets both predictions right on 9 out of 10 titles. The other 10% would get flagged for human review in production.”</p>
 </section>
+<section id="is-the-neural-network-really-worth-it-over-the-baseline" class="level3">
+<h3 class="anchored" data-anchor-id="is-the-neural-network-really-worth-it-over-the-baseline">“Is the neural network really worth it over the baseline?”</h3>
+<p><strong>Honest answer:</strong> “The gap is 1.4 percentage points — 89% vs 87.6%. If you asked me ‘should we ship the CNN or the TF-IDF?’ my honest answer is: start with TF-IDF. It trains in seconds, needs no GPU, and gets you 87.6%. Upgrade to the CNN if you’re processing enough contacts that 1.4% matters — at 100K contacts, that’s 1,400 more correct classifications, concentrated in the hardest cases. I built both because the comparison is the point: know what simple gives you before investing in complexity.”</p>
+</section>
 <section id="this-is-synthetic-data.-isnt-that-cheating" class="level3">
 <h3 class="anchored" data-anchor-id="this-is-synthetic-data.-isnt-that-cheating">“This is synthetic data. Isn’t that cheating?”</h3>
-<p><strong>Honest answer:</strong> “It’s a limitation I’m upfront about. I can’t share real Atlassian CRM data, so I built a generator that mirrors the same kinds of data quality problems. The noise is realistic — that’s why accuracy is 89% and not 99%. Real data would add challenges I didn’t simulate, like genuinely ambiguous titles or non-English titles. But the methodology is sound and would transfer — you’d retrain on real labeled data and likely get similar or better results.”</p>
+<p><strong>Honest answer:</strong> “It’s a limitation I’m upfront about in the project. I can’t share real Atlassian CRM data, so I built a generator that mirrors the same kinds of data quality problems. The noise is realistic — that’s why accuracy is 89% and not 99%. The main limitation is the closed vocabulary: the model only sees variants of about 500 canonical titles. Real data would include titles outside any taxonomy, non-English titles, and hybrid roles the model has never encountered. I’d expect a 5-10 point accuracy drop until the model is retrained on real labeled data. But the pipeline — the architecture, the multi-task approach, the evaluation framework — transfers directly.”</p>
 <hr>
 </section>
 </section>

@@ -161,16 +161,17 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#why-this-matters-in-the-real-world" id="toc-why-this-matters-in-the-real-world" class="nav-link" data-scroll-target="#why-this-matters-in-the-real-world">Why This Matters in the Real World</a></li>
   <li><a href="#the-data-what-a-crm-looks-like" id="toc-the-data-what-a-crm-looks-like" class="nav-link" data-scroll-target="#the-data-what-a-crm-looks-like">The Data: What a CRM Looks Like</a>
   <ul class="collapse">
-  <li><a href="#accounts-1500-rows" id="toc-accounts-1500-rows" class="nav-link" data-scroll-target="#accounts-1500-rows">Accounts (1,500 rows)</a></li>
-  <li><a href="#contacts-10504-rows" id="toc-contacts-10504-rows" class="nav-link" data-scroll-target="#contacts-10504-rows">Contacts (10,504 rows)</a></li>
-  <li><a href="#opportunities-800-rows" id="toc-opportunities-800-rows" class="nav-link" data-scroll-target="#opportunities-800-rows">Opportunities (800 rows)</a></li>
-  <li><a href="#contact-opportunity-bridge-1944-rows" id="toc-contact-opportunity-bridge-1944-rows" class="nav-link" data-scroll-target="#contact-opportunity-bridge-1944-rows">Contact-Opportunity Bridge (1,944 rows)</a></li>
+  <li><a href="#accounts-100000-rows" id="toc-accounts-100000-rows" class="nav-link" data-scroll-target="#accounts-100000-rows">Accounts (100,000 rows)</a></li>
+  <li><a href="#contacts-717820-rows" id="toc-contacts-717820-rows" class="nav-link" data-scroll-target="#contacts-717820-rows">Contacts (717,820 rows)</a></li>
+  <li><a href="#opportunities-50000-rows" id="toc-opportunities-50000-rows" class="nav-link" data-scroll-target="#opportunities-50000-rows">Opportunities (50,000 rows)</a></li>
+  <li><a href="#contact-opportunity-bridge-122677-rows" id="toc-contact-opportunity-bridge-122677-rows" class="nav-link" data-scroll-target="#contact-opportunity-bridge-122677-rows">Contact-Opportunity Bridge (122,677 rows)</a></li>
   </ul></li>
   <li><a href="#feature-engineering-turning-raw-data-into-signals" id="toc-feature-engineering-turning-raw-data-into-signals" class="nav-link" data-scroll-target="#feature-engineering-turning-raw-data-into-signals">Feature Engineering: Turning Raw Data Into Signals</a>
   <ul class="collapse">
   <li><a href="#level-1-firmographic-technographic-features" id="toc-level-1-firmographic-technographic-features" class="nav-link" data-scroll-target="#level-1-firmographic-technographic-features">Level 1: Firmographic &amp; Technographic Features</a></li>
   <li><a href="#level-2-contact-composition-features" id="toc-level-2-contact-composition-features" class="nav-link" data-scroll-target="#level-2-contact-composition-features">Level 2: Contact Composition Features</a></li>
   <li><a href="#level-3-buying-group-features" id="toc-level-3-buying-group-features" class="nav-link" data-scroll-target="#level-3-buying-group-features">Level 3: Buying Group Features</a></li>
+  <li><a href="#a-design-decision-avoiding-target-leakage" id="toc-a-design-decision-avoiding-target-leakage" class="nav-link" data-scroll-target="#a-design-decision-avoiding-target-leakage">A Design Decision: Avoiding Target Leakage</a></li>
   </ul></li>
   <li><a href="#the-model-logistic-regression" id="toc-the-model-logistic-regression" class="nav-link" data-scroll-target="#the-model-logistic-regression">The Model: Logistic Regression</a>
   <ul class="collapse">
@@ -231,7 +232,7 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="https://github.com/pfelix828/lead-scoring" class="btn btn-outline-primary">View on GitHub</a></p>
 <section id="what-this-project-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-project-does">What This Project Does</h2>
-<p>Imagine you’re running marketing at a B2B software company. You have 1,500 accounts in your pipeline — companies that might buy your product. But your team can only actively engage with maybe 200 of them this quarter. <strong>How do you decide which 200?</strong></p>
+<p>Imagine you’re running marketing at a B2B software company. You have 100,000 accounts in your CRM — companies that might buy your product. But your team can only actively engage with maybe a few thousand of them this quarter. <strong>How do you decide which ones?</strong></p>
 <p>This project builds two tools to answer that question:</p>
 <ol type="1">
 <li><strong>A propensity model</strong> that scores every account from 0 to 100% based on how likely they are to close a deal</li>
@@ -241,26 +242,27 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="why-this-matters-in-the-real-world" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-matters-in-the-real-world">Why This Matters in the Real World</h2>
-<p>At Atlassian, I did exactly this work — analyzing which contact profiles showed up on deals that closed, identifying accounts with coverage gaps, and building enrichment strategies. That analysis identified <strong>$50M in estimated pipeline</strong> from contact addition strategies.</p>
+<p>At Atlassian, I did similar work — analyzing which contact profiles showed up on deals that closed, identifying accounts with coverage gaps, and building enrichment strategies that informed marketing’s contact acquisition priorities.</p>
 <p>This project recreates that methodology on synthetic data so I can walk through the full approach openly, from data generation to model evaluation to strategic recommendations.</p>
+<p><strong>A note on synthetic data</strong>: The data generator embeds known signals at controlled strengths — for example, VP+ contacts on a deal increase win probability. The model’s job is to recover those signals from the feature matrix, validating that the pipeline works end-to-end. This demonstrates methodology, not empirical discovery. The same pipeline on real CRM data would face additional noise, confounders, and temporal dynamics — but the engineering and evaluation framework would carry over directly.</p>
 </section>
 <section id="the-data-what-a-crm-looks-like" class="level2">
 <h2 class="anchored" data-anchor-id="the-data-what-a-crm-looks-like">The Data: What a CRM Looks Like</h2>
 <p>Before we get into the model, it helps to understand what data B2B marketing teams actually work with. The project generates synthetic data across four tables that mirror what you’d find in a real CRM (Customer Relationship Management) system like Salesforce:</p>
-<section id="accounts-1500-rows" class="level3">
-<h3 class="anchored" data-anchor-id="accounts-1500-rows">Accounts (1,500 rows)</h3>
+<section id="accounts-100000-rows" class="level3">
+<h3 class="anchored" data-anchor-id="accounts-100000-rows">Accounts (100,000 rows)</h3>
 <p>Each row is a company. We know their <strong>industry</strong> (Technology, Healthcare, etc.), <strong>size</strong> (employee count, annual revenue), <strong>segment</strong> (SMB, Mid-Market, or Enterprise), and <strong>tech stack</strong> — which software tools they already use. We also know if they’re already a customer of ours.</p>
 </section>
-<section id="contacts-10504-rows" class="level3">
-<h3 class="anchored" data-anchor-id="contacts-10504-rows">Contacts (10,504 rows)</h3>
+<section id="contacts-717820-rows" class="level3">
+<h3 class="anchored" data-anchor-id="contacts-717820-rows">Contacts (717,820 rows)</h3>
 <p>Each row is a person at one of those companies. We know their <strong>job title</strong>, <strong>job function</strong> (Engineering, Marketing, Sales, etc.), <strong>seniority</strong> (from Individual Contributor up to C-Suite), and how they entered our system (paid search, organic, events, etc.).</p>
 </section>
-<section id="opportunities-800-rows" class="level3">
-<h3 class="anchored" data-anchor-id="opportunities-800-rows">Opportunities (800 rows)</h3>
+<section id="opportunities-50000-rows" class="level3">
+<h3 class="anchored" data-anchor-id="opportunities-50000-rows">Opportunities (50,000 rows)</h3>
 <p>Each row is a potential deal. It’s tied to an account and has a <strong>stage</strong> (Discovery → Evaluation → Proposal → Negotiation → Closed Won or Closed Lost), a <strong>dollar amount</strong>, and an outcome — did we win or lose?</p>
 </section>
-<section id="contact-opportunity-bridge-1944-rows" class="level3">
-<h3 class="anchored" data-anchor-id="contact-opportunity-bridge-1944-rows">Contact-Opportunity Bridge (1,944 rows)</h3>
+<section id="contact-opportunity-bridge-122677-rows" class="level3">
+<h3 class="anchored" data-anchor-id="contact-opportunity-bridge-122677-rows">Contact-Opportunity Bridge (122,677 rows)</h3>
 <p>This is the crucial table. It tells us <strong>which people are involved in which deals</strong>, and what role they play: Champion (our internal advocate), Decision Maker (signs the check), Evaluator (tests the product), Influencer (shapes opinion), or Blocker (raises objections).</p>
 </section>
 </section>
@@ -297,30 +299,36 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Role coverage</strong> — Of the four key roles (Champion, Decision Maker, Evaluator, Influencer), how many are present?</li>
 <li><strong>Buying group completeness</strong> — A composite 0-100 score combining role coverage, seniority presence, function diversity, and technical/business mix</li>
 </ul>
-<p>In total, we generate <strong>49 features</strong> from these three levels.</p>
+<p>In total, we generate <strong>39 features</strong> from these three levels.</p>
+</section>
+<section id="a-design-decision-avoiding-target-leakage" class="level3">
+<h3 class="anchored" data-anchor-id="a-design-decision-avoiding-target-leakage">A Design Decision: Avoiding Target Leakage</h3>
+<p>There’s a subtle but important problem here. The Level 3 features — deal contact count, role coverage, buying group completeness — are derived from the same opportunity records whose outcome is the target variable. If we include them in the propensity model, we’re letting the model peek at the answer.</p>
+<p>The solution: the propensity model uses <strong>only Level 1 and Level 2 features</strong> (firmographic, technographic, and contact composition signals that exist <em>before</em> any deal starts). Level 3 features are reserved for the buying group analysis, where we’re describing deal patterns rather than predicting outcomes. This separation is enforced in the code with a <code>include_deal_features</code> flag.</p>
+<p>This matters because many portfolio projects (and some production systems) accidentally leak future information into the training set. The result is a model that looks great in evaluation but fails in production, because it relied on information that wouldn’t be available at prediction time.</p>
 </section>
 </section>
 <section id="the-model-logistic-regression" class="level2">
 <h2 class="anchored" data-anchor-id="the-model-logistic-regression">The Model: Logistic Regression</h2>
 <section id="what-logistic-regression-does" class="level3">
 <h3 class="anchored" data-anchor-id="what-logistic-regression-does">What Logistic Regression Does</h3>
-<p>At its core, logistic regression answers a yes/no question: <strong>will this account close a deal?</strong> It takes all 49 features as inputs and outputs a probability between 0% and 100%.</p>
+<p>At its core, logistic regression answers a yes/no question: <strong>will this account close a deal?</strong> It takes all 39 features as inputs and outputs a probability between 0% and 100%.</p>
 <p>Think of it like a weighted scorecard. Each feature gets a weight (called a <strong>coefficient</strong>). Positive weights increase the score; negative weights decrease it. The model learns these weights from historical data — it looks at hundreds of accounts that won or lost, and figures out which features are most predictive.</p>
 <p>For example, if the model learns that “VP+ contacts on the deal” has a coefficient of +0.10, it means that having senior contacts engaged makes the account meaningfully more likely to close.</p>
 </section>
 <section id="why-logistic-regression-over-fancier-models" class="level3">
 <h3 class="anchored" data-anchor-id="why-logistic-regression-over-fancier-models">Why Logistic Regression Over Fancier Models</h3>
-<p>We also trained a <strong>Random Forest</strong> — a more complex model that builds hundreds of decision trees and averages their predictions. It performed slightly better by some measures, but we chose logistic regression because:</p>
+<p>We also trained a <strong>Random Forest</strong> — a more complex model that builds hundreds of decision trees and averages their predictions. At 100K-account scale, it actually performed slightly <em>worse</em> than logistic regression (AUC 0.567 vs 0.575). We chose logistic regression because:</p>
 <ul>
-<li><strong>Interpretability</strong>: You can look at the coefficients and say “VP+ engagement is our strongest signal, tech stack is second.” Try explaining a 100-tree ensemble to a marketing VP.</li>
+<li><strong>Interpretability</strong>: You can look at the coefficients and say “senior density is our strongest signal, existing customer status is second.” Try explaining a 100-tree ensemble to a marketing VP.</li>
 <li><strong>It’s what production systems use</strong>: Marketing platforms like Marketo and HubSpot use logistic regression under the hood for lead scoring. Building with the same approach makes the work directly transferable.</li>
-<li><strong>The performance gap was tiny</strong>: The fancier model wasn’t enough better to justify the complexity.</li>
+<li><strong>No performance justification for complexity</strong>: The simpler model matched or beat the fancier one, suggesting the signal structure is additive rather than interaction-driven.</li>
 </ul>
 </section>
 <section id="what-is-regularization" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-regularization">What is Regularization?</h3>
-<p>With 49 features and only ~580 accounts, there’s a risk of <strong>overfitting</strong> — the model memorizes quirks of the training data instead of learning real patterns. <strong>Regularization</strong> is a technique that penalizes large coefficients, essentially telling the model: “don’t put too much weight on any single feature.”</p>
-<p>We use <strong>L2 regularization</strong> (also called Ridge), controlled by a parameter called <strong>C</strong>. Lower C = stronger regularization = simpler model. We tested C values of 0.01, 0.1, 1.0, and 10.0, and the model performed best at <strong>C=0.01</strong> — fairly strong regularization, which makes sense given our relatively small dataset.</p>
+<p>Even with ~36K accounts and 39 features, there’s a risk of <strong>overfitting</strong> — the model memorizes quirks of the training data instead of learning real patterns. <strong>Regularization</strong> is a technique that penalizes large coefficients, essentially telling the model: “don’t put too much weight on any single feature.”</p>
+<p>We use <strong>L2 regularization</strong> (also called Ridge), controlled by a parameter called <strong>C</strong>. Lower C = stronger regularization = simpler model. We tested C values of 0.01, 0.1, 1.0, and 10.0, and the model performed best at <strong>C=0.01</strong> — fairly strong regularization that keeps feature redundancy (e.g., correlated size and revenue features) from inflating coefficients.</p>
 </section>
 </section>
 <section id="how-we-evaluate-business-metrics-that-matter" class="level2">
@@ -329,8 +337,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="auc-area-under-the-roc-curve" class="level3">
 <h3 class="anchored" data-anchor-id="auc-area-under-the-roc-curve">AUC (Area Under the ROC Curve)</h3>
 <p><strong>What it is</strong>: A number between 0 and 1 that measures how well the model separates winners from losers. An AUC of 0.5 means the model is no better than flipping a coin. An AUC of 1.0 means perfect separation.</p>
-<p><strong>Our result</strong>: <strong>0.608</strong> on the held-out test set.</p>
-<p><strong>What that means</strong>: The model is meaningfully better than random. In practice, AUC values of 0.60-0.70 are common for account-level propensity models — the signal exists but it’s noisy, because many factors that determine whether a deal closes (budget timing, competitive dynamics, internal politics) aren’t in the data.</p>
+<p><strong>Our result</strong>: <strong>0.575</strong> (95% CI: 0.56–0.59) on the held-out test set (~7,200 accounts).</p>
+<p><strong>What that means</strong>: The model is meaningfully better than random. In practice, AUC values of 0.55-0.65 are common for account-level propensity models using only pre-deal features — the signal exists but it’s noisy, because many factors that determine whether a deal closes (budget timing, competitive dynamics, internal politics) aren’t in the data. The tight confidence interval (thanks to the large test set) gives us confidence this isn’t a fluke.</p>
 </section>
 <section id="precision-k" class="level3">
 <h3 class="anchored" data-anchor-id="precision-k">Precision @ K</h3>
@@ -352,27 +360,27 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>Top 10%</td>
-<td><strong>54.5%</strong></td>
-<td>More than half of the highest-scored accounts actually won</td>
+<td><strong>44.8%</strong></td>
+<td>Nearly half of the highest-scored accounts actually won (vs.&nbsp;36% baseline)</td>
 </tr>
 <tr class="even">
 <td>Top 20%</td>
-<td>34.8%</td>
-<td>About a third — still above the 36% baseline</td>
+<td>44.2%</td>
+<td>Precision holds well beyond the top decile</td>
 </tr>
 <tr class="odd">
 <td>Top 30%</td>
-<td>41.2%</td>
-<td>Concentrated wins in the top tier</td>
+<td>42.2%</td>
+<td>Concentrated wins in the top tiers</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Why it matters</strong>: This is the metric marketing cares about most. “If I can only email 100 accounts this quarter, which ones?” The model says: pick the top-scored ones, and you’ll hit winners 55% of the time instead of 36%.</p>
+<p><strong>Why it matters</strong>: This is the metric marketing cares about most. “If I can only engage 3,000 accounts this quarter out of 100,000, which ones?” The model says: pick the top-scored ones, and you’ll hit winners 45% of the time instead of 36%.</p>
 </section>
 <section id="lift-chart" class="level3">
 <h3 class="anchored" data-anchor-id="lift-chart">Lift Chart</h3>
 <p><strong>What it is</strong>: We divide all accounts into 10 equal groups (deciles) based on their score, from highest to lowest. For each group, we measure how much more likely they are to win compared to the overall average. This ratio is called <strong>lift</strong>.</p>
-<p><strong>Our result</strong>: The top decile converts at <strong>1.4x</strong> the baseline rate. Accounts in the bottom deciles convert well below baseline.</p>
+<p><strong>Our result</strong>: The top decile converts at <strong>1.3x</strong> the baseline rate. Accounts in the bottom deciles convert well below baseline.</p>
 <p><strong>Why it matters</strong>: Lift tells you the concentration of value. If the top 30% of scored accounts capture a disproportionate share of wins, you can focus your team’s time there and ignore the rest.</p>
 </section>
 <section id="revenue-capture-curve" class="level3">
@@ -388,18 +396,19 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="feature-importance-what-drives-the-score" class="level2">
 <h2 class="anchored" data-anchor-id="feature-importance-what-drives-the-score">Feature Importance: What Drives the Score</h2>
-<p>The beauty of logistic regression is that you can look directly at the coefficients to see what matters:</p>
+<p>The beauty of logistic regression is that you can look directly at the coefficients to see what matters. Since this is synthetic data with known signal structure, the model’s job is to recover the embedded signals — and the ranking confirms the pipeline does so correctly:</p>
 <p><strong>Top positive drivers</strong> (increase propensity):</p>
 <ul>
-<li><strong>VP+ engagement on deals</strong> — The single strongest signal. Having senior contacts actively involved in the sales process is the best predictor of a win.</li>
-<li><strong>Complementary tech stack</strong> — Accounts that already use tools in our ecosystem (HubSpot, Slack) are more likely to buy.</li>
-<li><strong>VP+ contact count</strong> — Even beyond the deal level, just <em>knowing</em> senior people at an account is predictive.</li>
+<li><strong>Senior contact density</strong> — The fraction of VP+ contacts at an account is the single strongest signal. In real-world B2B sales, senior involvement is widely recognized as the strongest deal predictor.</li>
+<li><strong>Existing customer status</strong> — Upsell/cross-sell opportunities convert at meaningfully higher rates than net-new deals.</li>
+<li><strong>Complementary tech stack</strong> — Accounts that already use tools in our ecosystem (Jira, Salesforce, AWS) score higher.</li>
+<li><strong>Mid-Market segment</strong> — Mid-Market accounts convert at the highest rate, consistent with the “sweet spot” pattern common in B2B SaaS.</li>
 </ul>
 <p><strong>Top negative drivers</strong> (decrease propensity):</p>
 <ul>
-<li><strong>SMB segment</strong> — Smaller companies close at lower rates, likely due to smaller budgets and less formalized purchasing.</li>
+<li><strong>SMB segment and certain industries</strong> (Manufacturing, Education) — Smaller companies and industries with lower tech adoption close at lower rates.</li>
 </ul>
-<p>Both the logistic regression and random forest models agreed on the top signals, which is a good sign — it means the patterns are robust, not artifacts of one particular model type.</p>
+<p>Both the logistic regression and random forest models agreed on the top signals (senior density, tech stack, max seniority), which validates that the patterns are structural, not artifacts of one particular model type.</p>
 </section>
 <section id="buying-group-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="buying-group-analysis">Buying Group Analysis</h2>
@@ -462,32 +471,37 @@ ul.task-list li input[type="checkbox"] {
 <tr class="header">
 <th>Completeness Tier</th>
 <th>Win Rate</th>
+<th>Accounts</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Complete (75-100)</td>
-<td><strong>51%</strong></td>
+<td><strong>49%</strong></td>
+<td>9,356</td>
 </tr>
 <tr class="even">
 <td>High (50-75)</td>
-<td>38%</td>
+<td>39%</td>
+<td>10,467</td>
 </tr>
 <tr class="odd">
 <td>Medium (25-50)</td>
-<td>27%</td>
+<td>28%</td>
+<td>11,029</td>
 </tr>
 <tr class="even">
 <td>Low (0-25)</td>
-<td>24%</td>
+<td>22%</td>
+<td>5,121</td>
 </tr>
 </tbody>
 </table>
-<p>Accounts with complete buying groups win at <strong>2x the rate</strong> of those with low completeness. This isn’t surprising — it’s hard to close a deal when the right people aren’t at the table — but the magnitude of the difference gives marketing a clear mandate: <strong>invest in filling coverage gaps</strong>.</p>
+<p>Accounts with complete buying groups win at <strong>2.2x the rate</strong> of those with low completeness — and this pattern holds across thousands of accounts per tier. This isn’t surprising — it’s hard to close a deal when the right people aren’t at the table — but the magnitude and consistency of the difference gives marketing a clear mandate: <strong>invest in filling coverage gaps</strong>.</p>
 </section>
 <section id="gap-analysis-whats-missing-and-what-to-do-about-it" class="level3">
 <h3 class="anchored" data-anchor-id="gap-analysis-whats-missing-and-what-to-do-about-it">Gap Analysis: What’s Missing and What to Do About It</h3>
-<p>The analysis identified <strong>464 accounts</strong> with specific coverage gaps. The most common gaps:</p>
+<p>The analysis identified <strong>29,512 accounts</strong> with specific coverage gaps. The most common gaps:</p>
 <ul>
 <li>Missing buying roles (Champions and Decision Makers are the most commonly absent)</li>
 <li>No VP+ contact engaged on the deal</li>
@@ -497,8 +511,8 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="estimating-pipeline-value" class="level3">
 <h3 class="anchored" data-anchor-id="estimating-pipeline-value">Estimating Pipeline Value</h3>
-<p>The final step is quantifying the opportunity. If we assume that filling coverage gaps increases win rate by 10 percentage points (conservative, given the tier differences above), the gap accounts represent an estimated <strong>$286M in addressable pipeline</strong> from enrichment.</p>
-<p>This is the number that gets executive attention. It translates the analysis from “interesting data science project” into “here’s why you should fund this enrichment program.”</p>
+<p>The final step is quantifying the opportunity. The framework estimates pipeline value under explicit assumptions: a deal size of ~2% of account annual revenue, and a 10 percentage-point win rate uplift from filling coverage gaps.</p>
+<p>The absolute dollar estimates from synthetic data are illustrative — in production, both assumptions would need calibration against real historical conversion data, and actual deal-to-revenue ratios and enrichment uplift vary significantly by segment, industry, and sales motion. The value of this step isn’t the specific number — it’s the framework for sizing the opportunity, which translates the analysis into a business case that executives can evaluate and pressure-test with their own assumptions.</p>
 </section>
 </section>
 <section id="the-targeting-framework" class="level2">
@@ -530,7 +544,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>The upper-right quadrant is the sweet spot: accounts the model thinks are likely to buy, but where the buying group isn’t complete. These are the accounts where a targeted contact addition — finding the missing Champion, engaging the VP — could tip the deal.</p>
+<p>The upper-right quadrant is the sweet spot: <strong>7,068 accounts</strong> the model thinks are likely to buy, but where the buying group isn’t complete (30% win rate vs.&nbsp;48% for high-propensity accounts with complete groups). These are the accounts where a targeted contact addition — finding the missing Champion, engaging the VP — could tip the deal.</p>
 </section>
 <section id="what-id-do-differently-in-production" class="level2">
 <h2 class="anchored" data-anchor-id="what-id-do-differently-in-production">What I’d Do Differently in Production</h2>
