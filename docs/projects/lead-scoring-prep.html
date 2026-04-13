@@ -165,6 +165,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#why-logistic-regression" id="toc-why-logistic-regression" class="nav-link" data-scroll-target="#why-logistic-regression">“Why logistic regression?”</a></li>
   <li><a href="#what-is-auc-what-does-0.575-mean" id="toc-what-is-auc-what-does-0.575-mean" class="nav-link" data-scroll-target="#what-is-auc-what-does-0.575-mean">“What is AUC? What does 0.575 mean?”</a></li>
   <li><a href="#explain-precision-at-k." id="toc-explain-precision-at-k." class="nav-link" data-scroll-target="#explain-precision-at-k.">“Explain precision at K.”</a></li>
+  <li><a href="#what-are-precision-recall-and-k" id="toc-what-are-precision-recall-and-k" class="nav-link" data-scroll-target="#what-are-precision-recall-and-k">“What are precision, recall, and K?”</a></li>
   <li><a href="#what-is-regularization-why-did-you-use-it" id="toc-what-is-regularization-why-did-you-use-it" class="nav-link" data-scroll-target="#what-is-regularization-why-did-you-use-it">“What is regularization? Why did you use it?”</a></li>
   <li><a href="#what-is-cross-validation" id="toc-what-is-cross-validation" class="nav-link" data-scroll-target="#what-is-cross-validation">“What is cross-validation?”</a></li>
   <li><a href="#what-is-feature-engineering" id="toc-what-is-feature-engineering" class="nav-link" data-scroll-target="#what-is-feature-engineering">“What is feature engineering?”</a></li>
@@ -276,6 +277,69 @@ Note
 <p>“Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 45% precision — compared to a 36% baseline. At the top 20% and 30%, precision holds at 44% and 42% respectively. The practical takeaway: the model meaningfully concentrates wins in the top tiers. That’s fine for marketing because their question is usually ‘which 3,000 accounts should I target out of 100,000?’ — and the model gives them a 25% better hit rate than random targeting.”</p>
 <hr>
 </section>
+<section id="what-are-precision-recall-and-k" class="level3">
+<h3 class="anchored" data-anchor-id="what-are-precision-recall-and-k">“What are precision, recall, and K?”</h3>
+<p>These come up constantly. Here’s how to explain them without sounding like a textbook.</p>
+<p><strong>The setup — the confusion matrix:</strong></p>
+<p>Every prediction the model makes falls into one of four buckets:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Actually Won</th>
+<th>Actually Lost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Model said “win”</strong></td>
+<td>True Positive (TP) — correctly identified a winner</td>
+<td>False Positive (FP) — predicted win, actually lost</td>
+</tr>
+<tr class="even">
+<td><strong>Model said “lose”</strong></td>
+<td>False Negative (FN) — missed a winner</td>
+<td>True Negative (TN) — correctly identified a loser</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precision</strong> answers: <em>“Of the accounts the model flagged as winners, how many actually won?”</em></p>
+<blockquote class="blockquote">
+<p>Precision = TP / (TP + FP)</p>
+</blockquote>
+<p>In plain language: “When the model says an account will close, how often is it right?” High precision means few false alarms. If precision is 45%, that means 45% of the accounts the model calls winners actually are — the other 55% are false positives.</p>
+<p><strong>Why it matters for this project:</strong> Marketing has limited bandwidth. If they target the model’s top picks and half of them are duds, that’s wasted outreach. Precision tells you how efficient the model’s targeting is.</p>
+<p><strong>Recall</strong> answers: <em>“Of all the accounts that actually won, how many did the model catch?”</em></p>
+<blockquote class="blockquote">
+<p>Recall = TP / (TP + FN)</p>
+</blockquote>
+<p>In plain language: “Of every deal that actually closed, what fraction did the model surface?” High recall means you’re not missing winners. If recall is 80%, the model caught 80% of the deals that closed — but 20% slipped through as false negatives.</p>
+<p><strong>Why it matters for this project:</strong> If marketing only targets model-recommended accounts and the model has low recall, they’re leaving pipeline on the table — deals they would have won but never engaged because the model didn’t flag them.</p>
+<p><strong>The precision-recall tradeoff:</strong></p>
+<p>You can’t maximize both simultaneously. If you lower the score threshold (call more accounts “winners”), you’ll catch more actual winners (recall goes up) but also flag more false positives (precision goes down). If you raise the threshold (only call very high-scoring accounts “winners”), precision goes up but you miss more real winners (recall drops).</p>
+<blockquote class="blockquote">
+<p>“In lead scoring, we tend to care more about precision at the top — marketing wants to know ‘are the accounts I’m targeting actually good?’ rather than ‘am I catching every possible deal?’ That’s why we report precision@K rather than raw recall.”</p>
+</blockquote>
+<p><strong>K — what it means:</strong></p>
+<p>K is just “how deep into the ranked list are you going?” When we say “precision at K=10%,” we mean: take the top 10% of model-scored accounts, and measure what fraction actually won.</p>
+<ul>
+<li><strong>Precision@10%</strong> = take the top ~3,600 accounts (10% of 36K), 45% of them won</li>
+<li><strong>Precision@20%</strong> = take the top ~7,200 accounts, 44% won</li>
+<li><strong>Precision@30%</strong> = take the top ~10,800 accounts, 42% won</li>
+<li><strong>Baseline</strong> = if you picked randomly, 36% would have won</li>
+</ul>
+<p>K matters because marketing doesn’t score every account equally — they want the <em>best</em> accounts. Precision@K tells you how good the model is at concentrating winners at the top of the list, which is the actual business question.</p>
+<p><strong>If they ask about F1 score:</strong></p>
+<blockquote class="blockquote">
+<p>“F1 is the harmonic mean of precision and recall — it balances both into a single number. It’s useful when you care equally about catching all positives and avoiding false alarms. For lead scoring, we don’t care equally — precision at the top matters more than overall recall, because marketing is selecting a subset to target, not trying to catch every possible deal. That’s why we use precision@K and lift charts instead of F1.”</p>
+</blockquote>
+<hr>
+</section>
 <section id="what-is-regularization-why-did-you-use-it" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-regularization-why-did-you-use-it">“What is regularization? Why did you use it?”</h3>
 <p><strong>What it is:</strong></p>
@@ -357,8 +421,16 @@ Note
 <td>Probability that the model ranks a random positive higher than a random negative; 0.5 = random, 1.0 = perfect</td>
 </tr>
 <tr class="odd">
+<td><strong>Precision</strong></td>
+<td>Of the items the model flagged as positive, what fraction actually are — measures false alarm rate</td>
+</tr>
+<tr class="even">
+<td><strong>Recall</strong></td>
+<td>Of all actual positives, what fraction did the model catch — measures how many winners you miss</td>
+</tr>
+<tr class="odd">
 <td><strong>Precision @ K</strong></td>
-<td>Of the top K% scored items, what fraction are actually positive</td>
+<td>Precision measured on only the top K% of scored items — the metric marketing actually cares about</td>
 </tr>
 <tr class="even">
 <td><strong>Lift</strong></td>

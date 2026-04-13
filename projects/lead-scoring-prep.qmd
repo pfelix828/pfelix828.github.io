@@ -76,6 +76,58 @@ AUC stands for Area Under the ROC Curve. Here's the intuition: if you pick one a
 
 ---
 
+### "What are precision, recall, and K?"
+
+These come up constantly. Here's how to explain them without sounding like a textbook.
+
+**The setup — the confusion matrix:**
+
+Every prediction the model makes falls into one of four buckets:
+
+|  | Actually Won | Actually Lost |
+|--|--|--|
+| **Model said "win"** | True Positive (TP) — correctly identified a winner | False Positive (FP) — predicted win, actually lost |
+| **Model said "lose"** | False Negative (FN) — missed a winner | True Negative (TN) — correctly identified a loser |
+
+**Precision** answers: *"Of the accounts the model flagged as winners, how many actually won?"*
+
+> Precision = TP / (TP + FP)
+
+In plain language: "When the model says an account will close, how often is it right?" High precision means few false alarms. If precision is 45%, that means 45% of the accounts the model calls winners actually are — the other 55% are false positives.
+
+**Why it matters for this project:** Marketing has limited bandwidth. If they target the model's top picks and half of them are duds, that's wasted outreach. Precision tells you how efficient the model's targeting is.
+
+**Recall** answers: *"Of all the accounts that actually won, how many did the model catch?"*
+
+> Recall = TP / (TP + FN)
+
+In plain language: "Of every deal that actually closed, what fraction did the model surface?" High recall means you're not missing winners. If recall is 80%, the model caught 80% of the deals that closed — but 20% slipped through as false negatives.
+
+**Why it matters for this project:** If marketing only targets model-recommended accounts and the model has low recall, they're leaving pipeline on the table — deals they would have won but never engaged because the model didn't flag them.
+
+**The precision-recall tradeoff:**
+
+You can't maximize both simultaneously. If you lower the score threshold (call more accounts "winners"), you'll catch more actual winners (recall goes up) but also flag more false positives (precision goes down). If you raise the threshold (only call very high-scoring accounts "winners"), precision goes up but you miss more real winners (recall drops).
+
+> "In lead scoring, we tend to care more about precision at the top — marketing wants to know 'are the accounts I'm targeting actually good?' rather than 'am I catching every possible deal?' That's why we report precision@K rather than raw recall."
+
+**K — what it means:**
+
+K is just "how deep into the ranked list are you going?" When we say "precision at K=10%," we mean: take the top 10% of model-scored accounts, and measure what fraction actually won.
+
+- **Precision@10%** = take the top ~3,600 accounts (10% of 36K), 45% of them won
+- **Precision@20%** = take the top ~7,200 accounts, 44% won
+- **Precision@30%** = take the top ~10,800 accounts, 42% won
+- **Baseline** = if you picked randomly, 36% would have won
+
+K matters because marketing doesn't score every account equally — they want the *best* accounts. Precision@K tells you how good the model is at concentrating winners at the top of the list, which is the actual business question.
+
+**If they ask about F1 score:**
+
+> "F1 is the harmonic mean of precision and recall — it balances both into a single number. It's useful when you care equally about catching all positives and avoiding false alarms. For lead scoring, we don't care equally — precision at the top matters more than overall recall, because marketing is selecting a subset to target, not trying to catch every possible deal. That's why we use precision@K and lift charts instead of F1."
+
+---
+
 ### "What is regularization? Why did you use it?"
 
 **What it is:**
@@ -161,7 +213,9 @@ The AUC of 0.575 reflects realistic signal strength — it's not 0.95, which wou
 |---------|------------------------|
 | **Logistic regression** | A model that predicts the probability of a yes/no outcome by learning a weighted sum of input features |
 | **AUC** | Probability that the model ranks a random positive higher than a random negative; 0.5 = random, 1.0 = perfect |
-| **Precision @ K** | Of the top K% scored items, what fraction are actually positive |
+| **Precision** | Of the items the model flagged as positive, what fraction actually are — measures false alarm rate |
+| **Recall** | Of all actual positives, what fraction did the model catch — measures how many winners you miss |
+| **Precision @ K** | Precision measured on only the top K% of scored items — the metric marketing actually cares about |
 | **Lift** | How much better the model is than random at a given threshold — 1.3x means 30% better |
 | **Regularization** | A penalty that keeps model coefficients small, preventing overfitting |
 | **Cross-validation** | Evaluate model performance by rotating through multiple train/test splits |
