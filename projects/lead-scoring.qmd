@@ -8,7 +8,7 @@ toc-depth: 3
 
 ## What This Project Does
 
-Imagine you're running marketing at a B2B software company. You have 1,500 accounts in your pipeline — companies that might buy your product. But your team can only actively engage with maybe 200 of them this quarter. **How do you decide which 200?**
+Imagine you're running marketing at a B2B software company. You have 100,000 accounts in your CRM — companies that might buy your product. But your team can only actively engage with maybe a few thousand of them this quarter. **How do you decide which ones?**
 
 This project builds two tools to answer that question:
 
@@ -19,24 +19,26 @@ Together, they turn a chaotic spreadsheet of accounts into a prioritized action 
 
 ## Why This Matters in the Real World
 
-At Atlassian, I did exactly this work — analyzing which contact profiles showed up on deals that closed, identifying accounts with coverage gaps, and building enrichment strategies. That analysis identified **$50M in estimated pipeline** from contact addition strategies.
+At Atlassian, I did similar work — analyzing which contact profiles showed up on deals that closed, identifying accounts with coverage gaps, and building enrichment strategies that informed marketing's contact acquisition priorities.
 
 This project recreates that methodology on synthetic data so I can walk through the full approach openly, from data generation to model evaluation to strategic recommendations.
+
+**A note on synthetic data**: The data generator embeds known signals at controlled strengths — for example, VP+ contacts on a deal increase win probability. The model's job is to recover those signals from the feature matrix, validating that the pipeline works end-to-end. This demonstrates methodology, not empirical discovery. The same pipeline on real CRM data would face additional noise, confounders, and temporal dynamics — but the engineering and evaluation framework would carry over directly.
 
 ## The Data: What a CRM Looks Like
 
 Before we get into the model, it helps to understand what data B2B marketing teams actually work with. The project generates synthetic data across four tables that mirror what you'd find in a real CRM (Customer Relationship Management) system like Salesforce:
 
-### Accounts (1,500 rows)
+### Accounts (100,000 rows)
 Each row is a company. We know their **industry** (Technology, Healthcare, etc.), **size** (employee count, annual revenue), **segment** (SMB, Mid-Market, or Enterprise), and **tech stack** — which software tools they already use. We also know if they're already a customer of ours.
 
-### Contacts (10,504 rows)
+### Contacts (717,820 rows)
 Each row is a person at one of those companies. We know their **job title**, **job function** (Engineering, Marketing, Sales, etc.), **seniority** (from Individual Contributor up to C-Suite), and how they entered our system (paid search, organic, events, etc.).
 
-### Opportunities (800 rows)
+### Opportunities (50,000 rows)
 Each row is a potential deal. It's tied to an account and has a **stage** (Discovery → Evaluation → Proposal → Negotiation → Closed Won or Closed Lost), a **dollar amount**, and an outcome — did we win or lose?
 
-### Contact-Opportunity Bridge (1,944 rows)
+### Contact-Opportunity Bridge (122,677 rows)
 This is the crucial table. It tells us **which people are involved in which deals**, and what role they play: Champion (our internal advocate), Decision Maker (signs the check), Evaluator (tests the product), Influencer (shapes opinion), or Blocker (raises objections).
 
 ## Feature Engineering: Turning Raw Data Into Signals
@@ -71,13 +73,21 @@ The strongest signals come from the deal contact data:
 - **Role coverage** — Of the four key roles (Champion, Decision Maker, Evaluator, Influencer), how many are present?
 - **Buying group completeness** — A composite 0-100 score combining role coverage, seniority presence, function diversity, and technical/business mix
 
-In total, we generate **49 features** from these three levels.
+In total, we generate **39 features** from these three levels.
+
+### A Design Decision: Avoiding Target Leakage
+
+There's a subtle but important problem here. The Level 3 features — deal contact count, role coverage, buying group completeness — are derived from the same opportunity records whose outcome is the target variable. If we include them in the propensity model, we're letting the model peek at the answer.
+
+The solution: the propensity model uses **only Level 1 and Level 2 features** (firmographic, technographic, and contact composition signals that exist *before* any deal starts). Level 3 features are reserved for the buying group analysis, where we're describing deal patterns rather than predicting outcomes. This separation is enforced in the code with a `include_deal_features` flag.
+
+This matters because many portfolio projects (and some production systems) accidentally leak future information into the training set. The result is a model that looks great in evaluation but fails in production, because it relied on information that wouldn't be available at prediction time.
 
 ## The Model: Logistic Regression
 
 ### What Logistic Regression Does
 
-At its core, logistic regression answers a yes/no question: **will this account close a deal?** It takes all 49 features as inputs and outputs a probability between 0% and 100%.
+At its core, logistic regression answers a yes/no question: **will this account close a deal?** It takes all 39 features as inputs and outputs a probability between 0% and 100%.
 
 Think of it like a weighted scorecard. Each feature gets a weight (called a **coefficient**). Positive weights increase the score; negative weights decrease it. The model learns these weights from historical data — it looks at hundreds of accounts that won or lost, and figures out which features are most predictive.
 
@@ -85,17 +95,17 @@ For example, if the model learns that "VP+ contacts on the deal" has a coefficie
 
 ### Why Logistic Regression Over Fancier Models
 
-We also trained a **Random Forest** — a more complex model that builds hundreds of decision trees and averages their predictions. It performed slightly better by some measures, but we chose logistic regression because:
+We also trained a **Random Forest** — a more complex model that builds hundreds of decision trees and averages their predictions. At 100K-account scale, it actually performed slightly *worse* than logistic regression (AUC 0.567 vs 0.575). We chose logistic regression because:
 
-- **Interpretability**: You can look at the coefficients and say "VP+ engagement is our strongest signal, tech stack is second." Try explaining a 100-tree ensemble to a marketing VP.
+- **Interpretability**: You can look at the coefficients and say "senior density is our strongest signal, existing customer status is second." Try explaining a 100-tree ensemble to a marketing VP.
 - **It's what production systems use**: Marketing platforms like Marketo and HubSpot use logistic regression under the hood for lead scoring. Building with the same approach makes the work directly transferable.
-- **The performance gap was tiny**: The fancier model wasn't enough better to justify the complexity.
+- **No performance justification for complexity**: The simpler model matched or beat the fancier one, suggesting the signal structure is additive rather than interaction-driven.
 
 ### What is Regularization?
 
-With 49 features and only ~580 accounts, there's a risk of **overfitting** — the model memorizes quirks of the training data instead of learning real patterns. **Regularization** is a technique that penalizes large coefficients, essentially telling the model: "don't put too much weight on any single feature."
+Even with ~36K accounts and 39 features, there's a risk of **overfitting** — the model memorizes quirks of the training data instead of learning real patterns. **Regularization** is a technique that penalizes large coefficients, essentially telling the model: "don't put too much weight on any single feature."
 
-We use **L2 regularization** (also called Ridge), controlled by a parameter called **C**. Lower C = stronger regularization = simpler model. We tested C values of 0.01, 0.1, 1.0, and 10.0, and the model performed best at **C=0.01** — fairly strong regularization, which makes sense given our relatively small dataset.
+We use **L2 regularization** (also called Ridge), controlled by a parameter called **C**. Lower C = stronger regularization = simpler model. We tested C values of 0.01, 0.1, 1.0, and 10.0, and the model performed best at **C=0.01** — fairly strong regularization that keeps feature redundancy (e.g., correlated size and revenue features) from inflating coefficients.
 
 ## How We Evaluate: Business Metrics That Matter
 
@@ -105,9 +115,9 @@ Technical metrics like accuracy aren't very useful here. If 64% of accounts lose
 
 **What it is**: A number between 0 and 1 that measures how well the model separates winners from losers. An AUC of 0.5 means the model is no better than flipping a coin. An AUC of 1.0 means perfect separation.
 
-**Our result**: **0.608** on the held-out test set.
+**Our result**: **0.575** (95% CI: 0.56–0.59) on the held-out test set (~7,200 accounts).
 
-**What that means**: The model is meaningfully better than random. In practice, AUC values of 0.60-0.70 are common for account-level propensity models — the signal exists but it's noisy, because many factors that determine whether a deal closes (budget timing, competitive dynamics, internal politics) aren't in the data.
+**What that means**: The model is meaningfully better than random. In practice, AUC values of 0.55-0.65 are common for account-level propensity models using only pre-deal features — the signal exists but it's noisy, because many factors that determine whether a deal closes (budget timing, competitive dynamics, internal politics) aren't in the data. The tight confidence interval (thanks to the large test set) gives us confidence this isn't a fluke.
 
 ### Precision @ K
 
@@ -117,17 +127,17 @@ Technical metrics like accuracy aren't very useful here. If 64% of accounts lose
 
 | Top K% | Precision | What it means |
 |--------|-----------|---------------|
-| Top 10% | **54.5%** | More than half of the highest-scored accounts actually won |
-| Top 20% | 34.8% | About a third — still above the 36% baseline |
-| Top 30% | 41.2% | Concentrated wins in the top tier |
+| Top 10% | **44.8%** | Nearly half of the highest-scored accounts actually won (vs. 36% baseline) |
+| Top 20% | 44.2% | Precision holds well beyond the top decile |
+| Top 30% | 42.2% | Concentrated wins in the top tiers |
 
-**Why it matters**: This is the metric marketing cares about most. "If I can only email 100 accounts this quarter, which ones?" The model says: pick the top-scored ones, and you'll hit winners 55% of the time instead of 36%.
+**Why it matters**: This is the metric marketing cares about most. "If I can only engage 3,000 accounts this quarter out of 100,000, which ones?" The model says: pick the top-scored ones, and you'll hit winners 45% of the time instead of 36%.
 
 ### Lift Chart
 
 **What it is**: We divide all accounts into 10 equal groups (deciles) based on their score, from highest to lowest. For each group, we measure how much more likely they are to win compared to the overall average. This ratio is called **lift**.
 
-**Our result**: The top decile converts at **1.4x** the baseline rate. Accounts in the bottom deciles convert well below baseline.
+**Our result**: The top decile converts at **1.3x** the baseline rate. Accounts in the bottom deciles convert well below baseline.
 
 **Why it matters**: Lift tells you the concentration of value. If the top 30% of scored accounts capture a disproportionate share of wins, you can focus your team's time there and ignore the rest.
 
@@ -145,19 +155,20 @@ Technical metrics like accuracy aren't very useful here. If 64% of accounts lose
 
 ## Feature Importance: What Drives the Score
 
-The beauty of logistic regression is that you can look directly at the coefficients to see what matters:
+The beauty of logistic regression is that you can look directly at the coefficients to see what matters. Since this is synthetic data with known signal structure, the model's job is to recover the embedded signals — and the ranking confirms the pipeline does so correctly:
 
 **Top positive drivers** (increase propensity):
 
-- **VP+ engagement on deals** — The single strongest signal. Having senior contacts actively involved in the sales process is the best predictor of a win.
-- **Complementary tech stack** — Accounts that already use tools in our ecosystem (HubSpot, Slack) are more likely to buy.
-- **VP+ contact count** — Even beyond the deal level, just *knowing* senior people at an account is predictive.
+- **Senior contact density** — The fraction of VP+ contacts at an account is the single strongest signal. In real-world B2B sales, senior involvement is widely recognized as the strongest deal predictor.
+- **Existing customer status** — Upsell/cross-sell opportunities convert at meaningfully higher rates than net-new deals.
+- **Complementary tech stack** — Accounts that already use tools in our ecosystem (Jira, Salesforce, AWS) score higher.
+- **Mid-Market segment** — Mid-Market accounts convert at the highest rate, consistent with the "sweet spot" pattern common in B2B SaaS.
 
 **Top negative drivers** (decrease propensity):
 
-- **SMB segment** — Smaller companies close at lower rates, likely due to smaller budgets and less formalized purchasing.
+- **SMB segment and certain industries** (Manufacturing, Education) — Smaller companies and industries with lower tech adoption close at lower rates.
 
-Both the logistic regression and random forest models agreed on the top signals, which is a good sign — it means the patterns are robust, not artifacts of one particular model type.
+Both the logistic regression and random forest models agreed on the top signals (senior density, tech stack, max seniority), which validates that the patterns are structural, not artifacts of one particular model type.
 
 ## Buying Group Analysis
 
@@ -186,18 +197,18 @@ We score each account's buying group on a 0-100 scale across four dimensions (25
 
 ### The Results: Completeness Predicts Wins
 
-| Completeness Tier | Win Rate |
-|-------------------|----------|
-| Complete (75-100) | **51%** |
-| High (50-75) | 38% |
-| Medium (25-50) | 27% |
-| Low (0-25) | 24% |
+| Completeness Tier | Win Rate | Accounts |
+|-------------------|----------|----------|
+| Complete (75-100) | **49%** | 9,356 |
+| High (50-75) | 39% | 10,467 |
+| Medium (25-50) | 28% | 11,029 |
+| Low (0-25) | 22% | 5,121 |
 
-Accounts with complete buying groups win at **2x the rate** of those with low completeness. This isn't surprising — it's hard to close a deal when the right people aren't at the table — but the magnitude of the difference gives marketing a clear mandate: **invest in filling coverage gaps**.
+Accounts with complete buying groups win at **2.2x the rate** of those with low completeness — and this pattern holds across thousands of accounts per tier. This isn't surprising — it's hard to close a deal when the right people aren't at the table — but the magnitude and consistency of the difference gives marketing a clear mandate: **invest in filling coverage gaps**.
 
 ### Gap Analysis: What's Missing and What to Do About It
 
-The analysis identified **464 accounts** with specific coverage gaps. The most common gaps:
+The analysis identified **29,512 accounts** with specific coverage gaps. The most common gaps:
 
 - Missing buying roles (Champions and Decision Makers are the most commonly absent)
 - No VP+ contact engaged on the deal
@@ -207,9 +218,9 @@ For each gap account, the system generates a specific enrichment recommendation:
 
 ### Estimating Pipeline Value
 
-The final step is quantifying the opportunity. If we assume that filling coverage gaps increases win rate by 10 percentage points (conservative, given the tier differences above), the gap accounts represent an estimated **$286M in addressable pipeline** from enrichment.
+The final step is quantifying the opportunity. The framework estimates pipeline value under explicit assumptions: a deal size of ~2% of account annual revenue, and a 10 percentage-point win rate uplift from filling coverage gaps.
 
-This is the number that gets executive attention. It translates the analysis from "interesting data science project" into "here's why you should fund this enrichment program."
+The absolute dollar estimates from synthetic data are illustrative — in production, both assumptions would need calibration against real historical conversion data, and actual deal-to-revenue ratios and enrichment uplift vary significantly by segment, industry, and sales motion. The value of this step isn't the specific number — it's the framework for sizing the opportunity, which translates the analysis into a business case that executives can evaluate and pressure-test with their own assumptions.
 
 ## The Targeting Framework
 
@@ -220,7 +231,7 @@ The most powerful view combines both layers — propensity scores and buying gro
 | **High Propensity** | **Close now** — sales should be all over these | **Enrich & close** — highest-ROI enrichment targets |
 | **Low Propensity** | **Nurture** — engaged but signals are weak | **Low priority** — gaps AND weak signals |
 
-The upper-right quadrant is the sweet spot: accounts the model thinks are likely to buy, but where the buying group isn't complete. These are the accounts where a targeted contact addition — finding the missing Champion, engaging the VP — could tip the deal.
+The upper-right quadrant is the sweet spot: **7,068 accounts** the model thinks are likely to buy, but where the buying group isn't complete (30% win rate vs. 48% for high-propensity accounts with complete groups). These are the accounts where a targeted contact addition — finding the missing Champion, engaging the VP — could tip the deal.
 
 ## What I'd Do Differently in Production
 
