@@ -8,9 +8,7 @@ toc-depth: 3
 
 Most data science teams know AI is important but don't know where to start. They've used ChatGPT for quick questions or their company's internal LLM product, but they haven't integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.
 
-At Atlassian, I led AI adoption across a 30+ person data org. Most of the team's only AI experience was using Rovo, Atlassian's internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team's best practices and table documentation.
-
-This playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive.
+This playbook is based on what I learned helping a 30+ person data org at Atlassian adopt LLM tools. Before this effort, most of the team's AI experience was limited to Rovo, Atlassian's internal LLM product. The framework below captures the sequencing that worked — what to set up first, what blocks people, and how to build momentum. Some of it is obvious in hindsight; most of it wasn't obvious at the time.
 
 ## The Framework
 
@@ -61,7 +59,7 @@ AI adoption for a DS team isn't a training session. It's a sequence of unlocks, 
 - **Nomenclature and definitions** — what your team means by "MQL," "pipeline," "closed-won," segment names, and metric definitions
 - **Query patterns** — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed
 - **Best practices** — how your team structures analyses, naming conventions, how to document findings
-- **Visualization standards** — a preamble that enforces your company's brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. We standardized on Plotly with a preamble that aligned to Atlassian's viz requirements — every chart the LLM produced looked like it came from the team, not from a chatbot
+- **Visualization standards** — a preamble that enforces your company's brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. At Atlassian we used Plotly with a preamble that aligned to the team's viz standards, so charts from the LLM looked consistent with the rest of the team's output
 
 **How to format them:** Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.
 

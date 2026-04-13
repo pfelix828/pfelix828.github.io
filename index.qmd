@@ -54,7 +54,7 @@ Python · PyTorch · scikit-learn
 [AI Adoption Playbook](projects/ai-adoption-playbook.qmd)
 :::
 ::: {.project-card-description}
-How I took a 30-person data org from "what's an MCP server?" to running LLM-assisted analyses in weeks. Not theory — the actual steps, in order, with the blockers I hit and what I'd do differently.
+A practical framework for getting a data science team from "what's an MCP server?" to LLM-assisted workflows. The actual steps, in order, with common blockers and what to do about them.
 :::
 ::: {.project-card-stack}
 Claude · MCP · Cursor · Databricks CLI

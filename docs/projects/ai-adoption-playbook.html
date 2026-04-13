@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-58e7cb164a30d0964bc3a4cf0cb5a652.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-03744c5b2bea355dbb9d9b335658751b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1646a29432418bc01960b1b216496bbf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -210,8 +210,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="the-problem" class="level2">
 <h2 class="anchored" data-anchor-id="the-problem">The Problem</h2>
 <p>Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.</p>
-<p>At Atlassian, I led AI adoption across a 30+ person data org. Most of the team’s only AI experience was using Rovo, Atlassian’s internal LLM product. Within weeks, team members were running natural language queries against our Databricks data warehouse, having LLMs write analysis summaries directly to Confluence, and using standardized knowledge files that encoded our team’s best practices and table documentation.</p>
-<p>This playbook captures the framework I used — what worked, what blocked adoption, and how to sequence it so a team goes from zero to productive.</p>
+<p>This playbook is based on what I learned helping a 30+ person data org at Atlassian adopt LLM tools. Before this effort, most of the team’s AI experience was limited to Rovo, Atlassian’s internal LLM product. The framework below captures the sequencing that worked — what to set up first, what blocks people, and how to build momentum. Some of it is obvious in hindsight; most of it wasn’t obvious at the time.</p>
 </section>
 <section id="the-framework" class="level2">
 <h2 class="anchored" data-anchor-id="the-framework">The Framework</h2>
@@ -257,7 +256,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Nomenclature and definitions</strong> — what your team means by “MQL,” “pipeline,” “closed-won,” segment names, and metric definitions</li>
 <li><strong>Query patterns</strong> — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed</li>
 <li><strong>Best practices</strong> — how your team structures analyses, naming conventions, how to document findings</li>
-<li><strong>Visualization standards</strong> — a preamble that enforces your company’s brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. We standardized on Plotly with a preamble that aligned to Atlassian’s viz requirements — every chart the LLM produced looked like it came from the team, not from a chatbot</li>
+<li><strong>Visualization standards</strong> — a preamble that enforces your company’s brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. At Atlassian we used Plotly with a preamble that aligned to the team’s viz standards, so charts from the LLM looked consistent with the rest of the team’s output</li>
 </ul>
 <p><strong>How to format them:</strong> Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.</p>
 <p><strong>The unlock:</strong> When a team member asks the LLM to query a table, the LLM already knows the join conditions, the gotchas, and the right metric definitions. The analysis comes back correct the first time instead of requiring three rounds of debugging.</p>
