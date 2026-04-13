@@ -35,6 +35,12 @@ An LLM-powered analyst that answers the same business question differently depen
 
 Python, Claude API, DuckDB, Streamlit
 
+### [InterviewReady](projects/interview-ready.qmd)
+
+Paste a job description and get a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the role, company, and seniority level. AI-evaluated feedback with scoring and coaching. Built because I couldn't find an interview prep tool that adapts to the actual job.
+
+Next.js, Claude API, Supabase, Zustand
+
 ### [Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
 
 When a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. This interactive app simulates those dynamics — showing why attribution overcredits by 3-9x, why blended and incremental CAC diverge by 60x, and how to build a measurement stack that separates real signal from noise.
