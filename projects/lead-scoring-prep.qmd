@@ -12,7 +12,7 @@ Private prep doc — not linked from site navigation.
 
 ## The 60-Second Pitch
 
-> "I built an end-to-end lead scoring system for B2B SaaS marketing. It takes CRM data — accounts, contacts, deal history — and does two things: first, it scores every account on how likely they are to close, using a logistic regression model. Second, it analyzes the buying group at each account — who's involved in the deal, what roles they play — and identifies specific coverage gaps. The punchline is that accounts with complete buying groups close at 2x the rate of those with gaps, and the gap analysis identifies specific enrichment targets with a framework for estimating pipeline value. It mirrors similar work I did at Atlassian, where I built the company's first ICP and buying group analysis for the enterprise marketing org."
+> "I built an end-to-end lead scoring system for B2B SaaS marketing. It takes CRM data — accounts, contacts, deal history — and does two things: first, it scores every account on how likely they are to close, using a logistic regression model. Second, it analyzes the buying group at each account — who's involved in the deal, what roles they play — and identifies specific coverage gaps. The punchline is that accounts with complete buying groups close at 2.2x the rate of those with gaps, and the gap analysis identifies specific enrichment targets with a framework for estimating pipeline value. It mirrors similar work I did at Atlassian, where I built the company's first ICP and buying group analysis for the enterprise marketing org."
 
 Practice this until it's natural. Hit the business framing first, then the method, then the result.
 
@@ -42,7 +42,7 @@ For evaluation, I focused on business metrics — lift charts, precision at the 
 
 **Your answer:**
 
-"Three reasons. First, interpretability — the coefficients translate directly to a scoring system that marketing teams can understand and act on. 'VP engagement adds X points' is something a campaign manager can work with. Second, it's what production marketing stacks actually use under the hood — Marketo, HubSpot, they're all running logistic regression for lead scoring. So the approach is directly transferable. Third, I benchmarked against a Random Forest and the AUC difference was small — 0.61 vs 0.65 — not enough to justify losing interpretability."
+"Three reasons. First, interpretability — the coefficients translate directly to a scoring system that marketing teams can understand and act on. 'VP engagement adds X points' is something a campaign manager can work with. Second, it's what production marketing stacks actually use under the hood — Marketo, HubSpot, they're all running logistic regression for lead scoring. So the approach is directly transferable. Third, I benchmarked against a Random Forest and the Random Forest actually performed slightly worse — AUC 0.567 vs 0.575 for logistic regression. At 100K-account scale, there's no performance justification for losing interpretability."
 
 **Follow-up you might get:** "When *would* you use a more complex model?"
 
@@ -50,7 +50,7 @@ For evaluation, I focused on business metrics — lift charts, precision at the 
 
 ---
 
-### "What is AUC? What does 0.608 mean?"
+### "What is AUC? What does 0.575 mean?"
 
 **What AUC is (in your words):**
 
@@ -58,11 +58,11 @@ AUC stands for Area Under the ROC Curve. Here's the intuition: if you pick one a
 
 - **0.5** = coin flip, model is useless
 - **1.0** = perfect separation, model never gets it wrong
-- **0.608** = the model ranks the winner higher than the loser about 61% of the time
+- **0.575** = the model ranks the winner higher than the loser about 58% of the time
 
-**Why 0.608 is actually okay:**
+**Why 0.575 is actually okay:**
 
-"For account-level propensity models with the kind of features available in a CRM, AUC in the 0.60-0.70 range is typical. A lot of what determines whether a deal closes — budget timing, internal politics, competitive dynamics — isn't in the data. The model captures the structural signals that *are* in the data, and the business metrics show it concentrates value at the top: the top 10% of scored accounts have a 55% win rate vs 36% baseline. That's actionable."
+"For account-level propensity models using only pre-deal CRM features, AUC in the 0.55-0.65 range is typical. A lot of what determines whether a deal closes — budget timing, internal politics, competitive dynamics — isn't in the data. The model captures the structural signals that *are* in the data, and the business metrics show it concentrates value at the top: the top 10% of scored accounts have a 45% win rate vs 36% baseline. That's actionable across 100K accounts. The 95% CI is tight (0.56–0.59) thanks to the large test set, so we know the performance is reliably above random."
 
 **Honest framing if pushed:** "AUC isn't high enough that you'd blindly trust the model. It's a tool that improves prioritization, not a crystal ball. That's why I pair it with the buying group analysis — the model tells you *who* to focus on, the buying group analysis tells you *what to do about it*."
 
@@ -72,7 +72,7 @@ AUC stands for Area Under the ROC Curve. Here's the intuition: if you pick one a
 
 **Your answer:**
 
-"Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 55% precision — more than half of them won, compared to a 36% baseline. At the top 20%, precision drops to about 35% — slightly below baseline. That tells you the model's discriminative power is concentrated in the top decile. The practical takeaway: the model is best at identifying your *strongest* prospects, not at ranking the entire pipeline. That's fine for marketing because their question is usually 'which 100 accounts should I target?' not 'rank all 1,500.'"
+"Precision at K answers: if I take the top K% of model-scored accounts, what fraction actually won? Our top 10% has 45% precision — compared to a 36% baseline. At the top 20% and 30%, precision holds at 44% and 42% respectively. The practical takeaway: the model meaningfully concentrates wins in the top tiers. That's fine for marketing because their question is usually 'which 3,000 accounts should I target out of 100,000?' — and the model gives them a 25% better hit rate than random targeting."
 
 ---
 
@@ -91,7 +91,7 @@ Regularization is a technique that prevents the model from overfitting — putti
 
 **The C parameter:**
 
-"C controls how strong the regularization is. Lower C = stronger regularization = simpler model. I tested 0.01, 0.1, 1.0, and 10.0 through cross-validation, and 0.01 performed best — which makes sense with ~580 accounts and 49 features. The model benefits from being constrained."
+"C controls how strong the regularization is. Lower C = stronger regularization = simpler model. I tested 0.01, 0.1, 1.0, and 10.0 through cross-validation, and 0.01 performed best — which makes sense with ~36K accounts and 39 features. The model benefits from being constrained — it keeps correlated features like employee count and revenue from inflating coefficients."
 
 ---
 
@@ -117,11 +117,11 @@ Regularization is a technique that prevents the model from overfitting — putti
 
 "In B2B, deals aren't closed by one person. A typical enterprise deal has 4-7 people involved — someone championing the deal internally, someone who can sign the check, someone evaluating the technical fit, and people influencing the decision. If any of those roles are missing, the deal stalls.
 
-I score every account's buying group on a 0-100 scale across four dimensions: are the key roles filled, is there executive engagement, are multiple departments involved, and do we have both technical and business contacts. Accounts that score 75+ close at 51%. Accounts below 25 close at 24%. That's a 2x difference.
+I score every account's buying group on a 0-100 scale across four dimensions: are the key roles filled, is there executive engagement, are multiple departments involved, and do we have both technical and business contacts. Accounts that score 75+ close at 49%. Accounts below 25 close at 22%. That's a 2.2x difference — and it holds across thousands of accounts per tier.
 
 The gap analysis then identifies *what's missing* at each account — 'you need a Champion at this account' or 'you have no VP-level engagement here.' That turns a model score into a specific action for the marketing team.
 
-The last step is sizing the opportunity. Under illustrative assumptions — a deal size of about 2% of account revenue, a 10 percentage-point win rate uplift from filling gaps — the gap accounts represent roughly $286M in addressable pipeline. Those specific assumptions would need calibration against real historical data in production, but the framework for sizing the opportunity is the actual value. It translates the analysis into a business case executives can evaluate with their own numbers."
+The last step is sizing the opportunity. Under illustrative assumptions — a deal size of about 2% of account revenue, a 10 percentage-point win rate uplift from filling gaps — the framework estimates pipeline value from enrichment. The absolute dollar numbers depend on the synthetic revenue distributions, so I don't cite a specific figure — but the framework for sizing the opportunity is the actual value. It translates the analysis into a business case executives can evaluate and pressure-test with their own assumptions."
 
 ---
 
@@ -141,7 +141,7 @@ This portfolio project recreates that methodology on synthetic data so I can wal
 
 "I want to be upfront about what the synthetic data does and doesn't prove. The data generator embeds known signals at controlled strengths — VP presence, tech stack fit, buying group size all boost win probability. The model's job is to recover those signals from the feature matrix. So this validates that the pipeline works end-to-end — the feature engineering, model training, and evaluation all do what they should. It demonstrates methodology, not empirical discovery.
 
-The AUC of 0.61 reflects realistic signal strength — it's not 0.95, which would be a red flag. Real data would add challenges: messy job titles that need normalization, missing fields, data entry inconsistencies, confounders, and temporal dynamics. The project addresses all of those in the production considerations. But the engineering and evaluation framework — the feature hierarchy, the target leakage separation, the business metrics — that carries over directly."
+The AUC of 0.575 reflects realistic signal strength — it's not 0.95, which would be a red flag. Real data would add challenges: messy job titles that need normalization, missing fields, data entry inconsistencies, confounders, and temporal dynamics. The project addresses all of those in the production considerations. But the engineering and evaluation framework — the feature hierarchy, the target leakage separation, the business metrics — that carries over directly."
 
 ---
 
@@ -162,7 +162,7 @@ The AUC of 0.61 reflects realistic signal strength — it's not 0.95, which woul
 | **Logistic regression** | A model that predicts the probability of a yes/no outcome by learning a weighted sum of input features |
 | **AUC** | Probability that the model ranks a random positive higher than a random negative; 0.5 = random, 1.0 = perfect |
 | **Precision @ K** | Of the top K% scored items, what fraction are actually positive |
-| **Lift** | How much better the model is than random at a given threshold — 1.4x means 40% better |
+| **Lift** | How much better the model is than random at a given threshold — 1.3x means 30% better |
 | **Regularization** | A penalty that keeps model coefficients small, preventing overfitting |
 | **Cross-validation** | Evaluate model performance by rotating through multiple train/test splits |
 | **Feature engineering** | Transforming raw data into numeric signals that capture domain knowledge |
@@ -198,13 +198,13 @@ The AUC of 0.61 reflects realistic signal strength — it's not 0.95, which woul
 
 **Honest answer:** "I understand the mechanics — it's maximum likelihood estimation of a sigmoid function over a linear combination of features. I could walk through the math on a whiteboard. But in practice, nobody writes logistic regression from scratch — you use scikit-learn, and the value is in knowing *when* to use it, *how* to evaluate it, and *what* the output means for the business. That's where I focus."
 
-### "Why is the AUC only 0.61?"
+### "Why is the AUC only 0.575?"
 
-**Honest answer:** "Account-level propensity models with CRM features typically land in the 0.60-0.70 range. The features that drive deal outcomes in B2B — budget timing, competitive landscape, internal champion strength — are only partially observable in CRM data. The model captures the structural signals that are available, and the business metrics show it concentrates value: top 10% accounts convert at 55% vs 36% baseline. That's a meaningful improvement for a marketing team deciding where to spend their time."
+**Honest answer:** "Account-level propensity models using only pre-deal CRM features typically land in the 0.55-0.65 range. The features that drive deal outcomes in B2B — budget timing, competitive landscape, internal champion strength — are only partially observable in CRM data. The model captures the structural signals that are available, and the business metrics show it concentrates value: top 10% accounts convert at 45% vs 36% baseline. Across 100K accounts, that's a meaningful improvement for a marketing team deciding where to allocate resources. And the tight confidence interval (0.56–0.59) means we're confident it's real, not a lucky split."
 
 ### "This is synthetic data. Isn't that cheating?"
 
-**Honest answer:** "The synthetic data lets me show the full methodology without exposing proprietary Atlassian data. I'm upfront in the project that the data generator embeds signals the model then recovers — so this validates the pipeline, not discovery. The signals are calibrated to realistic strengths — the AUC is 0.61, not 0.95. Real data would add noise, confounders, and temporal dynamics. The project explicitly addresses what would change: title normalization, temporal validation, class imbalance, model monitoring, and A/B testing the model against a control group."
+**Honest answer:** "The synthetic data lets me show the full methodology without exposing proprietary Atlassian data. I'm upfront in the project that the data generator embeds signals the model then recovers — so this validates the pipeline, not discovery. The signals are calibrated to realistic strengths — the AUC is 0.575, not 0.95. Real data would add noise, confounders, and temporal dynamics. The project explicitly addresses what would change: title normalization, temporal validation, class imbalance, model monitoring, and A/B testing the model against a control group."
 
 ---
 
