@@ -1,6 +1,5 @@
 ---
 title: "Adaptive Analyst Agent"
-description: "An LLM-powered data analyst that adapts to stakeholder context"
 ---
 
 [View on GitHub](https://github.com/pfelix828/context-agent){.btn .btn-outline-primary}

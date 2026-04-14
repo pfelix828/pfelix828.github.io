@@ -1,6 +1,5 @@
 ---
 title: "Marketing Measurement Under Hypergrowth"
-description: "An interactive simulator for marketing measurement challenges at a company growing from $1B to $30B in 15 months"
 toc-depth: 3
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: "AI Adoption Playbook for Data Science Teams"
-description: "A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows"
 toc-depth: 3
 ---
 

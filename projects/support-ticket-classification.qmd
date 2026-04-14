@@ -1,0 +1,92 @@
+---
+title: "Support Ticket Classification"
+toc-depth: 3
+---
+
+[View on GitHub](https://github.com/pfelix828/support-ticket-classification){.btn .btn-outline-primary} [Live App](https://support-ticket-classification.vercel.app){.btn .btn-outline-primary}
+
+## What This Project Does
+
+When a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.
+
+This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to 100K labeled tickets, using synthetic data modeled after OpenAI's public help center taxonomy. The key output is a learning curve analysis showing where each method's advantage kicks in.
+
+## Why This Matters
+
+Most ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.
+
+At low volume (< 500 tickets), LLM few-shot classification with zero training data outperforms every supervised method. At medium volume (5K+), embeddings + XGBoost is hard to beat. At high volume with internal LLM infrastructure (like OpenAI has), a fine-tuned smaller LLM dominates. Knowing where these crossover points are is more valuable than knowing which model gets the highest F1.
+
+## What's Inside
+
+The app has 10 pages organized around method comparison:
+
+**Data & Methods:**
+
+- **Data Explorer** — Browse 100K synthetic tickets across 12 categories, see class distributions and example tickets
+- **TF-IDF + Logistic / XGBoost** — The baseline every project should start with
+- **Embeddings + XGBoost** — BERT embeddings as features, with structured metadata (customer tier, account age)
+- **Fine-Tuned BERT** — End-to-end fine-tuning on ticket text
+- **LLM Zero/Few-Shot** — Prompt engineering with no training data
+- **Fine-Tuned LLM** — The main event: fine-tuning a smaller LLM for classification
+
+**Analysis:**
+
+- **Volume vs. Method** — Learning curves from 100 to 100K tickets, crossover points, and volume-specific recommendations
+- **Error Analysis** — What each method gets wrong: ambiguous tickets, multi-intent requests, rare categories
+- **Production Architecture** — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the ambiguous tail
+- **Methodology** — Data generation, evaluation protocol, assumptions
+
+## Key Finding
+
+| Data Volume | Recommended Method | Why |
+|---|---|---|
+| < 500 tickets | LLM Few-Shot | Not enough data to train. Prompt engineering gets ~74% F1 with zero labeled examples. |
+| 500 – 5K | Embeddings + XGBoost | Enough for supervised learning. Fast inference, handles metadata natively. |
+| 5K – 50K | Fine-Tuned LLM | The crossover point. Fine-tuning outperforms all other methods. |
+| 50K+ | Fine-Tuned LLM (cascade) | Fine-tuned LLM dominates. Cascade architecture optimizes cost: XGBoost handles the confident 80%, LLM handles the ambiguous 20%. |
+
+At a company with internal LLM infrastructure (like OpenAI), the cost column for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.
+
+## The Data
+
+100,000 synthetic support tickets across 12 categories modeled after OpenAI's public help center:
+
+| Category | Share | Description |
+|---|---|---|
+| Billing & Payments | 15.2% | Refunds, charges, invoices, credits |
+| ChatGPT Product | 14.8% | Features, errors, image generation, memory, search |
+| Account Access | 13.6% | Login issues, password reset, phone verification |
+| API Errors | 11.8% | Rate limits, 429 errors, latency, error codes |
+| ChatGPT Apps | 8.3% | iOS, Android, macOS, Windows, connected apps |
+| Account Management | 7.6% | Members, orgs, projects, email changes |
+| API Usage | 7.1% | How-to, getting started, best practices |
+| Enterprise | 6.4% | SSO, SCIM, workspace setup, admin |
+| GPTs | 5.3% | Custom GPT creation, publishing, actions |
+| Newer Products | 5.0% | Sora, Codex, ChatGPT Atlas |
+| Privacy & Policy | 3.4% | Data privacy, training opt-out, exports |
+| Security | 1.5% | API key safety, vulnerability reporting |
+
+10% of tickets are ambiguous/multi-intent (e.g., "I was charged twice AND my API key stopped working"), which is where LLM-based methods shine over classical approaches.
+
+## The Approach
+
+### Data Generation (Python)
+
+Compositional template system with 300+ base templates, detail fragments, tone modifiers, and 20+ placeholder variables. Produces tickets with realistic language variation, class imbalance, and structured metadata (customer tier, account age, previous ticket count).
+
+### Interactive App (Next.js)
+
+Same stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where crossover points occur.
+
+## What I'd Do Differently in Production
+
+- **Active learning** — Use model uncertainty to prioritize which tickets to label next, reducing labeling cost
+- **Hierarchical classification** — Tier 1 (broad routing) then Tier 2 (specific workflow) as separate models
+- **Drift detection** — Monitor for new ticket types that don't fit existing categories
+- **Human-in-the-loop** — Route low-confidence classifications to human agents, use their decisions as training data
+- **A/B testing the classifier** — Compare routing accuracy and resolution time between methods in production
+
+## Stack
+
+Python | Next.js | TypeScript | Recharts | Tailwind | shadcn/ui | Vercel

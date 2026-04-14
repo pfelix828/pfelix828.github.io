@@ -1,6 +1,5 @@
 ---
 title: "Lead Scoring & Buying Group Identification"
-description: "A propensity model and buying group framework for B2B SaaS marketing"
 toc-depth: 3
 ---
 

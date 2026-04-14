@@ -1,6 +1,5 @@
 ---
 title: "InterviewReady"
-description: "AI-powered interview prep app that generates role-specific practice questions from job descriptions"
 toc-depth: 3
 ---
 

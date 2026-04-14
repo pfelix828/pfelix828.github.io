@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows">
 
-<title>AI Adoption Playbook for Data Science Teams</title>
+<title>Philip Felix</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -125,6 +124,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="./projects/marketing-measurement.html">
  <span class="dropdown-text">Marketing Measurement Under Hypergrowth</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./projects/support-ticket-classification.html">
+ <span class="dropdown-text">Support Ticket Classification</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -160,15 +163,10 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">AI Adoption Playbook for Data Science Teams</h1>
+<h1 class="title">Philip Felix</h1>
 <p class="subtitle lead">Senior Data Scientist</p>
 </div>
 
-<div>
-  <div class="description">
-    A practical framework for taking a data science org from zero LLM experience to AI-augmented workflows
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -262,131 +260,23 @@ ul.task-list li input[type="checkbox"] {
 <p>Python · Next.js · TypeScript · Visx · Recharts</p>
 </div>
 </div>
+<div class="project-card">
+<div class="project-card-title">
+<p><a href="./projects/support-ticket-classification.html">Support Ticket Classification</a></p>
+</div>
+<div class="project-card-description">
+<p>Which classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared across 100 to 100K tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after OpenAI’s help center.</p>
+</div>
+<div class="project-card-stack">
+<p>Python · Next.js · TypeScript · Recharts</p>
+</div>
+</div>
 </div>
 <div class="contact-section">
 <p>I’m currently looking for senior data science roles. If you’re hiring or just want to talk shop: <a href="mailto:pfelix828@gmail.com">pfelix828@gmail.com</a></p>
 </div>
 
 
-<section id="the-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-problem">The Problem</h2>
-<p>Most data science teams know AI is important but don’t know where to start. They’ve used ChatGPT for quick questions or their company’s internal LLM product, but they haven’t integrated AI into their actual workflows — the daily work of writing queries, analyzing data, documenting findings, and collaborating with stakeholders.</p>
-<p>This playbook is based on what I learned helping a 30+ person data org at Atlassian adopt LLM tools. Before this effort, most of the team’s AI experience was limited to Rovo, Atlassian’s internal LLM product. The framework below captures the sequencing that worked — what to set up first, what blocks people, and how to build momentum. Some of it is obvious in hindsight; most of it wasn’t obvious at the time.</p>
-</section>
-<section id="the-framework" class="level2">
-<h2 class="anchored" data-anchor-id="the-framework">The Framework</h2>
-<p>AI adoption for a DS team isn’t a training session. It’s a sequence of unlocks, where each step builds on the last. Skip a step and people get stuck. Get the order right and each unlock makes the next one obvious.</p>
-<section id="step-1-get-people-into-the-terminal" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-get-people-into-the-terminal">Step 1: Get People Into the Terminal</h3>
-<p><strong>The problem you’re solving:</strong> Most data scientists live in notebooks and GUIs. They’ve never run an LLM from the command line, installed a CLI tool, or configured an MCP server. This is the single biggest blocker — not skepticism about AI, but unfamiliarity with the environment where AI tools actually work.</p>
-<p><strong>What to do:</strong></p>
-<ul>
-<li>Walk people through terminal basics if needed — many data scientists are strong in Python and SQL but have never configured a CLI tool</li>
-<li>Install an AI-enabled code editor (Cursor, VS Code with extensions, or a CLI-based LLM tool)</li>
-<li>Get them to run their first LLM interaction from the terminal, not a web browser</li>
-<li>Make it hands-on — do this in 1:1 sessions, not a slide deck. The “aha moment” comes from seeing it work on their own machine</li>
-</ul>
-<p><strong>Why this matters:</strong> Every subsequent step depends on being comfortable running AI tools locally. If someone can’t get past terminal setup, nothing else in this playbook works.</p>
-<p><strong>Common blocker:</strong> Time. People know they should learn this but can’t carve out the hours. The solution is to make it feel small — a 30-minute 1:1 where you set everything up together. Once they see the capabilities, they find the time on their own.</p>
-</section>
-<section id="step-2-connect-the-llm-to-internal-tools-via-mcp" class="level3">
-<h3 class="anchored" data-anchor-id="step-2-connect-the-llm-to-internal-tools-via-mcp">Step 2: Connect the LLM to Internal Tools via MCP</h3>
-<p><strong>The problem you’re solving:</strong> A standalone LLM can answer questions and write code, but it can’t interact with your company’s systems. MCP (Model Context Protocol) connections turn the LLM from a chatbot into a tool that can read from and write to the systems your team actually uses.</p>
-<p><strong>What to connect:</strong></p>
-<ul>
-<li><strong>Documentation tools</strong> (Confluence, Notion, Google Docs) — the LLM can read existing docs for context and write analysis summaries directly</li>
-<li><strong>Project management</strong> (Jira, Linear, Asana) — the LLM can create tickets, update status, and pull context about what the team is working on</li>
-<li><strong>Code repositories</strong> (Bitbucket, GitHub) — the LLM can read the codebase, understand your data models, and write code that follows your team’s patterns</li>
-<li><strong>Data platforms</strong> (Databricks CLI, Snowflake CLI) — the LLM can query your data warehouse using natural language and run analysis on the results</li>
-</ul>
-<p><strong>The unlock:</strong> Once the LLM is connected to Confluence and your data warehouse, a data scientist can say “query the marketing attribution table for Q4 campaign performance, analyze the results, and write a summary to Confluence.” That workflow — which normally takes hours of writing SQL, interpreting results, and formatting a doc — becomes a conversation.</p>
-<p><strong>How to do it:</strong></p>
-<ul>
-<li>Set up MCP servers for each tool your team uses</li>
-<li>Test each connection yourself first — work out the gotchas before asking the team to try</li>
-<li>Start with the tools people use daily (documentation and code repos before project management)</li>
-<li>Create a simple install guide with copy-paste commands — remove every possible friction point</li>
-</ul>
-</section>
-<section id="step-3-build-knowledge-files-that-encode-team-expertise" class="level3">
-<h3 class="anchored" data-anchor-id="step-3-build-knowledge-files-that-encode-team-expertise">Step 3: Build Knowledge Files That Encode Team Expertise</h3>
-<p><strong>The problem you’re solving:</strong> Every data science team has tribal knowledge — which tables to use, which joins are tricky, what the column names actually mean, which metrics are the “real” ones. This knowledge lives in people’s heads, scattered Confluence pages, and Slack threads. New team members spend months learning it. LLMs don’t have it at all.</p>
-<p><strong>What to build:</strong></p>
-<ul>
-<li><strong>Table documentation</strong> — which tables exist, what they contain, key columns, common joins, and known gotchas (“this table has duplicates on account_id if you don’t filter by is_current”)</li>
-<li><strong>Nomenclature and definitions</strong> — what your team means by “MQL,” “pipeline,” “closed-won,” segment names, and metric definitions</li>
-<li><strong>Query patterns</strong> — common SQL patterns your team uses, including CTEs, window functions, and filters that are always needed</li>
-<li><strong>Best practices</strong> — how your team structures analyses, naming conventions, how to document findings</li>
-<li><strong>Visualization standards</strong> — a preamble that enforces your company’s brand guidelines (colors, fonts, chart styles) so every LLM-generated visualization is presentation-ready. At Atlassian we used Plotly with a preamble that aligned to the team’s viz standards, so charts from the LLM looked consistent with the rest of the team’s output</li>
-</ul>
-<p><strong>How to format them:</strong> Markdown files that the LLM loads as context. Keep them concise, specific, and up to date. A good knowledge file reads like a cheat sheet a senior team member would write for a new hire.</p>
-<p><strong>The unlock:</strong> When a team member asks the LLM to query a table, the LLM already knows the join conditions, the gotchas, and the right metric definitions. The analysis comes back correct the first time instead of requiring three rounds of debugging.</p>
-</section>
-<section id="step-4-create-standardized-skills-and-workflows" class="level3">
-<h3 class="anchored" data-anchor-id="step-4-create-standardized-skills-and-workflows">Step 4: Create Standardized Skills and Workflows</h3>
-<p><strong>The problem you’re solving:</strong> Once people have MCP connections and knowledge files, they’ll start building their own workflows. Some will be great. Many will reinvent the wheel. Without standardization, you get 40 people doing the same thing 40 different ways.</p>
-<p><strong>What to standardize:</strong></p>
-<ul>
-<li><strong>Analysis workflow</strong> — a standard pattern for how to use the LLM to run a data analysis: query the data, validate the results, generate visualizations, write a summary</li>
-<li><strong>Documentation workflow</strong> — how to have the LLM write findings to Confluence in a consistent format</li>
-<li><strong>Code review workflow</strong> — how to use the LLM to review SQL and Python against team standards</li>
-<li><strong>Onboarding workflow</strong> — how a new team member sets up their AI tools on day one</li>
-</ul>
-<p><strong>How to distribute:</strong> Build these as skills or templates that people can reference or invoke. Share them in a central location (a Confluence page, a repo, a shared config file). Make them easy to copy and modify.</p>
-</section>
-<section id="step-5-measure-and-iterate" class="level3">
-<h3 class="anchored" data-anchor-id="step-5-measure-and-iterate">Step 5: Measure and Iterate</h3>
-<p><strong>The problem you’re solving:</strong> “Are people actually using this?” and “Is it making us more productive?” are hard to answer without intentional measurement.</p>
-<p><strong>What to track:</strong></p>
-<ul>
-<li><strong>Adoption breadth</strong> — how many team members have completed setup and are actively using AI tools</li>
-<li><strong>Use case coverage</strong> — which workflows are people using AI for, and which are they still doing manually</li>
-<li><strong>Quality signals</strong> — are LLM-assisted analyses catching errors that manual work would miss? Are summaries being accepted or rewritten?</li>
-<li><strong>Qualitative feedback</strong> — regular check-ins to understand what’s working and what’s frustrating</li>
-</ul>
-<p><strong>What not to do:</strong> Don’t try to measure “time saved” precisely. It’s nearly impossible to A/B test individual productivity, and the numbers will be challenged. Instead, track adoption and collect stories — “I used to spend 2 hours writing this Confluence summary, now I describe what I want and review the output in 15 minutes.”</p>
-</section>
-</section>
-<section id="common-pitfalls" class="level2">
-<h2 class="anchored" data-anchor-id="common-pitfalls">Common Pitfalls</h2>
-<section id="lets-do-a-training-session" class="level3">
-<h3 class="anchored" data-anchor-id="lets-do-a-training-session">“Let’s do a training session”</h3>
-<p>Group training sessions are useful for awareness but don’t drive adoption. The actual unlock happens in 1:1 sessions where you sit with someone, set up their tools, and run through a workflow on their real data. Budget time for this — it’s the highest-leverage activity.</p>
-</section>
-<section id="starting-with-the-wrong-use-case" class="level3">
-<h3 class="anchored" data-anchor-id="starting-with-the-wrong-use-case">Starting with the wrong use case</h3>
-<p>Don’t start with the most complex workflow. Start with the most repetitive one — the thing everyone does weekly that’s tedious but not risky. Documentation, data validation, and exploratory queries are good first use cases. Production model training is not.</p>
-</section>
-<section id="underestimating-terminal-unfamiliarity" class="level3">
-<h3 class="anchored" data-anchor-id="underestimating-terminal-unfamiliarity">Underestimating terminal unfamiliarity</h3>
-<p>Data scientists who work exclusively in Jupyter notebooks and Tableau may have never configured a CLI tool. Don’t assume this is trivial. Walk people through it.</p>
-</section>
-<section id="no-knowledge-files" class="level3">
-<h3 class="anchored" data-anchor-id="no-knowledge-files">No knowledge files</h3>
-<p>Without knowledge files, the LLM will write plausible-looking queries against the wrong tables with the wrong join conditions. The output looks professional but is wrong. Knowledge files are the difference between an LLM that’s useful and one that’s dangerous.</p>
-</section>
-<section id="trusting-llm-output-without-qa" class="level3">
-<h3 class="anchored" data-anchor-id="trusting-llm-output-without-qa">Trusting LLM output without QA</h3>
-<p>The LLM will write SQL that looks correct but joins on the wrong key. It will generate analysis that cites a metric definition it made up. It will produce a chart with the right format but the wrong data. Knowledge files reduce this significantly — accurate table documentation and query patterns mean fewer hallucinations — but they don’t eliminate it. A data scientist still needs to review every query, validate the numbers, and sanity-check the conclusions. The LLM is a force multiplier, not a replacement for judgment. We never reached a point where output could be trusted blindly, and any adoption framework that promises otherwise is selling something.</p>
-</section>
-<section id="trying-to-measure-roi-too-early" class="level3">
-<h3 class="anchored" data-anchor-id="trying-to-measure-roi-too-early">Trying to measure ROI too early</h3>
-<p>AI adoption is an infrastructure investment, not a feature launch. The ROI comes from compounding efficiency gains over months, not from a single measurable event. Track adoption and let the stories accumulate.</p>
-</section>
-</section>
-<section id="what-id-do-differently-next-time" class="level2">
-<h2 class="anchored" data-anchor-id="what-id-do-differently-next-time">What I’d Do Differently Next Time</h2>
-<ul>
-<li><strong>Start with MCP connections earlier.</strong> Terminal setup + MCP connections should happen in the same session. The MCP connections are what make the whole thing feel magical — without them, it’s just another chatbot.</li>
-<li><strong>Build knowledge files before training anyone.</strong> Having accurate table documentation and query patterns ready before the first 1:1 means the team’s first experience with AI tools produces correct results, which builds trust.</li>
-<li><strong>Create a buddy system.</strong> Pair early adopters with skeptics. Peer enablement scales better than one person doing every 1:1.</li>
-<li><strong>Record the 1:1 sessions.</strong> The same questions come up every time. A library of short walkthroughs would have saved significant time.</li>
-</ul>
-</section>
-<section id="stack" class="level2">
-<h2 class="anchored" data-anchor-id="stack">Stack</h2>
-<p>Claude (Anthropic) | MCP (Model Context Protocol) | Cursor | VS Code | Databricks CLI | Confluence | Jira | Bitbucket | Python | SQL</p>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

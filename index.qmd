@@ -97,6 +97,18 @@ Python · Next.js · TypeScript · Visx · Recharts
 :::
 :::
 
+::: {.project-card}
+::: {.project-card-title}
+[Support Ticket Classification](projects/support-ticket-classification.qmd)
+:::
+::: {.project-card-description}
+Which classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared across 100 to 100K tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after OpenAI's help center.
+:::
+::: {.project-card-stack}
+Python · Next.js · TypeScript · Recharts
+:::
+:::
+
 :::
 
 ::: {.contact-section}

@@ -1,6 +1,5 @@
 ---
 title: "Job Title Normalizer"
-description: "A multi-task neural network that standardizes messy CRM job titles into seniority levels and job functions"
 toc-depth: 3
 ---
 
