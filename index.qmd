@@ -14,7 +14,7 @@ Senior Data Scientist — San Francisco
 :::
 
 ::: {.hero-bio}
-Currently playing with LLMs and shipping side projects.
+Currently building with LLMs and shipping side projects.
 :::
 
 :::
