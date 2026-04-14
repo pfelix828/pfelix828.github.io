@@ -27,6 +27,42 @@ Projects
 
 ::: {.project-card}
 ::: {.project-card-title}
+[Support Ticket Classification](projects/support-ticket-classification.qmd)
+:::
+::: {.project-card-description}
+Which classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared across 100 to 100K tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after OpenAI's help center.
+:::
+::: {.project-card-stack}
+Python · Next.js · TypeScript · Recharts
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
+[InterviewReady](projects/interview-ready.qmd)
+:::
+::: {.project-card-description}
+Paste a job description and get a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the role, company, and seniority level. AI-evaluated feedback with scoring and coaching.
+:::
+::: {.project-card-stack}
+Next.js · Claude API · Supabase · Zustand
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
+[Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
+:::
+::: {.project-card-description}
+When a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. An interactive app showing why attribution overcredits by 3-9x and how to build a measurement stack that works.
+:::
+::: {.project-card-stack}
+Python · Next.js · TypeScript · Visx · Recharts
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
 [Lead Scoring & Buying Group Identification](projects/lead-scoring.qmd)
 :::
 ::: {.project-card-description}
@@ -70,42 +106,6 @@ An LLM-powered analyst that answers the same business question differently depen
 :::
 ::: {.project-card-stack}
 Python · Claude API · DuckDB · Streamlit
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
-[InterviewReady](projects/interview-ready.qmd)
-:::
-::: {.project-card-description}
-Paste a job description and get a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the role, company, and seniority level. AI-evaluated feedback with scoring and coaching.
-:::
-::: {.project-card-stack}
-Next.js · Claude API · Supabase · Zustand
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
-[Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
-:::
-::: {.project-card-description}
-When a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. An interactive app showing why attribution overcredits by 3-9x and how to build a measurement stack that works.
-:::
-::: {.project-card-stack}
-Python · Next.js · TypeScript · Visx · Recharts
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
-[Support Ticket Classification](projects/support-ticket-classification.qmd)
-:::
-::: {.project-card-description}
-Which classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared across 100 to 100K tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after OpenAI's help center.
-:::
-::: {.project-card-stack}
-Python · Next.js · TypeScript · Recharts
 :::
 :::
 
