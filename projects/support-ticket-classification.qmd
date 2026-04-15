@@ -9,48 +9,48 @@ toc-depth: 3
 
 When a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.
 
-This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to 100K labeled tickets, using synthetic data modeled after OpenAI's public help center taxonomy. The key output is a learning curve analysis showing where each method's advantage kicks in.
+This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after OpenAI's public help center taxonomy. The key output is a learning curve analysis showing where each method's advantage kicks in.
 
 ## Why This Matters
 
 Most ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.
 
-At low volume (< 500 tickets), LLM few-shot classification with zero training data outperforms every supervised method. At medium volume (5K+), embeddings + XGBoost is hard to beat. At high volume with internal LLM infrastructure (like OpenAI has), a fine-tuned smaller LLM dominates. Knowing where these crossover points are is more valuable than knowing which model gets the highest F1.
+The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure (like OpenAI), fine-tuning is the obvious default.
 
 ## What's Inside
 
-The app has 10 pages organized around method comparison:
+The app has 12 pages organized around method comparison:
 
 **Data & Methods:**
 
-- **Data Explorer** — Browse 100K synthetic tickets across 12 categories, see class distributions and example tickets
+- **Data Explorer** — Browse 12,091 synthetic tickets across 12 categories, see class distributions and example tickets
 - **TF-IDF + Logistic / XGBoost** — The baseline every project should start with
-- **Embeddings + XGBoost** — BERT embeddings as features, with structured metadata (customer tier, account age)
+- **Embeddings + XGBoost** — Sentence embeddings as features, with structured metadata (customer tier, account age)
 - **Fine-Tuned BERT** — End-to-end fine-tuning on ticket text
 - **LLM Zero/Few-Shot** — Prompt engineering with no training data
-- **Fine-Tuned LLM** — The main event: fine-tuning a smaller LLM for classification
+- **Fine-Tuned LLM** — Fine-tuning GPT-4o-mini for classification
+- **Distillation** — Using o1-mini as a teacher model to label data for GPT-4o-mini
 
 **Analysis:**
 
-- **Volume vs. Method** — Learning curves from 100 to 100K tickets, crossover points, and volume-specific recommendations
-- **Error Analysis** — What each method gets wrong: ambiguous tickets, multi-intent requests, rare categories
-- **Production Architecture** — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the ambiguous tail
+- **Volume vs. Method** — Learning curves from 100 to ~10K tickets with real measured data at every point
+- **Error Analysis** — What each method gets wrong: category boundary confusion, semantic overlap, rare categories
+- **Production Architecture** — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the low-confidence tail
 - **Methodology** — Data generation, evaluation protocol, assumptions
+- **Glossary** — Plain-language definitions of every method and concept
 
 ## Key Finding
 
 | Data Volume | Recommended Method | Why |
 |---|---|---|
-| < 500 tickets | LLM Few-Shot | Not enough data to train. Prompt engineering gets ~74% F1 with zero labeled examples. |
-| 500 – 5K | Embeddings + XGBoost | Enough for supervised learning. Fast inference, handles metadata natively. |
-| 5K – 50K | Fine-Tuned LLM | The crossover point. Fine-tuning outperforms all other methods. |
-| 50K+ | Fine-Tuned LLM (cascade) | Fine-tuned LLM dominates. Cascade architecture optimizes cost: XGBoost handles the confident 80%, LLM handles the ambiguous 20%. |
+| < 500 tickets | LLM Few-Shot | Not enough data to train. Prompt engineering gets ~78% F1 with zero labeled examples. |
+| 500+ tickets | Fine-Tuned LLM | Dominates on accuracy (88-96% F1). Requires API access or GPU. Cost-constrained alternative: Embeddings+XGBoost. |
 
-At a company with internal LLM infrastructure (like OpenAI), the cost column for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.
+At a company with internal LLM infrastructure (like OpenAI), the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.
 
 ## The Data
 
-100,000 synthetic support tickets across 12 categories modeled after OpenAI's public help center:
+12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after OpenAI's public help center:
 
 | Category | Share | Description |
 |---|---|---|
@@ -67,17 +67,21 @@ At a company with internal LLM infrastructure (like OpenAI), the cost column for
 | Privacy & Policy | 3.4% | Data privacy, training opt-out, exports |
 | Security | 1.5% | API key safety, vulnerability reporting |
 
-10% of tickets are ambiguous/multi-intent (e.g., "I was charged twice AND my API key stopped working"), which is where LLM-based methods shine over classical approaches.
+Natural category overlap exists between semantically similar classes (e.g., API Usage vs. API Errors, Account Access vs. Account Management), which is where methods diverge most in performance.
 
 ## The Approach
 
 ### Data Generation (Python)
 
-Compositional template system with 300+ base templates, detail fragments, tone modifiers, and 20+ placeholder variables. Produces tickets with realistic language variation, class imbalance, and structured metadata (customer tier, account age, previous ticket count).
+12,091 unique tickets generated using Claude Haiku with structured prompts specifying category, customer tier, urgency, and account metadata. Each ticket is a unique natural-language formulation with realistic class imbalance.
+
+### Model Training & Evaluation
+
+All supervised methods trained on the same 80/20 stratified split (~9,557 train / ~2,390 test). Learning curves measured at 100, 500, 1K, 2.5K, 5K, and ~9.5K tickets. All reported F1 scores are real measured values — no projected or simulated numbers.
 
 ### Interactive App (Next.js)
 
-Same stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where crossover points occur.
+Same stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where each method's advantage kicks in.
 
 ## What I'd Do Differently in Production
 
