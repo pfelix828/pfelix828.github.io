@@ -43,3 +43,5 @@ format:
     toc: true
     code-fold: true
     code-summary: "Show code"
+    include-after-body:
+      text: '<script data-goatcounter="https://pfelix.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'
