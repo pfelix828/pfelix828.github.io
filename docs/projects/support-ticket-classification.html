@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Support Ticket Classification – Philip Felix</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -32,15 +35,14 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-58e7cb164a30d0964bc3a4cf0cb5a652.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-49c9dac6fae8e09f4ca8bec003b153f0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-53305cd9a0cd75d0635870c2da6c4b70.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9baaaec89b84946db80e63cede68fa47.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -168,6 +170,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-approach" id="toc-the-approach" class="nav-link" data-scroll-target="#the-approach">The Approach</a>
   <ul class="collapse">
   <li><a href="#data-generation-python" id="toc-data-generation-python" class="nav-link" data-scroll-target="#data-generation-python">Data Generation (Python)</a></li>
+  <li><a href="#model-training-evaluation" id="toc-model-training-evaluation" class="nav-link" data-scroll-target="#model-training-evaluation">Model Training &amp; Evaluation</a></li>
   <li><a href="#interactive-app-next.js" id="toc-interactive-app-next.js" class="nav-link" data-scroll-target="#interactive-app-next.js">Interactive App (Next.js)</a></li>
   </ul></li>
   <li><a href="#what-id-do-differently-in-production" id="toc-what-id-do-differently-in-production" class="nav-link" data-scroll-target="#what-id-do-differently-in-production">What I’d Do Differently in Production</a></li>
@@ -201,31 +204,33 @@ ul.task-list li input[type="checkbox"] {
 <section id="what-this-project-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-project-does">What This Project Does</h2>
 <p>When a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.</p>
-<p>This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to 100K labeled tickets, using synthetic data modeled after OpenAI’s public help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in.</p>
+<p>This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after OpenAI’s public help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in.</p>
 </section>
 <section id="why-this-matters" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-matters">Why This Matters</h2>
 <p>Most ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.</p>
-<p>At low volume (&lt; 500 tickets), LLM few-shot classification with zero training data outperforms every supervised method. At medium volume (5K+), embeddings + XGBoost is hard to beat. At high volume with internal LLM infrastructure (like OpenAI has), a fine-tuned smaller LLM dominates. Knowing where these crossover points are is more valuable than knowing which model gets the highest F1.</p>
+<p>The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure (like OpenAI), fine-tuning is the obvious default.</p>
 </section>
 <section id="whats-inside" class="level2">
 <h2 class="anchored" data-anchor-id="whats-inside">What’s Inside</h2>
-<p>The app has 10 pages organized around method comparison:</p>
+<p>The app has 12 pages organized around method comparison:</p>
 <p><strong>Data &amp; Methods:</strong></p>
 <ul>
-<li><strong>Data Explorer</strong> — Browse 100K synthetic tickets across 12 categories, see class distributions and example tickets</li>
+<li><strong>Data Explorer</strong> — Browse 12,091 synthetic tickets across 12 categories, see class distributions and example tickets</li>
 <li><strong>TF-IDF + Logistic / XGBoost</strong> — The baseline every project should start with</li>
-<li><strong>Embeddings + XGBoost</strong> — BERT embeddings as features, with structured metadata (customer tier, account age)</li>
+<li><strong>Embeddings + XGBoost</strong> — Sentence embeddings as features, with structured metadata (customer tier, account age)</li>
 <li><strong>Fine-Tuned BERT</strong> — End-to-end fine-tuning on ticket text</li>
 <li><strong>LLM Zero/Few-Shot</strong> — Prompt engineering with no training data</li>
-<li><strong>Fine-Tuned LLM</strong> — The main event: fine-tuning a smaller LLM for classification</li>
+<li><strong>Fine-Tuned LLM</strong> — Fine-tuning GPT-4o-mini for classification</li>
+<li><strong>Distillation</strong> — Using o1-mini as a teacher model to label data for GPT-4o-mini</li>
 </ul>
 <p><strong>Analysis:</strong></p>
 <ul>
-<li><strong>Volume vs.&nbsp;Method</strong> — Learning curves from 100 to 100K tickets, crossover points, and volume-specific recommendations</li>
-<li><strong>Error Analysis</strong> — What each method gets wrong: ambiguous tickets, multi-intent requests, rare categories</li>
-<li><strong>Production Architecture</strong> — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the ambiguous tail</li>
+<li><strong>Volume vs.&nbsp;Method</strong> — Learning curves from 100 to ~10K tickets with real measured data at every point</li>
+<li><strong>Error Analysis</strong> — What each method gets wrong: category boundary confusion, semantic overlap, rare categories</li>
+<li><strong>Production Architecture</strong> — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the low-confidence tail</li>
 <li><strong>Methodology</strong> — Data generation, evaluation protocol, assumptions</li>
+<li><strong>Glossary</strong> — Plain-language definitions of every method and concept</li>
 </ul>
 </section>
 <section id="key-finding" class="level2">
@@ -247,30 +252,20 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>&lt; 500 tickets</td>
 <td>LLM Few-Shot</td>
-<td>Not enough data to train. Prompt engineering gets ~74% F1 with zero labeled examples.</td>
+<td>Not enough data to train. Prompt engineering gets ~78% F1 with zero labeled examples.</td>
 </tr>
 <tr class="even">
-<td>500 – 5K</td>
-<td>Embeddings + XGBoost</td>
-<td>Enough for supervised learning. Fast inference, handles metadata natively.</td>
-</tr>
-<tr class="odd">
-<td>5K – 50K</td>
+<td>500+ tickets</td>
 <td>Fine-Tuned LLM</td>
-<td>The crossover point. Fine-tuning outperforms all other methods.</td>
-</tr>
-<tr class="even">
-<td>50K+</td>
-<td>Fine-Tuned LLM (cascade)</td>
-<td>Fine-tuned LLM dominates. Cascade architecture optimizes cost: XGBoost handles the confident 80%, LLM handles the ambiguous 20%.</td>
+<td>Dominates on accuracy (88-96% F1). Requires API access or GPU. Cost-constrained alternative: Embeddings+XGBoost.</td>
 </tr>
 </tbody>
 </table>
-<p>At a company with internal LLM infrastructure (like OpenAI), the cost column for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.</p>
+<p>At a company with internal LLM infrastructure (like OpenAI), the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.</p>
 </section>
 <section id="the-data" class="level2">
 <h2 class="anchored" data-anchor-id="the-data">The Data</h2>
-<p>100,000 synthetic support tickets across 12 categories modeled after OpenAI’s public help center:</p>
+<p>12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after OpenAI’s public help center:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -347,17 +342,21 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>10% of tickets are ambiguous/multi-intent (e.g., “I was charged twice AND my API key stopped working”), which is where LLM-based methods shine over classical approaches.</p>
+<p>Natural category overlap exists between semantically similar classes (e.g., API Usage vs.&nbsp;API Errors, Account Access vs.&nbsp;Account Management), which is where methods diverge most in performance.</p>
 </section>
 <section id="the-approach" class="level2">
 <h2 class="anchored" data-anchor-id="the-approach">The Approach</h2>
 <section id="data-generation-python" class="level3">
 <h3 class="anchored" data-anchor-id="data-generation-python">Data Generation (Python)</h3>
-<p>Compositional template system with 300+ base templates, detail fragments, tone modifiers, and 20+ placeholder variables. Produces tickets with realistic language variation, class imbalance, and structured metadata (customer tier, account age, previous ticket count).</p>
+<p>12,091 unique tickets generated using Claude Haiku with structured prompts specifying category, customer tier, urgency, and account metadata. Each ticket is a unique natural-language formulation with realistic class imbalance.</p>
+</section>
+<section id="model-training-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="model-training-evaluation">Model Training &amp; Evaluation</h3>
+<p>All supervised methods trained on the same 80/20 stratified split (~9,557 train / ~2,390 test). Learning curves measured at 100, 500, 1K, 2.5K, 5K, and ~9.5K tickets. All reported F1 scores are real measured values — no projected or simulated numbers.</p>
 </section>
 <section id="interactive-app-next.js" class="level3">
 <h3 class="anchored" data-anchor-id="interactive-app-next.js">Interactive App (Next.js)</h3>
-<p>Same stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where crossover points occur.</p>
+<p>Same stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where each method’s advantage kicks in.</p>
 </section>
 </section>
 <section id="what-id-do-differently-in-production" class="level2">
