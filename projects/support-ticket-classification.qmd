@@ -19,7 +19,7 @@ The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beat
 
 ## What's Inside
 
-The app has 12 pages organized around method comparison:
+The app has 13 pages organized around method comparison:
 
 **Data & Methods:**
 
