@@ -63,18 +63,6 @@ Python · Next.js · TypeScript · Recharts
 
 ::: {.project-card}
 ::: {.project-card-title}
-[InterviewReady](projects/interview-ready.qmd)
-:::
-::: {.project-card-description}
-Paste a job description and get a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the role, company, and seniority level. AI-evaluated feedback with scoring and coaching.
-:::
-::: {.project-card-stack}
-Next.js · Claude API · Supabase · Zustand
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
 [Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
 :::
 ::: {.project-card-description}
@@ -106,6 +94,18 @@ A practical framework for getting a data science team from "what's an MCP server
 :::
 ::: {.project-card-stack}
 Claude · MCP · Cursor · Databricks CLI
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
+[InterviewReady](projects/interview-ready.qmd)
+:::
+::: {.project-card-description}
+Paste a job description and get a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the role, company, and seniority level. AI-evaluated feedback with scoring and coaching.
+:::
+::: {.project-card-stack}
+Next.js · Claude API · Supabase · Zustand
 :::
 :::
 
