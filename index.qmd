@@ -97,18 +97,6 @@ Claude · MCP · Cursor · Databricks CLI
 :::
 :::
 
-::: {.project-card}
-::: {.project-card-title}
-[InterviewReady](projects/interview-ready.qmd)
-:::
-::: {.project-card-description}
-Paste a job description and get a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the role, company, and seniority level. AI-evaluated feedback with scoring and coaching.
-:::
-::: {.project-card-stack}
-Next.js · Claude API · Supabase · Zustand
-:::
-:::
-
 :::
 
 ::: {.contact-section}
