@@ -9,13 +9,13 @@ toc-depth: 3
 
 When a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.
 
-This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after OpenAI's public help center taxonomy. The key output is a learning curve analysis showing where each method's advantage kicks in.
+This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after a real AI-product help center taxonomy. The key output is a learning curve analysis showing where each method's advantage kicks in.
 
 ## Why This Matters
 
 Most ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.
 
-The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure (like OpenAI), fine-tuning is the obvious default.
+The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure, fine-tuning is the obvious default.
 
 ## What's Inside
 
@@ -46,11 +46,11 @@ The app has 13 pages organized around method comparison:
 | < 500 tickets | LLM Few-Shot | Not enough data to train. Prompt engineering gets ~78% F1 with zero labeled examples. |
 | 500+ tickets | Fine-Tuned LLM | Dominates on accuracy (88-96% F1). Requires API access or GPU. Cost-constrained alternative: Embeddings+XGBoost. |
 
-At a company with internal LLM infrastructure (like OpenAI), the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.
+At a company with internal LLM infrastructure, the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.
 
 ## The Data
 
-12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after OpenAI's public help center:
+12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after a real AI-product public help center:
 
 | Category | Share | Description |
 |---|---|---|

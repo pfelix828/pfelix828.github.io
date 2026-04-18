@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Support Ticket Classification – Philip Felix</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -35,14 +32,15 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-49c9dac6fae8e09f4ca8bec003b153f0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-58e7cb164a30d0964bc3a4cf0cb5a652.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9baaaec89b84946db80e63cede68fa47.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-53305cd9a0cd75d0635870c2da6c4b70.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -204,12 +202,12 @@ ul.task-list li input[type="checkbox"] {
 <section id="what-this-project-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-project-does">What This Project Does</h2>
 <p>When a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.</p>
-<p>This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after OpenAI’s public help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in.</p>
+<p>This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after a real AI-product help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in.</p>
 </section>
 <section id="why-this-matters" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-matters">Why This Matters</h2>
 <p>Most ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.</p>
-<p>The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure (like OpenAI), fine-tuning is the obvious default.</p>
+<p>The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure, fine-tuning is the obvious default.</p>
 </section>
 <section id="whats-inside" class="level2">
 <h2 class="anchored" data-anchor-id="whats-inside">What’s Inside</h2>
@@ -261,11 +259,11 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>At a company with internal LLM infrastructure (like OpenAI), the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.</p>
+<p>At a company with internal LLM infrastructure, the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.</p>
 </section>
 <section id="the-data" class="level2">
 <h2 class="anchored" data-anchor-id="the-data">The Data</h2>
-<p>12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after OpenAI’s public help center:</p>
+<p>12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after a real AI-product public help center:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">

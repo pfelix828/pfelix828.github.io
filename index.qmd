@@ -54,7 +54,7 @@ Python · Claude API · DuckDB · Streamlit
 [Support Ticket Classification](projects/support-ticket-classification.qmd)
 :::
 ::: {.project-card-description}
-Which classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared across 100 to 100K tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after OpenAI's help center.
+Which classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared from 100 to ~9.5K labeled tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after a real AI-product support taxonomy.
 :::
 ::: {.project-card-stack}
 Python · Next.js · TypeScript · Recharts
