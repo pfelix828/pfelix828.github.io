@@ -12,7 +12,7 @@ pagetitle: "Philip Felix — Senior Data Scientist"
 # Philip Felix
 
 ::: {.hero-subtitle}
-Senior Data Scientist — San Francisco
+Senior Data Scientist — Bay Area
 :::
 
 ::: {.hero-bio}

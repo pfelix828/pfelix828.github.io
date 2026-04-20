@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Philip Felix"
-  description: "Senior Data Scientist in San Francisco"
+  description: "Senior Data Scientist in the Bay Area"
   navbar:
     background: light
     left:
@@ -33,7 +33,7 @@ website:
         href: https://linkedin.com/in/pfelix1
 
   page-footer:
-    center: "Philip Felix — San Francisco"
+    center: "Philip Felix — Bay Area"
 
 format:
   html:

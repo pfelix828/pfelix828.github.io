@@ -24,7 +24,7 @@ A lot of what I ended up doing at Atlassian was helping the rest of the data org
 
 ## Where I Am Now
 
-I was laid off from Atlassian in March 2026 as part of a broader restructure. I'm based just north of San Francisco and looking for senior data science roles where the work is close to the business, the support-to-product-to-DS progression is an asset, and I can keep learning how AI tooling actually changes this kind of work in practice.
+I was laid off from Atlassian in March 2026 as part of a broader restructure. I'm based in the Bay Area and looking for senior data science roles where the work is close to the business, the support-to-product-to-DS progression is an asset, and I can keep learning how AI tooling actually changes this kind of work in practice.
 
 ## Education
 
