@@ -16,7 +16,7 @@ Senior Data Scientist — SF Bay Area
 :::
 
 ::: {.hero-bio}
-Currently building with LLMs and shipping side projects.
+Psychology undergrad, math post-bacc, a decade of helping GTM and product teams see what they were missing. Currently building with LLMs and shipping side projects while looking for the next role.
 :::
 
 :::
@@ -102,5 +102,5 @@ Claude · MCP · Cursor · Databricks CLI
 :::
 
 ::: {.contact-section}
-I'm currently looking for senior data science roles. If you're hiring or just want to talk shop: [pfelix828@gmail.com](mailto:pfelix828@gmail.com)
+Looking for senior data science roles where the work is collaborative and the problems are hard. If you're hiring — or just want to trade notes on LLM evals, GTM analytics, or how to get a data team actually using AI — [pfelix828@gmail.com](mailto:pfelix828@gmail.com).
 :::

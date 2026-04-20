@@ -16,7 +16,7 @@ In 2017 I also taught a data analytics course at General Assembly — 10 weeks o
 
 ## Building DS Chops at Atlassian
 
-I joined Atlassian in 2020 as the first data scientist hire for the events team — tight enough scope to build the pipeline end-to-end instead of inheriting one. From there I moved into marketing DS: ICP modeling, buying group analysis, propensity scoring for the enterprise GTM org. Same seam-between-functions work as Square, now with modeling tools behind it.
+Joined Atlassian in 2020 as the first data scientist hire for the events team — tight enough scope to build the pipeline end-to-end instead of inheriting one. From there, moved into marketing DS: ICP modeling, buying group analysis, and propensity scoring for the enterprise GTM org, partnering closely with Marketing Ops and sales leadership. Same seam-between-functions work as Square, now with modeling tools behind it.
 
 Toward the end I spent a lot of time on how LLMs change the shape of DS work. They're a real unlock when paired with verification — checking the join, sanity-checking the numbers, pressure-testing the framing before it reaches a stakeholder. I've seen the tooling work well, and I've seen it produce work that looks right and isn't. A lot of my last six months there was helping the data org find that balance — MCP connections, knowledge files, walking people through their first workflows. That pulled on the same thing I liked about teaching.
 
