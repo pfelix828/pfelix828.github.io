@@ -2,7 +2,7 @@
 title: "About"
 ---
 
-I'm naturally curious and learn by doing. Data science fits because it sits at the intersection of the qualitative and the quantitative, and only lands when it's tied to the people acting on it. My background reflects that: psychology at UCSB, a math post-bacc at CUNY, the rest picked up on the job. I also love to teach.
+I'm naturally curious and learn by doing. Data science fits because it sits at the intersection of the qualitative and the quantitative, and only lands when it's tied to the people acting on it. My background reflects that: psychology at UCSB, a math post-bacc at CUNY, the rest picked up on the job.
 
 ## Starting in Support
 
