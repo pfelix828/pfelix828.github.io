@@ -87,18 +87,6 @@ Python · PyTorch · scikit-learn
 
 ::: {.project-card}
 ::: {.project-card-title}
-[InterviewReady](projects/interview-ready.qmd)
-:::
-::: {.project-card-description}
-Paste a job description, get a tailored practice session — technical, case, or behavioral questions calibrated to the role and company. Answers are evaluated in-app by Claude with scoring and coaching. Skill-readiness tracking across sessions.
-:::
-::: {.project-card-stack}
-Next.js · TypeScript · Supabase · Claude API
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
 [AI Adoption Playbook](projects/ai-adoption-playbook.qmd)
 :::
 ::: {.project-card-description}
