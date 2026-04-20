@@ -22,7 +22,7 @@ Toward the end I spent a lot of time on how LLMs change the shape of DS work. Th
 
 ## Where I Am Now
 
-Laid off from Atlassian in March 2026 as part of a broader restructure. Based in the SF Bay Area, looking for senior DS roles where the work is close to the business and I can help a team spot the high-leverage AI use cases, build them, and ship them.
+Based in the SF Bay Area, looking for senior DS roles where the work is close to the business and I can help a team spot the high-leverage AI use cases, build them, and ship them.
 
 ## Education
 
