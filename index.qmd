@@ -100,7 +100,7 @@ Claude · MCP · Cursor · Databricks CLI
 :::
 
 ::: {.contact-section}
-Looking for senior data science roles where the work is collaborative and the problems are hard. If you're hiring — or just want to trade notes on LLM evals, GTM analytics, or how to get a data team actually using AI — [pfelix828@gmail.com](mailto:pfelix828@gmail.com).
+[pfelix828@gmail.com](mailto:pfelix828@gmail.com)
 
 ::: {.contact-links}
 [GitHub](https://github.com/pfelix828) · [LinkedIn](https://linkedin.com/in/pfelix1)
