@@ -308,6 +308,27 @@ code {
 
 body.home-page #title-block-header,
 body.home-page .quarto-title-block,
-body.home-page .quarto-title {
-  display: none;
+body.home-page .quarto-title,
+body.home-page header.quarto-title-block {
+  display: none !important;
+}
+
+// ---- Contact links ----
+
+.contact-section {
+  .contact-links {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #888;
+
+    a {
+      color: #666;
+      font-weight: 500;
+      text-decoration: none;
+
+      &:hover {
+        color: #c4613d;
+      }
+    }
+  }
 }

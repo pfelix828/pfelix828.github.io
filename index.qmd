@@ -1,10 +1,8 @@
 ---
-title: "Philip Felix"
-subtitle: "Senior Data Scientist"
+pagetitle: "Philip Felix — Senior Data Scientist"
 body-classes: home-page
 toc: false
 title-block-style: none
-pagetitle: "Philip Felix — Senior Data Scientist"
 ---
 
 ::: {.hero-section}
@@ -16,7 +14,7 @@ Senior Data Scientist — SF Bay Area
 :::
 
 ::: {.hero-bio}
-A decade of working alongside marketing, sales, and product teams on the messy, interesting questions. Currently building with LLMs and shipping side projects.
+A decade of data science work with marketing, sales, and product teams — most recently at Atlassian, before that Square. Currently focused on where LLMs make GTM analytics sharper: context-aware agents, rigorous evals, and measurement work where standard attribution breaks. [More about me →](about.qmd)
 :::
 
 :::
@@ -29,25 +27,13 @@ Projects
 
 ::: {.project-card}
 ::: {.project-card-title}
-[Job Title Normalizer](projects/title-normalizer.qmd)
+[Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
 :::
 ::: {.project-card-description}
-Sales and marketing teams route deals and score leads off job titles, but CRM titles are chaos — abbreviations, regions, seniority markers, punctuation. A multi-task PyTorch classifier that normalizes them into clean seniority and function labels.
+When a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. An interactive app showing why attribution overcredits by 3-9x and how to build a measurement stack that works.
 :::
 ::: {.project-card-stack}
-Python · PyTorch · scikit-learn
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
-[Adaptive Analyst Agent](projects/context-agent.qmd)
-:::
-::: {.project-card-description}
-An LLM-powered analyst that answers the same business question differently depending on who's asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.
-:::
-::: {.project-card-stack}
-Python · Claude API · DuckDB · Streamlit
+Python · Next.js · TypeScript · Visx · Recharts
 :::
 :::
 
@@ -65,13 +51,13 @@ Python · Next.js · TypeScript · Recharts
 
 ::: {.project-card}
 ::: {.project-card-title}
-[Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
+[Adaptive Analyst Agent](projects/context-agent.qmd)
 :::
 ::: {.project-card-description}
-When a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. An interactive app showing why attribution overcredits by 3-9x and how to build a measurement stack that works.
+An LLM-powered analyst that answers the same business question differently depending on who's asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.
 :::
 ::: {.project-card-stack}
-Python · Next.js · TypeScript · Visx · Recharts
+Python · Claude API · DuckDB · Streamlit
 :::
 :::
 
@@ -84,6 +70,30 @@ You have 100K accounts and can only engage a few thousand this quarter. Which on
 :::
 ::: {.project-card-stack}
 Python · Pandas · scikit-learn · Streamlit
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
+[Job Title Normalizer](projects/title-normalizer.qmd)
+:::
+::: {.project-card-description}
+Sales and marketing teams route deals and score leads off job titles, but CRM titles are chaos — abbreviations, regions, seniority markers, punctuation. A multi-task PyTorch classifier that normalizes them into clean seniority and function labels.
+:::
+::: {.project-card-stack}
+Python · PyTorch · scikit-learn
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
+[InterviewReady](projects/interview-ready.qmd)
+:::
+::: {.project-card-description}
+Paste a job description, get a tailored practice session — technical, case, or behavioral questions calibrated to the role and company. Answers are evaluated in-app by Claude with scoring and coaching. Skill-readiness tracking across sessions.
+:::
+::: {.project-card-stack}
+Next.js · TypeScript · Supabase · Claude API
 :::
 :::
 
@@ -103,4 +113,8 @@ Claude · MCP · Cursor · Databricks CLI
 
 ::: {.contact-section}
 Looking for senior data science roles where the work is collaborative and the problems are hard. If you're hiring — or just want to trade notes on LLM evals, GTM analytics, or how to get a data team actually using AI — [pfelix828@gmail.com](mailto:pfelix828@gmail.com).
+
+::: {.contact-links}
+[GitHub](https://github.com/pfelix828) · [LinkedIn](https://linkedin.com/in/pfelix1)
+:::
 :::
