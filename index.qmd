@@ -16,7 +16,7 @@ Senior Data Scientist — SF Bay Area
 :::
 
 ::: {.hero-bio}
-Psychology undergrad, math post-bacc, a decade of helping GTM and product teams see what they were missing. Currently building with LLMs and shipping side projects while looking for the next role.
+A decade of working alongside GTM and product teams on the messy, interesting questions. Currently building with LLMs and shipping side projects.
 :::
 
 :::
