@@ -16,7 +16,7 @@ Senior Data Scientist — SF Bay Area
 :::
 
 ::: {.hero-bio}
-A decade of working alongside GTM and product teams on the messy, interesting questions. Currently building with LLMs and shipping side projects.
+A decade of working alongside marketing, sales, and product teams on the messy, interesting questions. Currently building with LLMs and shipping side projects.
 :::
 
 :::
