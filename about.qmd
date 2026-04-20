@@ -2,7 +2,7 @@
 title: "About"
 ---
 
-I came to data science slowly, and mostly by accident. I studied psychology at UC Santa Barbara and left without much of a quantitative foundation; a math post-bacc at CUNY a few years later helped me start to close that gap. Most of what I know I picked up on the job, one role at a time, learning from people further along than me — and I still feel like I'm learning the craft.
+I came to data science the long way, but I came to it on purpose. I studied psychology at UC Santa Barbara and left without much of a quantitative foundation, so I went back and did a math post-bacc at CUNY to close the gap. Every role I've taken since has been a deliberate step closer to the work — more data, more modeling, more ownership — and I've picked up most of what I know on the job, from people further along than me. I still feel like I'm learning the craft.
 
 ## Starting in Support
 
