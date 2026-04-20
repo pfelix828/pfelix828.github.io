@@ -3,6 +3,8 @@ title: "Philip Felix"
 subtitle: "Senior Data Scientist"
 body-classes: home-page
 toc: false
+title-block-style: none
+pagetitle: "Philip Felix — Senior Data Scientist"
 ---
 
 ::: {.hero-section}

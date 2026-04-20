@@ -20,8 +20,6 @@ website:
             href: projects/ai-adoption-playbook.qmd
           - text: Adaptive Analyst Agent
             href: projects/context-agent.qmd
-          - text: InterviewReady
-            href: projects/interview-ready.qmd
           - text: Marketing Measurement Under Hypergrowth
             href: projects/marketing-measurement.qmd
           - text: Support Ticket Classification

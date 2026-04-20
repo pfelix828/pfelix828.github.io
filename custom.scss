@@ -306,12 +306,8 @@ code {
 
 // ---- Remove default Quarto title block on homepage ----
 
-.quarto-title {
+body.home-page #title-block-header,
+body.home-page .quarto-title-block,
+body.home-page .quarto-title {
   display: none;
-}
-
-// ---- Restore title block on non-home pages ----
-
-body:not(.home-page) .quarto-title {
-  display: block;
 }
