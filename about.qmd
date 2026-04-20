@@ -2,7 +2,7 @@
 title: "About"
 ---
 
-I'm naturally curious, and I learn best by doing — finding a problem I don't yet know how to solve and then working out how to solve it. Data science fits because the work sits at the intersection of the qualitative and the quantitative, and understanding a business means being fluent in both. My own background reflects that mix: psychology at UC Santa Barbara, a math post-bacc at CUNY, and most of the craft picked up on the job since. I also love to teach, which is still the best way I've found to pressure-test whether I really understand what I think I do.
+I'm naturally curious, and I learn best by doing — finding a problem I don't yet know how to solve and then working out how to solve it. Data science fits because the work sits at the intersection of the qualitative and the quantitative, and understanding a business means being fluent in both. It's also fundamentally collaborative — the analysis only lands when it's tied to the people who have to act on it — which is part of why I've always gravitated to roles at the seam between functions. My own background reflects that mix: psychology at UC Santa Barbara, a math post-bacc at CUNY, and most of the craft picked up on the job since. I also love to teach, which is still the best way I've found to pressure-test whether I really understand what I think I do.
 
 ## Starting in Support
 
