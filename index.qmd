@@ -14,7 +14,7 @@ Senior Data Scientist — SF Bay Area
 :::
 
 ::: {.hero-bio}
-Started in Support at ZocDoc, moved into Operations, then spent the last decade as a data scientist with marketing, sales, customer success, and product teams at Square and most recently Atlassian. Currently focused on where LLMs make GTM analytics sharper: context-aware agents and rigorous evals. [More about me →](about.qmd)
+Started in Support at ZocDoc, moved into Operations, then spent the last decade as a data scientist with marketing, sales, customer success, and product teams at Square and most recently Atlassian. [More about me →](about.qmd)
 :::
 
 :::
