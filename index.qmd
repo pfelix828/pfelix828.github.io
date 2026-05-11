@@ -27,18 +27,6 @@ Projects
 
 ::: {.project-card}
 ::: {.project-card-title}
-[Marketing Measurement Under Hypergrowth](projects/marketing-measurement.qmd)
-:::
-::: {.project-card-description}
-When a company grows from $1B to $30B in 15 months on mostly organic adoption, every standard measurement approach breaks. An interactive app showing why attribution overcredits by 3-9x and how to build a measurement stack that works.
-:::
-::: {.project-card-stack}
-Python · Next.js · TypeScript · Visx · Recharts
-:::
-:::
-
-::: {.project-card}
-::: {.project-card-title}
 [Support Ticket Classification](projects/support-ticket-classification.qmd)
 :::
 ::: {.project-card-description}
