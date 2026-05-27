@@ -20,8 +20,6 @@ website:
             href: projects/context-agent.qmd
           - text: Support Ticket Classification
             href: projects/support-ticket-classification.qmd
-      - text: About
-        href: about.qmd
     right:
       - icon: github
         href: https://github.com/pfelix828

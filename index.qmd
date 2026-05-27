@@ -14,7 +14,7 @@ Senior Data Scientist — SF Bay Area
 :::
 
 ::: {.hero-bio}
-A decade in analytics working with marketing, sales, customer success, and product teams: Product Specialist and Operations Analyst at Square, then data scientist at Atlassian for the last six years. [More about me →](about.qmd)
+A decade in analytics working with marketing, sales, customer success, and product teams: Product Specialist and Operations Analyst at Square, then data scientist at Atlassian for the last six years.
 :::
 
 :::
