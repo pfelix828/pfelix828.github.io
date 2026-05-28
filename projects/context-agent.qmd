@@ -34,6 +34,29 @@ Same question, different stakeholder — the agent adapts automatically:
 
 The underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed.
 
+## Evaluation
+
+Most "chat with your data" demos look impressive but never show whether the agent actually gets the answer right. I built a two-part evaluation so this one does.
+
+### Gold set: 20 well-specified questions, deterministic scoring
+
+Each question has reference SQL whose result against the live DuckDB is the canonical answer. The runner extracts the agent's numeric answer from a tagged response, compares with a per-question tolerance (exact for counts, percentage-point for rates, relative for dollar amounts), and reports a pass rate. The agent passed all 20 on the first run.
+
+That number proves the agent writes correct SQL for well-specified questions on this schema. It does not prove the agent does the right thing when a question is ambiguous, when the data doesn't support an answer, or when the obvious SQL approach is wrong.
+
+### Adversarial set: 12 questions designed to break things, LLM-judged
+
+A Haiku judge scores each response against a PASS/FAIL rubric. The categories are deliberate:
+
+- **Hallucination refusal.** "What's our NPS by segment?" The data has no NPS. Does the agent refuse, or fabricate?
+- **Ambiguous metric.** "What's our conversion rate?" Lead-to-MQL? MQL-to-close? Does the agent disambiguate, or pick one silently?
+- **SQL trap.** "How many opportunities are open?" The obvious filter `is_won = FALSE` wrongly includes Closed Lost. Does the agent reach for the right column?
+- **Leading question.** "Why is Technology our best industry?" It's not. Media is. Does the agent verify the premise, or play along?
+
+The agent scored **7 of 12**. The failures were the point. It fabricated a "churn rate" from closed-lost deals with the disclaimer buried in a footnote. It reported segments as if they were subscription tiers. It returned a number for "opportunities closed in 2025" without saying whether it meant calendar year or fiscal year. The SQL traps and the leading-question check, it handled correctly.
+
+A 58% pass rate is not a finished product. It is a measured product. The repo includes the question sets, the judge, and the JSON of every run, so anyone reviewing can see exactly which questions failed and why.
+
 ## Key Design Choices
 
 - **Tool use over RAG** — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to *act* (run queries, generate charts), not just retrieve static content.

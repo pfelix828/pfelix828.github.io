@@ -150,6 +150,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture">Architecture</a></li>
   </ul></li>
   <li><a href="#in-action" id="toc-in-action" class="nav-link" data-scroll-target="#in-action">In Action</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#gold-set-20-well-specified-questions-deterministic-scoring" id="toc-gold-set-20-well-specified-questions-deterministic-scoring" class="nav-link" data-scroll-target="#gold-set-20-well-specified-questions-deterministic-scoring">Gold set: 20 well-specified questions, deterministic scoring</a></li>
+  <li><a href="#adversarial-set-12-questions-designed-to-break-things-llm-judged" id="toc-adversarial-set-12-questions-designed-to-break-things-llm-judged" class="nav-link" data-scroll-target="#adversarial-set-12-questions-designed-to-break-things-llm-judged">Adversarial set: 12 questions designed to break things, LLM-judged</a></li>
+  </ul></li>
   <li><a href="#key-design-choices" id="toc-key-design-choices" class="nav-link" data-scroll-target="#key-design-choices">Key Design Choices</a></li>
   <li><a href="#stack" id="toc-stack" class="nav-link" data-scroll-target="#stack">Stack</a></li>
   </ul>
@@ -209,6 +214,27 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Marketing asks “How is pipeline trending?”</strong> → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.</li>
 </ul>
 <p>The underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed.</p>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
+<p>Most “chat with your data” demos look impressive but never show whether the agent actually gets the answer right. I built a two-part evaluation so this one does.</p>
+<section id="gold-set-20-well-specified-questions-deterministic-scoring" class="level3">
+<h3 class="anchored" data-anchor-id="gold-set-20-well-specified-questions-deterministic-scoring">Gold set: 20 well-specified questions, deterministic scoring</h3>
+<p>Each question has reference SQL whose result against the live DuckDB is the canonical answer. The runner extracts the agent’s numeric answer from a tagged response, compares with a per-question tolerance (exact for counts, percentage-point for rates, relative for dollar amounts), and reports a pass rate. The agent passed all 20 on the first run.</p>
+<p>That number proves the agent writes correct SQL for well-specified questions on this schema. It does not prove the agent does the right thing when a question is ambiguous, when the data doesn’t support an answer, or when the obvious SQL approach is wrong.</p>
+</section>
+<section id="adversarial-set-12-questions-designed-to-break-things-llm-judged" class="level3">
+<h3 class="anchored" data-anchor-id="adversarial-set-12-questions-designed-to-break-things-llm-judged">Adversarial set: 12 questions designed to break things, LLM-judged</h3>
+<p>A Haiku judge scores each response against a PASS/FAIL rubric. The categories are deliberate:</p>
+<ul>
+<li><strong>Hallucination refusal.</strong> “What’s our NPS by segment?” The data has no NPS. Does the agent refuse, or fabricate?</li>
+<li><strong>Ambiguous metric.</strong> “What’s our conversion rate?” Lead-to-MQL? MQL-to-close? Does the agent disambiguate, or pick one silently?</li>
+<li><strong>SQL trap.</strong> “How many opportunities are open?” The obvious filter <code>is_won = FALSE</code> wrongly includes Closed Lost. Does the agent reach for the right column?</li>
+<li><strong>Leading question.</strong> “Why is Technology our best industry?” It’s not. Media is. Does the agent verify the premise, or play along?</li>
+</ul>
+<p>The agent scored <strong>7 of 12</strong>. The failures were the point. It fabricated a “churn rate” from closed-lost deals with the disclaimer buried in a footnote. It reported segments as if they were subscription tiers. It returned a number for “opportunities closed in 2025” without saying whether it meant calendar year or fiscal year. The SQL traps and the leading-question check, it handled correctly.</p>
+<p>A 58% pass rate is not a finished product. It is a measured product. The repo includes the question sets, the judge, and the JSON of every run, so anyone reviewing can see exactly which questions failed and why.</p>
+</section>
 </section>
 <section id="key-design-choices" class="level2">
 <h2 class="anchored" data-anchor-id="key-design-choices">Key Design Choices</h2>
