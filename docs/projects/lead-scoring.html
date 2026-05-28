@@ -169,6 +169,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#how-we-evaluate-business-metrics-that-matter" id="toc-how-we-evaluate-business-metrics-that-matter" class="nav-link" data-scroll-target="#how-we-evaluate-business-metrics-that-matter">How We Evaluate: Business Metrics That Matter</a>
   <ul class="collapse">
   <li><a href="#auc-area-under-the-roc-curve" id="toc-auc-area-under-the-roc-curve" class="nav-link" data-scroll-target="#auc-area-under-the-roc-curve">AUC (Area Under the ROC Curve)</a></li>
+  <li><a href="#does-the-model-earn-its-complexity" id="toc-does-the-model-earn-its-complexity" class="nav-link" data-scroll-target="#does-the-model-earn-its-complexity">Does the Model Earn Its Complexity?</a></li>
   <li><a href="#precision-k" id="toc-precision-k" class="nav-link" data-scroll-target="#precision-k">Precision @ K</a></li>
   <li><a href="#lift-chart" id="toc-lift-chart" class="nav-link" data-scroll-target="#lift-chart">Lift Chart</a></li>
   <li><a href="#revenue-capture-curve" id="toc-revenue-capture-curve" class="nav-link" data-scroll-target="#revenue-capture-curve">Revenue Capture Curve</a></li>
@@ -322,6 +323,54 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Our result</strong>: <strong>0.575</strong> (95% CI: 0.56–0.59) on the held-out test set (~7,200 accounts).</p>
 <p><strong>What that means</strong>: The model is meaningfully better than random. In practice, AUC values of 0.55-0.65 are common for account-level propensity models using only pre-deal features — the signal exists but it’s noisy, because many factors that determine whether a deal closes (budget timing, competitive dynamics, internal politics) aren’t in the data. The tight confidence interval (thanks to the large test set) gives us confidence this isn’t a fluke.</p>
 </section>
+<section id="does-the-model-earn-its-complexity" class="level3">
+<h3 class="anchored" data-anchor-id="does-the-model-earn-its-complexity">Does the Model Earn Its Complexity?</h3>
+<p>An AUC of 0.575 beats random, but “better than random” is a low bar. The more useful question: does the full 39-feature model beat what a marketing analyst could do with a single <code>ORDER BY</code> in SQL? To check, I compared it against four naive baselines on the same held-out test set, each using a progressively richer slice of the data. All confidence intervals are bootstrap estimates (1,000 resamples of the test set, 95% percentile interval), so they’re directly comparable.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Features</th>
+<th>Test AUC</th>
+<th>95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Random</td>
+<td>0</td>
+<td>0.494</td>
+<td>0.480–0.507</td>
+</tr>
+<tr class="even">
+<td>Senior density (rank only)</td>
+<td>1</td>
+<td>0.548</td>
+<td>0.535–0.562</td>
+</tr>
+<tr class="odd">
+<td>Segment only</td>
+<td>3</td>
+<td>0.529</td>
+<td>0.517–0.541</td>
+</tr>
+<tr class="even">
+<td>Firmographic only</td>
+<td>30</td>
+<td>0.562</td>
+<td>0.549–0.575</td>
+</tr>
+<tr class="odd">
+<td><strong>Full model</strong></td>
+<td><strong>39</strong></td>
+<td><strong>0.575</strong></td>
+<td><strong>0.561–0.589</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Two things stand out. First, ranking accounts by one feature, senior contact density, gets you to 0.548, roughly half the gap from random to the full model. A team with no model at all could capture a meaningful chunk of the value with a single sort. Second, and more important: the full model’s confidence interval (0.561–0.589) overlaps the firmographic-only model’s (0.549–0.575). The nine contact-composition features add only about 0.013 AUC, and that lift is small enough that I can’t cleanly distinguish it from noise on this data.</p>
+<p>The honest takeaway is that most of the pre-deal propensity signal is firmographic: who the company is matters more than the shape of the contact list we’ve assembled. The stronger signal from who is actually on the deal shows up later, in the buying group analysis, where those features describe deal patterns rather than predict outcomes. Including them in the propensity model would leak the answer, as covered above.</p>
+</section>
 <section id="precision-k" class="level3">
 <h3 class="anchored" data-anchor-id="precision-k">Precision @ K</h3>
 <p><strong>What it is</strong>: If you only look at the top K% of model-scored accounts, what fraction actually won?</p>
@@ -373,7 +422,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="calibration" class="level3">
 <h3 class="anchored" data-anchor-id="calibration">Calibration</h3>
 <p><strong>What it is</strong>: Are the predicted probabilities trustworthy? If the model says an account has a 40% chance of closing, does it <em>actually</em> close about 40% of the time?</p>
-<p><strong>Why it matters</strong>: If you tell a sales team “this account has a 50% chance of closing,” that number needs to be real. A poorly calibrated model might assign 50% to accounts that actually close 20% of the time, which erodes trust.</p>
+<p><strong>Our result</strong>: Yes. Across score deciles, the largest gap between the predicted probability and the observed win rate is 2.4 percentage points. The Brier score (mean squared error of the probabilities) is 0.226, versus 0.230 for a no-skill model that always predicts the base rate.</p>
+<p><strong>What that means</strong>: This is the part of the model I trust most. The ranking is weak (AUC 0.575), but the probabilities themselves are honest: a predicted 40% really does win close to 40% of the time. That distinction matters operationally. If marketing sets a threshold like “work every account above 45%,” a well-calibrated score means the threshold behaves as expected, even though the model is not a strong separator overall.</p>
 </section>
 </section>
 <section id="feature-importance-what-drives-the-score" class="level2">
@@ -480,6 +530,7 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p>Accounts with complete buying groups win at <strong>2.2x the rate</strong> of those with low completeness — and this pattern holds across thousands of accounts per tier. This isn’t surprising — it’s hard to close a deal when the right people aren’t at the table — but the magnitude and consistency of the difference gives marketing a clear mandate: <strong>invest in filling coverage gaps</strong>.</p>
+<p>A caution on how to read this: it’s an association, not a causal estimate. Complete buying groups tend to show up at larger, more engaged, later-stage accounts that were more likely to win anyway, so the raw 2.2x overstates the lift a team would get purely from filling gaps. Pinning down the actual causal effect would take a controlled test, randomly enriching some accounts and not others, or at minimum adjusting for account size, segment, and deal stage. The completeness score is still useful as a prioritization signal. It just shouldn’t be read as “fill the gap and win 2.2x more often.”</p>
 </section>
 <section id="gap-analysis-whats-missing-and-what-to-do-about-it" class="level3">
 <h3 class="anchored" data-anchor-id="gap-analysis-whats-missing-and-what-to-do-about-it">Gap Analysis: What’s Missing and What to Do About It</h3>

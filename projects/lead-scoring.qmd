@@ -118,6 +118,22 @@ Technical metrics like accuracy aren't very useful here. If 64% of accounts lose
 
 **What that means**: The model is meaningfully better than random. In practice, AUC values of 0.55-0.65 are common for account-level propensity models using only pre-deal features — the signal exists but it's noisy, because many factors that determine whether a deal closes (budget timing, competitive dynamics, internal politics) aren't in the data. The tight confidence interval (thanks to the large test set) gives us confidence this isn't a fluke.
 
+### Does the Model Earn Its Complexity?
+
+An AUC of 0.575 beats random, but "better than random" is a low bar. The more useful question: does the full 39-feature model beat what a marketing analyst could do with a single `ORDER BY` in SQL? To check, I compared it against four naive baselines on the same held-out test set, each using a progressively richer slice of the data. All confidence intervals are bootstrap estimates (1,000 resamples of the test set, 95% percentile interval), so they're directly comparable.
+
+| Model | Features | Test AUC | 95% CI |
+|-------|----------|----------|--------|
+| Random | 0 | 0.494 | 0.480–0.507 |
+| Senior density (rank only) | 1 | 0.548 | 0.535–0.562 |
+| Segment only | 3 | 0.529 | 0.517–0.541 |
+| Firmographic only | 30 | 0.562 | 0.549–0.575 |
+| **Full model** | **39** | **0.575** | **0.561–0.589** |
+
+Two things stand out. First, ranking accounts by one feature, senior contact density, gets you to 0.548, roughly half the gap from random to the full model. A team with no model at all could capture a meaningful chunk of the value with a single sort. Second, and more important: the full model's confidence interval (0.561–0.589) overlaps the firmographic-only model's (0.549–0.575). The nine contact-composition features add only about 0.013 AUC, and that lift is small enough that I can't cleanly distinguish it from noise on this data.
+
+The honest takeaway is that most of the pre-deal propensity signal is firmographic: who the company is matters more than the shape of the contact list we've assembled. The stronger signal from who is actually on the deal shows up later, in the buying group analysis, where those features describe deal patterns rather than predict outcomes. Including them in the propensity model would leak the answer, as covered above.
+
 ### Precision @ K
 
 **What it is**: If you only look at the top K% of model-scored accounts, what fraction actually won?
@@ -150,7 +166,9 @@ Technical metrics like accuracy aren't very useful here. If 64% of accounts lose
 
 **What it is**: Are the predicted probabilities trustworthy? If the model says an account has a 40% chance of closing, does it *actually* close about 40% of the time?
 
-**Why it matters**: If you tell a sales team "this account has a 50% chance of closing," that number needs to be real. A poorly calibrated model might assign 50% to accounts that actually close 20% of the time, which erodes trust.
+**Our result**: Yes. Across score deciles, the largest gap between the predicted probability and the observed win rate is 2.4 percentage points. The Brier score (mean squared error of the probabilities) is 0.226, versus 0.230 for a no-skill model that always predicts the base rate.
+
+**What that means**: This is the part of the model I trust most. The ranking is weak (AUC 0.575), but the probabilities themselves are honest: a predicted 40% really does win close to 40% of the time. That distinction matters operationally. If marketing sets a threshold like "work every account above 45%," a well-calibrated score means the threshold behaves as expected, even though the model is not a strong separator overall.
 
 ## Feature Importance: What Drives the Score
 
@@ -204,6 +222,8 @@ We score each account's buying group on a 0-100 scale across four dimensions (25
 | Low (0-25) | 22% | 5,121 |
 
 Accounts with complete buying groups win at **2.2x the rate** of those with low completeness — and this pattern holds across thousands of accounts per tier. This isn't surprising — it's hard to close a deal when the right people aren't at the table — but the magnitude and consistency of the difference gives marketing a clear mandate: **invest in filling coverage gaps**.
+
+A caution on how to read this: it's an association, not a causal estimate. Complete buying groups tend to show up at larger, more engaged, later-stage accounts that were more likely to win anyway, so the raw 2.2x overstates the lift a team would get purely from filling gaps. Pinning down the actual causal effect would take a controlled test, randomly enriching some accounts and not others, or at minimum adjusting for account size, segment, and deal stage. The completeness score is still useful as a prioritization signal. It just shouldn't be read as "fill the gap and win 2.2x more often."
 
 ### Gap Analysis: What's Missing and What to Do About It
 
