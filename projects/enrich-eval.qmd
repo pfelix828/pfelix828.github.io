@@ -98,14 +98,16 @@ mislabeled it as PayPal, when v1 had correctly called it Steam. The rule that fi
 quietly broke this one. **This is the entire reason you run an evaluation on every change** — a release
 that improves the average can still ship a specific, customer-visible regression.
 
-**Finding 4 — Some things can't be known from one transaction.** Recurring-subscription detection
-lands at an F1 of 0.91, and it's deliberately not higher. You usually can't tell a subscription from a
-single line of text — you'd need to see the charge repeat each month. The harness includes cases that
-prove it: a real gym membership with no telltale word (the system misses it) and a one-off purchase at
-a store named "Monthly Market" (the word *monthly* wrongly trips the recurring flag). An earlier draft
-scored a suspicious 1.0 here; that was an artifact of a tiny answer key, and adding cases the rule
-genuinely can't solve replaced a misleading perfect score with an honest one. The real fix is looking
-at transaction history, not writing a cleverer rule for a single string.
+**Finding 4 — Some things can't be known from one transaction.** Recurring-subscription detection is
+the one thing here I *don't* report as a headline score, on purpose. Whether a charge is part of a
+subscription is a fact about a *series* of transactions, so a system — or an evaluation — that sees
+one line at a time can't honestly measure it. The harness keeps recurring as a failure-mode
+demonstration instead: a real gym membership with no telltale word gets missed, and a one-off purchase
+at a store named "Monthly Market" wrongly trips the flag because of the word *monthly*. (An earlier
+draft scored a perfect 1.0 here. That was an artifact of a tiny answer key where the labels and the
+detector keyed on the same words — and honestly, *any* number I'd quote would mostly reflect how many
+hard cases I chose to include, not real performance.) The real fix isn't a cleverer string rule; it's
+looking at transaction history.
 
 ## The Complaint Investigator (the part I'm most proud of)
 
