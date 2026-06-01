@@ -27,6 +27,18 @@ Projects
 
 ::: {.project-card}
 ::: {.project-card-title}
+[EnrichEval — Transaction Enrichment Quality](projects/enrich-eval.qmd)
+:::
+::: {.project-card-description}
+Your banking app turns a cryptic string like `SQ *BLUE BOTTLE COFFEE OAKLAND CA` into a clean merchant, category, and recurring flag. Building that is easy; knowing how good it is, is hard. A harness that measures enrichment quality — defining what "correct" means, turning a vague complaint into a ranked list of fixes, validating an AI judge against human labels, and catching regressions when the model changes.
+:::
+::: {.project-card-stack}
+Python · pandas · scikit-learn · Streamlit · Claude API
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
 [Support Ticket Classification](projects/support-ticket-classification.qmd)
 :::
 ::: {.project-card-description}

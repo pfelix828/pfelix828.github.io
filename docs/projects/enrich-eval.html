@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Support Ticket Classification – Philip Felix</title>
+<title>EnrichEval — A Quality Lab for Transaction Enrichment – Philip Felix</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,17 +149,12 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#what-this-project-does" id="toc-what-this-project-does" class="nav-link active" data-scroll-target="#what-this-project-does">What This Project Does</a></li>
-  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters">Why This Matters</a></li>
-  <li><a href="#whats-inside" id="toc-whats-inside" class="nav-link" data-scroll-target="#whats-inside">What’s Inside</a></li>
-  <li><a href="#key-finding" id="toc-key-finding" class="nav-link" data-scroll-target="#key-finding">Key Finding</a></li>
-  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a></li>
-  <li><a href="#the-approach" id="toc-the-approach" class="nav-link" data-scroll-target="#the-approach">The Approach</a>
-  <ul class="collapse">
-  <li><a href="#data-generation-python" id="toc-data-generation-python" class="nav-link" data-scroll-target="#data-generation-python">Data Generation (Python)</a></li>
-  <li><a href="#model-training-evaluation" id="toc-model-training-evaluation" class="nav-link" data-scroll-target="#model-training-evaluation">Model Training &amp; Evaluation</a></li>
-  <li><a href="#interactive-app-next.js" id="toc-interactive-app-next.js" class="nav-link" data-scroll-target="#interactive-app-next.js">Interactive App (Next.js)</a></li>
-  </ul></li>
+  <li><a href="#why-this-matters-in-the-real-world" id="toc-why-this-matters-in-the-real-world" class="nav-link" data-scroll-target="#why-this-matters-in-the-real-world">Why This Matters in the Real World</a></li>
+  <li><a href="#the-approach-in-plain-english" id="toc-the-approach-in-plain-english" class="nav-link" data-scroll-target="#the-approach-in-plain-english">The Approach in Plain English</a></li>
+  <li><a href="#what-the-harness-found" id="toc-what-the-harness-found" class="nav-link" data-scroll-target="#what-the-harness-found">What the Harness Found</a></li>
+  <li><a href="#the-complaint-investigator-the-part-im-most-proud-of" id="toc-the-complaint-investigator-the-part-im-most-proud-of" class="nav-link" data-scroll-target="#the-complaint-investigator-the-part-im-most-proud-of">The Complaint Investigator (the part I’m most proud of)</a></li>
   <li><a href="#what-id-do-differently-in-production" id="toc-what-id-do-differently-in-production" class="nav-link" data-scroll-target="#what-id-do-differently-in-production">What I’d Do Differently in Production</a></li>
+  <li><a href="#how-its-built" id="toc-how-its-built" class="nav-link" data-scroll-target="#how-its-built">How It’s Built</a></li>
   <li><a href="#stack" id="toc-stack" class="nav-link" data-scroll-target="#stack">Stack</a></li>
   </ul>
 </nav>
@@ -169,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Support Ticket Classification</h1>
+<h1 class="title">EnrichEval — A Quality Lab for Transaction Enrichment</h1>
 </div>
 
 
@@ -186,178 +181,120 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://github.com/pfelix828/support-ticket-classification" class="btn btn-outline-primary">View on GitHub</a> <a href="https://support-ticket-classification.vercel.app" class="btn btn-outline-primary">Live App</a></p>
+<p><a href="https://github.com/pfelix828/enrich-eval" class="btn btn-outline-primary">View on GitHub</a></p>
 <section id="what-this-project-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-project-does">What This Project Does</h2>
-<p>When a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.</p>
-<p>This project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after a real AI-product help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in.</p>
+<p>Open your banking app and look at a recent purchase. Behind the scenes, your bank received something ugly and cryptic, like:</p>
+<blockquote class="blockquote">
+<p><code>SQ *BLUE BOTTLE COFFEE OAKLAND CA</code></p>
+</blockquote>
+<p>A system has to turn that into something a person can read: the merchant is <strong>Blue Bottle Coffee</strong>, the category is <strong>Coffee</strong>, and it’s <strong>not</strong> a recurring subscription. That cleanup step is called <strong>enrichment</strong>, and thousands of finance apps depend on it being right.</p>
+<p>Here’s the hard part. It’s fairly easy to build something that <em>attempts</em> this. It’s genuinely difficult to know <em>how good</em> your attempt actually is — because “correct” is fuzzy (is <code>Blue Bottle</code> as good as <code>Blue Bottle Coffee</code>?), and because the complaints you get are vague (“your categories are wrong for my users”). You can’t eyeball quality across millions of transactions.</p>
+<p><strong>This project isn’t an enrichment system. It’s the measuring tape for one.</strong> It’s a harness that tells you, in a principled way, exactly where an enrichment system is wrong, which failures matter most, and what to fix first.</p>
 </section>
-<section id="why-this-matters" class="level2">
-<h2 class="anchored" data-anchor-id="why-this-matters">Why This Matters</h2>
-<p>Most ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.</p>
-<p>The fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure, fine-tuning is the obvious default.</p>
+<section id="why-this-matters-in-the-real-world" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-matters-in-the-real-world">Why This Matters in the Real World</h2>
+<p>Plenty of data science projects build a model and report a single accuracy number. But in production, the harder and more valuable job is often the <em>evaluation</em>: defining what “good” means, turning a fuzzy customer complaint into a specific engineering fix, and catching the moment a “better” model quietly breaks something it used to get right.</p>
+<p>This project recreates that evaluation discipline end-to-end. It scores a deliberately simple enrichment system so the spotlight stays on the measurement, not the model.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>A note on the data.</strong> The transaction strings here are <em>synthetic descriptors for real merchants</em> — made-up strings formatted to look like real bank statements, never actual cardholder data (which is private and contains personal information). So the specific numbers below are a demonstration of the method, not a production benchmark. The point is the approach, which carries over directly to real data. The category labels use <a href="https://plaid.com/docs/transactions/transactions-data/#personal-finance-category">Plaid’s public Personal Finance Category taxonomy</a> (16 broad categories, 103 detailed ones).</p>
+</div>
+</div>
 </section>
-<section id="whats-inside" class="level2">
-<h2 class="anchored" data-anchor-id="whats-inside">What’s Inside</h2>
-<p>The app has 13 pages organized around method comparison:</p>
-<p><strong>Data &amp; Methods:</strong></p>
-<ul>
-<li><strong>Data Explorer</strong> — Browse 12,091 synthetic tickets across 12 categories, see class distributions and example tickets</li>
-<li><strong>TF-IDF + Logistic / XGBoost</strong> — The baseline every project should start with</li>
-<li><strong>Embeddings + XGBoost</strong> — Sentence embeddings as features, with structured metadata (customer tier, account age)</li>
-<li><strong>Fine-Tuned BERT</strong> — End-to-end fine-tuning on ticket text</li>
-<li><strong>LLM Zero/Few-Shot</strong> — Prompt engineering with no training data</li>
-<li><strong>Fine-Tuned LLM</strong> — Fine-tuning GPT-4o-mini for classification</li>
-<li><strong>Distillation</strong> — Using o1-mini as a teacher model to label data for GPT-4o-mini</li>
-</ul>
-<p><strong>Analysis:</strong></p>
-<ul>
-<li><strong>Volume vs.&nbsp;Method</strong> — Learning curves from 100 to ~10K tickets with real measured data at every point</li>
-<li><strong>Error Analysis</strong> — What each method gets wrong: category boundary confusion, semantic overlap, rare categories</li>
-<li><strong>Production Architecture</strong> — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the low-confidence tail</li>
-<li><strong>Methodology</strong> — Data generation, evaluation protocol, assumptions</li>
-<li><strong>Glossary</strong> — Plain-language definitions of every method and concept</li>
-</ul>
+<section id="the-approach-in-plain-english" class="level2">
+<h2 class="anchored" data-anchor-id="the-approach-in-plain-english">The Approach in Plain English</h2>
+<p>I built the project in layers, each answering a question the layer before it raised.</p>
+<p><strong>1. Define “correct” before measuring it.</strong> I wrote a labeling rulebook that settles the judgment calls up front: Starbucks is <em>Coffee</em>, not <em>Fast Food</em>; Amazon is an <em>online marketplace</em>, not a superstore; when a delivery app like DoorDash hides the real restaurant, you label the app and admit the restaurant is unknowable. Then I hand-built a 52-transaction answer key covering the messy patterns that trip systems up — payment-processor prefixes (<code>SQ *</code>, <code>PYPL *</code>), delivery apps that mask the merchant, ALL-CAPS truncation, and store-ID noise.</p>
+<p><strong>2. Score two versions of the system.</strong> A first-pass enricher (v1) and an improved one (v2), so I could measure not just quality but <em>change</em> in quality.</p>
+<p><strong>3. Handle the “close enough” problem with a judge — and then check the judge.</strong> Strict text-matching would wrongly mark <code>Blue Bottle</code> as a miss against <code>Blue Bottle Coffee</code>. So a judge decides when two names mean the same merchant. Crucially, I don’t trust a judge I haven’t measured: I validated it against 24 human-labeled pairs, including deliberately tricky ones (is <code>Amazon</code> the same as <code>Amazon Prime</code>? No). The judge agreed with human judgment <strong>92%</strong> of the time.</p>
+<p><strong>4. Turn a vague complaint into a ranked to-do list.</strong> This is the centerpiece. You type a real complaint — <em>“categorization is wrong for a lot of my users”</em> — and the harness finds the failing transactions, groups them by root cause, and ranks the groups by how much damage they do.</p>
+<p><strong>5. Catch silent regressions.</strong> Every time the model changes, the harness re-checks every transaction and flags any that used to be right and just became wrong.</p>
 </section>
-<section id="key-finding" class="level2">
-<h2 class="anchored" data-anchor-id="key-finding">Key Finding</h2>
+<section id="what-the-harness-found" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-harness-found">What the Harness Found</h2>
+<p>Moving from v1 to v2 improved every headline number — merchant accuracy jumped from 54% to 87%, category accuracy from 62% to 92%. But the averages hide the interesting parts.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/enrich-eval/accuracy_v1_v2.png" class="img-fluid figure-img"></p>
+<figcaption>Quality improved across the board from v1 to v2. <em>Synthetic data; methodology demo, not production metrics.</em></figcaption>
+</figure>
+</div>
+<p><strong>Finding 1 — Averages lie; quality is wildly uneven.</strong> Clean strings get enriched nearly perfectly. Transactions where a delivery app or payment processor masks the real merchant are where everything falls apart. A single accuracy number would have hidden that completely.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/enrich-eval/by_pattern_tag.png" class="img-fluid figure-img"></p>
+<figcaption>The same system is excellent on some patterns and poor on others. Red bars are the segments to fix. <em>Synthetic data; methodology demo.</em></figcaption>
+</figure>
+</div>
+<p><strong>Finding 2 — The system doesn’t know when it’s wrong.</strong> A confidence score is only useful if it tracks reality. It doesn’t here, and unevenly: the guess-from-a-keyword path reports 40% confidence but is <strong>0% accurate</strong> (confidently wrong, which is the worst kind — those answers look trustworthy and reach customers), while the delivery-app path is the opposite, underconfident. You only see this by comparing confidence to accuracy along each path, not in aggregate.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/enrich-eval/confidence_by_matchtype.png" class="img-fluid figure-img"></p>
+<figcaption>Stated confidence vs.&nbsp;actual accuracy. Gaps in either direction are mis-calibration. <em>Synthetic data; methodology demo.</em></figcaption>
+</figure>
+</div>
+<p><strong>Finding 3 — “Better on average” can still break things.</strong> v2 improved 18 merchants but <em>broke one</em>: its smart new rule for delivery apps saw the <code>PYPL</code> (PayPal) prefix on a Steam game purchase and mislabeled it as PayPal, when v1 had correctly called it Steam. The rule that fixed many transactions quietly broke this one. <strong>This is the entire reason you run an evaluation on every change</strong> — a release that improves the average can still ship a specific, customer-visible regression.</p>
+</section>
+<section id="the-complaint-investigator-the-part-im-most-proud-of" class="level2">
+<h2 class="anchored" data-anchor-id="the-complaint-investigator-the-part-im-most-proud-of">The Complaint Investigator (the part I’m most proud of)</h2>
+<p>When a customer says <em>“categorization is wrong for a lot of my users,”</em> that’s unactionable. The harness turns it into this:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Data Volume</th>
-<th>Recommended Method</th>
-<th>Why</th>
+<th>Rank</th>
+<th>Root cause</th>
+<th>Share of errors</th>
+<th>Was confident while wrong?</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>&lt; 500 tickets</td>
-<td>LLM Few-Shot</td>
-<td>Not enough data to train. Prompt engineering gets ~78% F1 with zero labeled examples.</td>
+<td>1</td>
+<td>Genuinely ambiguous categories</td>
+<td>50%</td>
+<td>No (low confidence)</td>
 </tr>
 <tr class="even">
-<td>500+ tickets</td>
-<td>Fine-Tuned LLM</td>
-<td>Dominates on accuracy (88-96% F1). Requires API access or GPU. Cost-constrained alternative: Embeddings+XGBoost.</td>
+<td>2</td>
+<td>Delivery app masks the merchant</td>
+<td>25%</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Payment-processor prefix</td>
+<td>25%</td>
+<td>Yes</td>
 </tr>
 </tbody>
 </table>
-<p>At a company with internal LLM infrastructure, the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data.</p>
-</section>
-<section id="the-data" class="level2">
-<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
-<p>12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after a real AI-product public help center:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Category</th>
-<th>Share</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Billing &amp; Payments</td>
-<td>15.2%</td>
-<td>Refunds, charges, invoices, credits</td>
-</tr>
-<tr class="even">
-<td>ChatGPT Product</td>
-<td>14.8%</td>
-<td>Features, errors, image generation, memory, search</td>
-</tr>
-<tr class="odd">
-<td>Account Access</td>
-<td>13.6%</td>
-<td>Login issues, password reset, phone verification</td>
-</tr>
-<tr class="even">
-<td>API Errors</td>
-<td>11.8%</td>
-<td>Rate limits, 429 errors, latency, error codes</td>
-</tr>
-<tr class="odd">
-<td>ChatGPT Apps</td>
-<td>8.3%</td>
-<td>iOS, Android, macOS, Windows, connected apps</td>
-</tr>
-<tr class="even">
-<td>Account Management</td>
-<td>7.6%</td>
-<td>Members, orgs, projects, email changes</td>
-</tr>
-<tr class="odd">
-<td>API Usage</td>
-<td>7.1%</td>
-<td>How-to, getting started, best practices</td>
-</tr>
-<tr class="even">
-<td>Enterprise</td>
-<td>6.4%</td>
-<td>SSO, SCIM, workspace setup, admin</td>
-</tr>
-<tr class="odd">
-<td>GPTs</td>
-<td>5.3%</td>
-<td>Custom GPT creation, publishing, actions</td>
-</tr>
-<tr class="even">
-<td>Newer Products</td>
-<td>5.0%</td>
-<td>Sora, Codex, ChatGPT Atlas</td>
-</tr>
-<tr class="odd">
-<td>Privacy &amp; Policy</td>
-<td>3.4%</td>
-<td>Data privacy, training opt-out, exports</td>
-</tr>
-<tr class="even">
-<td>Security</td>
-<td>1.5%</td>
-<td>API key safety, vulnerability reporting</td>
-</tr>
-</tbody>
-</table>
-<p>Natural category overlap exists between semantically similar classes (e.g., API Usage vs.&nbsp;API Errors, Account Access vs.&nbsp;Account Management), which is where methods diverge most in performance.</p>
-</section>
-<section id="the-approach" class="level2">
-<h2 class="anchored" data-anchor-id="the-approach">The Approach</h2>
-<section id="data-generation-python" class="level3">
-<h3 class="anchored" data-anchor-id="data-generation-python">Data Generation (Python)</h3>
-<p>12,091 unique tickets generated using Claude Haiku with structured prompts specifying category, customer tier, urgency, and account metadata. Each ticket is a unique natural-language formulation with realistic class imbalance.</p>
-</section>
-<section id="model-training-evaluation" class="level3">
-<h3 class="anchored" data-anchor-id="model-training-evaluation">Model Training &amp; Evaluation</h3>
-<p>All supervised methods trained on the same 80/20 stratified split (~9,557 train / ~2,390 test). Learning curves measured at 100, 500, 1K, 2.5K, 5K, and ~9.5K tickets. All reported F1 scores are real measured values — no projected or simulated numbers.</p>
-</section>
-<section id="interactive-app-next.js" class="level3">
-<h3 class="anchored" data-anchor-id="interactive-app-next.js">Interactive App (Next.js)</h3>
-<p>Same stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where each method’s advantage kicks in.</p>
-</section>
+<p>…plus a specific recommendation for each: <em>add a tie-break rule to the rulebook</em>, <em>stop guessing the masked merchant and flag low confidence instead</em>, <em>extend the prefix-stripping rules</em>. That’s the difference between “quality is bad” and “here are the three things to fix, in order.”</p>
 </section>
 <section id="what-id-do-differently-in-production" class="level2">
 <h2 class="anchored" data-anchor-id="what-id-do-differently-in-production">What I’d Do Differently in Production</h2>
 <ul>
-<li><strong>Active learning</strong> — Use model uncertainty to prioritize which tickets to label next, reducing labeling cost</li>
-<li><strong>Hierarchical classification</strong> — Tier 1 (broad routing) then Tier 2 (specific workflow) as separate models</li>
-<li><strong>Drift detection</strong> — Monitor for new ticket types that don’t fit existing categories</li>
-<li><strong>Human-in-the-loop</strong> — Route low-confidence classifications to human agents, use their decisions as training data</li>
-<li><strong>A/B testing the classifier</strong> — Compare routing accuracy and resolution time between methods in production</li>
+<li><strong>Build the answer key from real descriptors</strong>, with two people labeling a sample and measuring how often they agree — the synthetic seed here is a stand-in for that.</li>
+<li><strong>Use the confidence calibration as a release gate</strong> — suppress or human-review the confidently-wrong paths instead of showing them to users.</li>
+<li><strong>Add the regression check to CI</strong> so no model change ships without passing the per-transaction diff.</li>
+<li><strong>Bring in transaction history</strong> for recurring detection — you can’t always tell a subscription from a single line of text; you need to see the pattern over time.</li>
 </ul>
+</section>
+<section id="how-its-built" class="level2">
+<h2 class="anchored" data-anchor-id="how-its-built">How It’s Built</h2>
+<p>Deliberately lightweight and fully reproducible. The whole thing runs offline for free, and the harness is model-agnostic — the same scoring, investigation, and regression layers work whether the enricher is a simple rules engine or a large language model, which you can swap in with one setting.</p>
 </section>
 <section id="stack" class="level2">
 <h2 class="anchored" data-anchor-id="stack">Stack</h2>
-<p>Python | Next.js | TypeScript | Recharts | Tailwind | shadcn/ui | Vercel</p>
+<p>Python | pandas | scikit-learn | Matplotlib | Streamlit | Anthropic API (optional backend)</p>
 
 
 </section>
