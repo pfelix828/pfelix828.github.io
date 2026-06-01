@@ -221,7 +221,7 @@ Note
 </section>
 <section id="what-the-harness-found" class="level2">
 <h2 class="anchored" data-anchor-id="what-the-harness-found">What the Harness Found</h2>
-<p>Moving from v1 to v2 improved every headline number — merchant accuracy jumped from 54% to 87%, category accuracy from 62% to 92%. But the averages hide the interesting parts.</p>
+<p>Moving from v1 to v2 improved every headline number — merchant accuracy jumped from 51% to 82%, category accuracy from 62% to 91%. But the averages hide the interesting parts.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/enrich-eval/accuracy_v1_v2.png" class="img-fluid figure-img"></p>
@@ -243,11 +243,18 @@ Note
 </figure>
 </div>
 <p><strong>Finding 3 — “Better on average” can still break things.</strong> v2 improved 18 merchants but <em>broke one</em>: its smart new rule for delivery apps saw the <code>PYPL</code> (PayPal) prefix on a Steam game purchase and mislabeled it as PayPal, when v1 had correctly called it Steam. The rule that fixed many transactions quietly broke this one. <strong>This is the entire reason you run an evaluation on every change</strong> — a release that improves the average can still ship a specific, customer-visible regression.</p>
+<p><strong>Finding 4 — Some things can’t be known from one transaction.</strong> Recurring-subscription detection lands at an F1 of 0.91, and it’s deliberately not higher. You usually can’t tell a subscription from a single line of text — you’d need to see the charge repeat each month. The harness includes cases that prove it: a real gym membership with no telltale word (the system misses it) and a one-off purchase at a store named “Monthly Market” (the word <em>monthly</em> wrongly trips the recurring flag). An earlier draft scored a suspicious 1.0 here; that was an artifact of a tiny answer key, and adding cases the rule genuinely can’t solve replaced a misleading perfect score with an honest one. The real fix is looking at transaction history, not writing a cleverer rule for a single string.</p>
 </section>
 <section id="the-complaint-investigator-the-part-im-most-proud-of" class="level2">
 <h2 class="anchored" data-anchor-id="the-complaint-investigator-the-part-im-most-proud-of">The Complaint Investigator (the part I’m most proud of)</h2>
 <p>When a customer says <em>“categorization is wrong for a lot of my users,”</em> that’s unactionable. The harness turns it into this:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Rank</th>
@@ -259,25 +266,25 @@ Note
 <tbody>
 <tr class="odd">
 <td>1</td>
-<td>Genuinely ambiguous categories</td>
-<td>50%</td>
+<td>Merchant not recognized at all (coverage gap)</td>
+<td>67%</td>
 <td>No (low confidence)</td>
 </tr>
 <tr class="even">
 <td>2</td>
 <td>Delivery app masks the merchant</td>
-<td>25%</td>
+<td>17%</td>
 <td>Yes</td>
 </tr>
 <tr class="odd">
 <td>3</td>
 <td>Payment-processor prefix</td>
-<td>25%</td>
+<td>17%</td>
 <td>Yes</td>
 </tr>
 </tbody>
 </table>
-<p>…plus a specific recommendation for each: <em>add a tie-break rule to the rulebook</em>, <em>stop guessing the masked merchant and flag low confidence instead</em>, <em>extend the prefix-stripping rules</em>. That’s the difference between “quality is bad” and “here are the three things to fix, in order.”</p>
+<p>…plus a specific recommendation for each: <em>close the knowledge-base coverage gap</em>, <em>stop guessing the masked merchant and flag low confidence instead</em>, <em>extend the prefix-stripping rules</em>. That’s the difference between “quality is bad” and “here are the three things to fix, in order.”</p>
 </section>
 <section id="what-id-do-differently-in-production" class="level2">
 <h2 class="anchored" data-anchor-id="what-id-do-differently-in-production">What I’d Do Differently in Production</h2>

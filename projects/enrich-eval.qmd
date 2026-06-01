@@ -73,8 +73,8 @@ transaction and flags any that used to be right and just became wrong.
 
 ## What the Harness Found
 
-Moving from v1 to v2 improved every headline number — merchant accuracy jumped from 54% to 87%,
-category accuracy from 62% to 92%. But the averages hide the interesting parts.
+Moving from v1 to v2 improved every headline number — merchant accuracy jumped from 51% to 82%,
+category accuracy from 62% to 91%. But the averages hide the interesting parts.
 
 ![Quality improved across the board from v1 to v2. *Synthetic data; methodology demo, not production metrics.*](images/enrich-eval/accuracy_v1_v2.png)
 
@@ -98,6 +98,15 @@ mislabeled it as PayPal, when v1 had correctly called it Steam. The rule that fi
 quietly broke this one. **This is the entire reason you run an evaluation on every change** — a release
 that improves the average can still ship a specific, customer-visible regression.
 
+**Finding 4 — Some things can't be known from one transaction.** Recurring-subscription detection
+lands at an F1 of 0.91, and it's deliberately not higher. You usually can't tell a subscription from a
+single line of text — you'd need to see the charge repeat each month. The harness includes cases that
+prove it: a real gym membership with no telltale word (the system misses it) and a one-off purchase at
+a store named "Monthly Market" (the word *monthly* wrongly trips the recurring flag). An earlier draft
+scored a suspicious 1.0 here; that was an artifact of a tiny answer key, and adding cases the rule
+genuinely can't solve replaced a misleading perfect score with an honest one. The real fix is looking
+at transaction history, not writing a cleverer rule for a single string.
+
 ## The Complaint Investigator (the part I'm most proud of)
 
 When a customer says *"categorization is wrong for a lot of my users,"* that's unactionable. The
@@ -105,11 +114,11 @@ harness turns it into this:
 
 | Rank | Root cause | Share of errors | Was confident while wrong? |
 |---|---|---|---|
-| 1 | Genuinely ambiguous categories | 50% | No (low confidence) |
-| 2 | Delivery app masks the merchant | 25% | Yes |
-| 3 | Payment-processor prefix | 25% | Yes |
+| 1 | Merchant not recognized at all (coverage gap) | 67% | No (low confidence) |
+| 2 | Delivery app masks the merchant | 17% | Yes |
+| 3 | Payment-processor prefix | 17% | Yes |
 
-…plus a specific recommendation for each: *add a tie-break rule to the rulebook*, *stop guessing the
+…plus a specific recommendation for each: *close the knowledge-base coverage gap*, *stop guessing the
 masked merchant and flag low confidence instead*, *extend the prefix-stripping rules*. That's the
 difference between "quality is bad" and "here are the three things to fix, in order."
 
