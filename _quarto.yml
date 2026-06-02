@@ -12,6 +12,8 @@ website:
         href: index.qmd
       - text: Projects
         menu:
+          - text: GTM Analytics Warehouse — dbt
+            href: projects/gtm-analytics-warehouse.qmd
           - text: EnrichEval — Transaction Enrichment Quality
             href: projects/enrich-eval.qmd
           - text: Lead Scoring & Buying Groups

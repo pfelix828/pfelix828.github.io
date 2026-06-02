@@ -1,0 +1,127 @@
+---
+title: "GTM Analytics Warehouse — A dbt Project Done Properly"
+toc-depth: 3
+---
+
+[View on GitHub](https://github.com/pfelix828/gtm-analytics-warehouse){.btn .btn-outline-primary} [Live docs + lineage](https://pfelix828.github.io/gtm-analytics-warehouse/){.btn .btn-outline-primary}
+
+## What This Project Does
+
+Every company's go-to-market data starts out messy. The same customer is entered
+twice under different IDs. The same person shows up under three email addresses.
+Marketing events arrive keyed on email while the CRM is keyed on a contact ID, so
+a naive join quietly counts the same touch five times. Analysts build dashboards
+on top of all this and wonder why the numbers never quite tie out.
+
+**Analytics engineering is the job of fixing that once, in one place, so nobody
+downstream has to.** This project is a full analytics-engineering warehouse built
+with [dbt](https://www.getdbt.com/): it takes six raw, deliberately messy source
+tables and turns them into clean, tested, documented tables that a revenue team
+can actually trust. It runs end to end on a free local database with one command,
+and every model is documented with an interactive lineage graph you can click
+through in the [live docs](https://pfelix828.github.io/gtm-analytics-warehouse/).
+
+## Why This Matters in the Real World
+
+A data scientist's model is only as good as the table it's trained on. Most of the
+pain in a data team is not the model, it's the layer underneath: the
+transformations that turn raw system exports into trustworthy facts and
+dimensions. That layer is what analytics engineers own, and it is exactly the work
+I did at Atlassian when I reconciled a large CRM dataset and fixed a join that was
+double-counting contacts.
+
+This project recreates that discipline from scratch on a clean, public codebase,
+so the craft is visible: the layering, the tests, the documentation, and the data
+quality logic.
+
+::: {.callout-note}
+**A note on the data.** The source tables are *synthetic and generated with a
+fixed random seed*, so every run produces identical output and no real customer
+data is involved. The dollar figures below are illustrative and exist only to
+exercise the models. What is real is the modeling, the tests, and the
+data-quality logic. The messiness in the data, duplicate companies, duplicate
+contacts, inconsistent formatting, and the email-keyed marketing join, is modeled
+on the kinds of problems that actually show up in B2B go-to-market data.
+:::
+
+## How It's Structured
+
+dbt projects are built in layers, and each layer has one job. Raw data comes in at
+the top, gets cleaned, gets reshaped, and lands as tables that answer business
+questions.
+
+```{mermaid}
+flowchart TD
+    A["Raw sources (6 tables, ~86k rows)<br/>CRM · marketing · product · web"] --> B["staging<br/>clean, cast, normalize keys"]
+    B --> C["intermediate<br/>reconcile accounts · dedup contacts<br/>fix the marketing join · build the funnel"]
+    C --> D["marts / core<br/>dim_accounts · dim_contacts<br/>fct_opportunities · fct_product_usage"]
+    C --> E["marts / gtm<br/>account health · buying group<br/>lead-scoring features · pipeline funnel"]
+    D --> F["semantic layer<br/>bookings · pipeline · win rate"]
+    E --> G["consumers<br/>lead-scoring model · GTM dashboard"]
+```
+
+## Three Problems It Solves
+
+I built the project around the three problems that actually make GTM data hard.
+These are the parts worth reading.
+
+**1. The same company, entered twice.** The raw CRM has duplicate accounts that
+share a web domain, and duplicate contacts that share an email. Report on the raw
+IDs and you double-count companies and people. The warehouse picks one golden
+record per domain, collapses duplicate contacts, and a test fails the build if a
+duplicate ever slips through again. In this build, 408 raw account rows resolve to
+400 real companies, and 3,035 raw contacts resolve to 2,826 people.
+
+**2. A join that double-counts, caught by a test.** Marketing touches arrive keyed
+on email, not contact ID, and the CRM holds duplicate-email contacts. Join them
+naively and a single marketing touch matches several duplicate contacts and gets
+counted multiple times. The fix is to join against the deduplicated contact set,
+and a dedicated test asserts that the number of attributed touches exactly equals
+the number of source touches, so the join can never silently break again. This is
+the same class of bug as the join fix I worked on at Atlassian.
+
+**3. Cheap rebuilds and point-in-time history.** The product usage table is built
+*incrementally*: a full run scans all 50,000 events, but a routine run only
+reprocesses the most recent days, so it stays cheap to refresh. And an account
+snapshot records a new versioned row whenever a company's size or industry
+changes, so the warehouse can answer "what segment was this account in when the
+deal closed," not just what it looks like today.
+
+## The Trust Layer: Tests, Docs, and CI
+
+A transformation is only useful if people trust it. This project treats that as a
+first-class requirement, not an afterthought:
+
+- **57 data tests** run on every build, from simple "this key is unique and not
+  null" checks to custom business rules like "every domain resolves to exactly one
+  account."
+- **100% documentation coverage**, enforced by a script that fails the build if
+  any model or column is left undocumented.
+- **Continuous integration** rebuilds the entire warehouse from scratch in a clean
+  environment on every push, runs all the tests, checks documentation coverage,
+  and confirms the metrics layer still answers a query. The badge on the repo is
+  green because the whole thing genuinely reproduces, not because I said so.
+
+## One Tasteful Use of AI
+
+Writing column descriptions is the chore everyone skips, which is why so many data
+warehouses are undocumented. The project includes an optional tool that sends a
+model's SQL to Claude and asks for first-draft descriptions, written to a review
+file rather than merged automatically. Documentation is reviewed, not
+auto-generated, and every description in the repo was written and edited by hand.
+The audit half of that same tool runs offline with no AI at all and is what gates
+the build. It is a small, honest use of AI: speed up the blank-page problem,
+without pretending the machine owns the documentation.
+
+## How It Maps to My Work
+
+| This project | The real work at Atlassian |
+|---|---|
+| Account and contact reconciliation, duplicate detection | Reconciling a large CRM dataset into a clean source of truth |
+| The email-join fix and the test that guards it | The join fix that stopped contacts being double-counted |
+| Buying-group role coverage per account | ICP and buying-group identification |
+| A clean feature table handed to a scoring model | The lead-scoring and propensity work |
+
+## Stack
+
+dbt · DuckDB · MetricFlow · SQL · Python · GitHub Actions

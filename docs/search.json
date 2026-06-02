@@ -105,123 +105,109 @@
     "text": "Stack\nPython | pandas | scikit-learn | Matplotlib | Streamlit | Anthropic API (optional backend)"
   },
   {
-    "objectID": "projects/title-normalizer.html",
-    "href": "projects/title-normalizer.html",
-    "title": "Job Title Normalizer",
+    "objectID": "projects/support-ticket-classification.html",
+    "href": "projects/support-ticket-classification.html",
+    "title": "Support Ticket Classification",
     "section": "",
-    "text": "View on GitHub"
+    "text": "View on GitHub Live App"
   },
   {
-    "objectID": "projects/title-normalizer.html#what-this-project-does",
-    "href": "projects/title-normalizer.html#what-this-project-does",
-    "title": "Job Title Normalizer",
+    "objectID": "projects/support-ticket-classification.html#what-this-project-does",
+    "href": "projects/support-ticket-classification.html#what-this-project-does",
+    "title": "Support Ticket Classification",
     "section": "What This Project Does",
-    "text": "What This Project Does\nCRM databases are full of job titles that look like they were typed by someone in a hurry — because they were. You get “Sr. Dir. Mktg (EMEA)”, “SENIOR DIRECTOR ENGINEERING”, “Snr. Direcotr, Engg” — all describing the same kind of person but completely different as text. When you need to segment contacts by seniority or function — which is the first step in building buying groups, scoring leads, or targeting campaigns — this inconsistency makes everything downstream unreliable.\nThis project trains a neural network to classify raw, messy titles into two standardized labels simultaneously:\n\nSeniority — one of 10 levels, from Individual Contributor through C-Suite\nFunction — one of 10 categories: Engineering, Data, Product, Marketing, Sales, Finance, HR, Operations, Design, Legal\n\nThe model predicts both at once through a shared representation, which is more efficient and more accurate than building two separate classifiers."
+    "text": "What This Project Does\nWhen a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.\nThis project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after a real AI-product help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in."
   },
   {
-    "objectID": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
-    "href": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
-    "title": "Job Title Normalizer",
-    "section": "Why This Matters in the Real World",
-    "text": "Why This Matters in the Real World\nAt Atlassian, I built contact segmentation and buying group analysis for enterprise marketing. The prerequisite to all of that work was normalizing job titles — you can’t identify coverage gaps in a buying group if you don’t know who’s a VP vs. an IC, or who’s in engineering vs. marketing. Title normalization was the critical first step.\nThis project isolates that step as a standalone system. The seniority and function labels it produces are exactly the features that would feed into the lead scoring and buying group models in a production pipeline."
+    "objectID": "projects/support-ticket-classification.html#why-this-matters",
+    "href": "projects/support-ticket-classification.html#why-this-matters",
+    "title": "Support Ticket Classification",
+    "section": "Why This Matters",
+    "text": "Why This Matters\nMost ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.\nThe fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure, fine-tuning is the obvious default."
   },
   {
-    "objectID": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
-    "href": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
-    "title": "Job Title Normalizer",
-    "section": "The Data: Why CRM Noise Is Harder Than It Looks",
-    "text": "The Data: Why CRM Noise Is Harder Than It Looks\nInstead of using clean, synthetic data that would make the model look artificially good, the data generator mirrors what real CRM exports actually look like. There are 15 categories of noise, all drawn from real-world data quality issues:\nThe obvious stuff — abbreviations (Sr., Dir., Mgr.), case variation (UPPERCASE, lowercase, Title Case), extra whitespace, and character-swap typos.\nThe stuff that actually makes CRM data painful:\n\nTruncation — CRM fields have character limits. “Senior Vice President of Engineering” becomes “Senior Vice Presi…” and now you’re missing the critical information\nGeographic qualifiers — Someone appended “(EMEA)” or “- North America” because that’s what their admin system required\nCredential suffixes — “MBA”, “CPA”, “PMP” stuck on the end because people copy their LinkedIn bio into the title field\nMisspellings — Not just swapped characters, but real mistakes: “Manger” for Manager, “Engineeer” with a triple e, “Marekting” for Marketing\nWord reordering — “Director of Engineering” vs “Engineering, Director” — different CRM systems format differently\nEncoding artifacts — Smart quotes, em dashes, HTML entities, non-breaking spaces from system imports\nWord drops — Lazy data entry where someone typed “VP” instead of “VP of Engineering”\n\nThis noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn’t seen.\nAn important limitation: All noise is applied to a fixed set of ~500 canonical title templates across 10 functions. The model never encounters a title structure it hasn’t seen some variant of. Real CRM data includes titles outside any taxonomy — “Chief Evangelist,” “Growth Hacker,” “Sustainability Officer” — plus non-English titles and hybrid roles like “Marketing Engineer” that blend functions. This synthetic setup validates the pipeline and architecture, but production accuracy would likely drop 5-10 points until the model is retrained on real labeled data."
+    "objectID": "projects/support-ticket-classification.html#whats-inside",
+    "href": "projects/support-ticket-classification.html#whats-inside",
+    "title": "Support Ticket Classification",
+    "section": "What’s Inside",
+    "text": "What’s Inside\nThe app has 13 pages organized around method comparison:\nData & Methods:\n\nData Explorer — Browse 12,091 synthetic tickets across 12 categories, see class distributions and example tickets\nTF-IDF + Logistic / XGBoost — The baseline every project should start with\nEmbeddings + XGBoost — Sentence embeddings as features, with structured metadata (customer tier, account age)\nFine-Tuned BERT — End-to-end fine-tuning on ticket text\nLLM Zero/Few-Shot — Prompt engineering with no training data\nFine-Tuned LLM — Fine-tuning GPT-4o-mini for classification\nDistillation — Using o1-mini as a teacher model to label data for GPT-4o-mini\n\nAnalysis:\n\nVolume vs. Method — Learning curves from 100 to ~10K tickets with real measured data at every point\nError Analysis — What each method gets wrong: category boundary confusion, semantic overlap, rare categories\nProduction Architecture — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the low-confidence tail\nMethodology — Data generation, evaluation protocol, assumptions\nGlossary — Plain-language definitions of every method and concept"
   },
   {
-    "objectID": "projects/title-normalizer.html#the-models-why-multi-task-learning",
-    "href": "projects/title-normalizer.html#the-models-why-multi-task-learning",
-    "title": "Job Title Normalizer",
-    "section": "The Models: Why Multi-Task Learning",
-    "text": "The Models: Why Multi-Task Learning\n\nWhat Multi-Task Learning Is\nInstead of training one model for seniority and a separate one for function, we train one model that predicts both simultaneously. The key insight is that seniority and function share structure. “CTO” tells you both seniority (C-Suite) and function (Engineering) at once. “Manager” tells you seniority but not function. By sharing internal representations, the model learns this structure more efficiently.\nThe architecture has three parts:\n\nWord embeddings — Each token in a title (after tokenization) maps to a 64-dimensional vector. During training, the model learns that “VP”, “V.P.”, and “Vice President” should all have similar vectors\nShared encoder — Processes the embedded title into a fixed-size representation. This is where seniority and function signals merge\nTask-specific heads — Two separate linear layers, one for each prediction\n\n\n\nTwo Encoder Architectures\nBiLSTM reads the title as a sequence, left-to-right and right-to-left, maintaining memory of what it’s seen. The bidirectional pass means “VP of Engineering” and “Engineering VP” produce similar representations.\nCNN slides filters across the title looking for local patterns — 2-word, 3-word, and 4-word combinations like “VP of”, “Director of Engineering”, or “Sr. Dir.” It’s faster and slightly more accurate here because title classification depends on local n-gram patterns more than long-range dependencies.\n\n\nThe Baseline: Know What Simple Gets You\nBefore going neural, we trained TF-IDF + Logistic Regression — the simplest reasonable approach. TF-IDF converts titles to numeric vectors by counting weighted word frequencies. Logistic Regression draws a decision boundary. This establishes a performance floor: if the neural network can’t beat this, it’s not worth the complexity."
+    "objectID": "projects/support-ticket-classification.html#key-finding",
+    "href": "projects/support-ticket-classification.html#key-finding",
+    "title": "Support Ticket Classification",
+    "section": "Key Finding",
+    "text": "Key Finding\n\n\n\n\n\n\n\n\nData Volume\nRecommended Method\nWhy\n\n\n\n\n&lt; 500 tickets\nLLM Few-Shot\nNot enough data to train. Prompt engineering gets ~78% F1 with zero labeled examples.\n\n\n500+ tickets\nFine-Tuned LLM\nDominates on accuracy (88-96% F1). Requires API access or GPU. Cost-constrained alternative: Embeddings+XGBoost.\n\n\n\nAt a company with internal LLM infrastructure, the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data."
   },
   {
-    "objectID": "projects/title-normalizer.html#results",
-    "href": "projects/title-normalizer.html#results",
-    "title": "Job Title Normalizer",
-    "section": "Results",
-    "text": "Results\n\n\n\nModel\nSeniority Acc\nFunction Acc\nBoth Correct\n\n\n\n\nCNN (PyTorch)\n95.2%\n93.0%\n89.0%\n\n\nBiLSTM (PyTorch)\n94.5%\n92.6%\n88.0%\n\n\nTF-IDF + LogReg (baseline)\n93.3%\n93.3%\n87.6%\n\n\n\n20,000 synthetic titles total, split 70/15/15: 14,000 train, 3,000 validation (for early stopping), 3,000 held-out test.\nWhy these numbers are realistic, not inflated: The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “HR” vs “Operations” is hard when the title says “People Operations Manager.” Real CRM data would likely push combined accuracy down another 5-10 points, as it introduces title structures and vocabulary the model has never seen.\nHonestly assessing the neural network’s value: The gap over TF-IDF (89.0% vs 87.6% combined) is 1.4 percentage points. That’s real but small — and it comes with real costs: PyTorch dependencies, embedding layers, training loops, and GPU for scale. TF-IDF + LogReg trains in seconds, needs no GPU, and is trivially deployable.\nSo when is the neural network worth it? At scale. On a database of 100K contacts, 1.4 percentage points is ~1,400 additional correct classifications. The gap is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where learned embeddings capture similarity that bag-of-words misses. In production, I’d start with TF-IDF as a fast baseline and upgrade to the CNN only if the error cases at the margin are costing downstream analysis quality.\n\nPer-Class Performance\nThe model performs best on classes with distinctive vocabulary:\n\nC-Suite — near-perfect (CTO, CFO, CMO are unambiguous)\nLegal — distinctive terms (Counsel, Paralegal, Compliance)\nDesign — UX/UI vocabulary is specific\n\nIt struggles most where vocabulary overlaps:\n\nIndividual Contributor vs Senior — when seniority markers get truncated or misspelled, the model loses the only signal distinguishing the two\nHR vs Operations — “People Operations” is an HR function despite the word “Operations”\nOperations vs Engineering — In real CRM data, “DevOps” sits at the boundary between these functions. In this synthetic dataset, DevOps titles are consistently labeled under Engineering, so the model learns them cleanly — but this is a taxonomy decision that different companies would make differently.\n\n\n\nTaxonomy Decisions Worth Noting\nTwo deliberate choices in the classification schema:\n“Product Manager” is labeled as Individual Contributor. This is counterintuitive — the title contains “Manager.” But in most tech companies, “Product Manager” is a function descriptor, not a seniority marker. A PM is an IC role; the people-management equivalent is “Director of Product” or “VP of Product.” This is the exact kind of taxonomy ambiguity that makes title normalization hard in practice — “Manager” means different things depending on context.\nSome seniority/function combinations don’t exist in the training data. Functions like Design and Legal don’t have SVP-level templates, because those titles are rare in practice. This means the model has never seen “SVP of Design” and would misclassify it. In production, this would be caught by confidence monitoring — the model would output a low-confidence prediction, flagging it for human review."
+    "objectID": "projects/support-ticket-classification.html#the-data",
+    "href": "projects/support-ticket-classification.html#the-data",
+    "title": "Support Ticket Classification",
+    "section": "The Data",
+    "text": "The Data\n12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after a real AI-product public help center:\n\n\n\n\n\n\n\n\nCategory\nShare\nDescription\n\n\n\n\nBilling & Payments\n15.2%\nRefunds, charges, invoices, credits\n\n\nChatGPT Product\n14.8%\nFeatures, errors, image generation, memory, search\n\n\nAccount Access\n13.6%\nLogin issues, password reset, phone verification\n\n\nAPI Errors\n11.8%\nRate limits, 429 errors, latency, error codes\n\n\nChatGPT Apps\n8.3%\niOS, Android, macOS, Windows, connected apps\n\n\nAccount Management\n7.6%\nMembers, orgs, projects, email changes\n\n\nAPI Usage\n7.1%\nHow-to, getting started, best practices\n\n\nEnterprise\n6.4%\nSSO, SCIM, workspace setup, admin\n\n\nGPTs\n5.3%\nCustom GPT creation, publishing, actions\n\n\nNewer Products\n5.0%\nSora, Codex, ChatGPT Atlas\n\n\nPrivacy & Policy\n3.4%\nData privacy, training opt-out, exports\n\n\nSecurity\n1.5%\nAPI key safety, vulnerability reporting\n\n\n\nNatural category overlap exists between semantically similar classes (e.g., API Usage vs. API Errors, Account Access vs. Account Management), which is where methods diverge most in performance."
   },
   {
-    "objectID": "projects/title-normalizer.html#training-how-the-model-learns",
-    "href": "projects/title-normalizer.html#training-how-the-model-learns",
-    "title": "Job Title Normalizer",
-    "section": "Training: How the Model Learns",
-    "text": "Training: How the Model Learns\n\nEarly Stopping\nThe model trains for up to 30 passes through the data (epochs). After each pass, we check performance on held-out data. If performance stops improving for 5 consecutive epochs (patience), training halts and we revert to the best checkpoint. This prevents the model from memorizing the training data — a problem called overfitting that’s especially dangerous with 20,000 samples.\n\n\nWhat the Model Learns\nDuring training, the embedding layer discovers semantic structure: abbreviations cluster with their full forms, seniority markers group together, function-specific terms form distinct neighborhoods. This learned vocabulary is the main advantage over TF-IDF, which treats every distinct string as a completely independent feature."
+    "objectID": "projects/support-ticket-classification.html#the-approach",
+    "href": "projects/support-ticket-classification.html#the-approach",
+    "title": "Support Ticket Classification",
+    "section": "The Approach",
+    "text": "The Approach\n\nData Generation (Python)\n12,091 unique tickets generated using Claude Haiku with structured prompts specifying category, customer tier, urgency, and account metadata. Each ticket is a unique natural-language formulation with realistic class imbalance.\n\n\nModel Training & Evaluation\nAll supervised methods trained on the same 80/20 stratified split (~9,557 train / ~2,390 test). Learning curves measured at 100, 500, 1K, 2.5K, 5K, and ~9.5K tickets. All reported F1 scores are real measured values — no projected or simulated numbers.\n\n\nInteractive App (Next.js)\nSame stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where each method’s advantage kicks in."
   },
   {
-    "objectID": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
-    "href": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
-    "title": "Job Title Normalizer",
-    "section": "How This Connects to the Lead Scoring Pipeline",
-    "text": "How This Connects to the Lead Scoring Pipeline\nTitle normalization is Step 1 in a contact data pipeline:\n\nNormalize titles → standardized seniority and function labels (this project)\nBuild contact features → VP+ count, function diversity, senior density per account\nScore accounts → propensity model using contact features + firmographics\nIdentify gaps → buying group completeness analysis\n\nWithout reliable title normalization, everything downstream is built on noise. If “Sr. Dir. Mktg” doesn’t get classified as a senior director in marketing, the buying group analysis doesn’t know there’s a senior marketing leader on the account, and the gap analysis might incorrectly recommend finding one."
-  },
-  {
-    "objectID": "projects/title-normalizer.html#what-id-do-differently-in-production",
-    "href": "projects/title-normalizer.html#what-id-do-differently-in-production",
-    "title": "Job Title Normalizer",
+    "objectID": "projects/support-ticket-classification.html#what-id-do-differently-in-production",
+    "href": "projects/support-ticket-classification.html#what-id-do-differently-in-production",
+    "title": "Support Ticket Classification",
     "section": "What I’d Do Differently in Production",
-    "text": "What I’d Do Differently in Production\n\nReal labeled data — Retrain on titles from actual CRM exports (Salesforce, HubSpot). The synthetic generator gets you 80% of the way, but production titles have patterns no generator anticipates\nActive learning — Flag low-confidence predictions for human review. A model that says “60% engineering, 35% data” is asking for help — route those to a human and use the corrections to retrain\nFine-tuned LLM — For the hardest 10% of titles (creative titles, non-English, multi-role), a fine-tuned language model would capture context that word embeddings miss\nMonitoring — Track prediction confidence distributions over time. If a new client uses unusual title conventions, confidence will drop and you’ll know to retrain"
+    "text": "What I’d Do Differently in Production\n\nActive learning — Use model uncertainty to prioritize which tickets to label next, reducing labeling cost\nHierarchical classification — Tier 1 (broad routing) then Tier 2 (specific workflow) as separate models\nDrift detection — Monitor for new ticket types that don’t fit existing categories\nHuman-in-the-loop — Route low-confidence classifications to human agents, use their decisions as training data\nA/B testing the classifier — Compare routing accuracy and resolution time between methods in production"
   },
   {
-    "objectID": "projects/title-normalizer.html#stack",
-    "href": "projects/title-normalizer.html#stack",
-    "title": "Job Title Normalizer",
+    "objectID": "projects/support-ticket-classification.html#stack",
+    "href": "projects/support-ticket-classification.html#stack",
+    "title": "Support Ticket Classification",
     "section": "Stack",
-    "text": "Stack\nPython | PyTorch | scikit-learn | Pandas | NumPy | Matplotlib | pytest"
+    "text": "Stack\nPython | Next.js | TypeScript | Recharts | Tailwind | shadcn/ui | Vercel"
   },
   {
-    "objectID": "projects/context-agent.html",
-    "href": "projects/context-agent.html",
-    "title": "Adaptive Analyst Agent",
+    "objectID": "projects/interview-ready.html",
+    "href": "projects/interview-ready.html",
+    "title": "InterviewReady",
     "section": "",
-    "text": "View on GitHub"
+    "text": "Live App"
   },
   {
-    "objectID": "projects/context-agent.html#the-problem",
-    "href": "projects/context-agent.html#the-problem",
-    "title": "Adaptive Analyst Agent",
-    "section": "The Problem",
-    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nAdaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
+    "objectID": "projects/interview-ready.html#what-this-project-does",
+    "href": "projects/interview-ready.html#what-this-project-does",
+    "title": "InterviewReady",
+    "section": "What This Project Does",
+    "text": "What This Project Does\nPaste a job description URL and InterviewReady generates a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the specific role, company, and seniority level. Answer in-app and get immediate AI-evaluated feedback with scoring and coaching.\nIt’s the tool I wanted when I was prepping for interviews and couldn’t find: something that adapts to the actual job instead of recycling the same generic question bank."
   },
   {
-    "objectID": "projects/context-agent.html#how-it-works",
-    "href": "projects/context-agent.html#how-it-works",
-    "title": "Adaptive Analyst Agent",
+    "objectID": "projects/interview-ready.html#how-it-works",
+    "href": "projects/interview-ready.html#how-it-works",
+    "title": "InterviewReady",
     "section": "How It Works",
-    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
+    "text": "How It Works\n\nSetup\nPaste a job posting URL (or the raw text). The app auto-extracts the company name, role title, seniority level, and technical skills from the JD. Pick an interview type — Technical (coding), Case Study, or Behavioral — and start.\n\n\nQuestion Generation\nQuestions are generated by Claude Sonnet, drawing from a 600+ question bank in Supabase and adapting to the target company and role. Technical questions always include sample data (SQL tables with column types, Python DataFrames with sample rows). Every question is scoped to be answerable in 2-3 minutes with only the provided data.\nQuality rules are strict: one task per question, difficulty matched to JD seniority, company-specific tailoring (references to real products, never competitors), and a hardcoded skills allowlist so only genuinely codeable skills appear in technical mode.\n\n\nAnswer Evaluation\nAnswers are evaluated by Claude Sonnet (temperature 0) with structured feedback. Technical answers get correctness scoring. Behavioral answers are evaluated against STAR framework criteria. Feedback streams in real-time with a score, coaching notes, and specific suggestions.\n\n\nProgress Tracking\nThe app tracks skill readiness across sessions using a multiplicative formula (score quality x practice volume). A skills readiness dashboard shows per-skill bars, score trends over time, best answers, and weak areas with targeted practice links. Gap analysis compares your resume against a JD to identify skill matches, gaps, and talking points."
   },
   {
-    "objectID": "projects/context-agent.html#in-action",
-    "href": "projects/context-agent.html#in-action",
-    "title": "Adaptive Analyst Agent",
-    "section": "In Action",
-    "text": "In Action\nSame question, different stakeholder — the agent adapts automatically:\n\nExecutive asks “How is pipeline trending?” → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.\nMarketing asks “How is pipeline trending?” → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.\n\nThe underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed."
+    "objectID": "projects/interview-ready.html#architecture",
+    "href": "projects/interview-ready.html#architecture",
+    "title": "InterviewReady",
+    "section": "Architecture",
+    "text": "Architecture\n\nFrontend\nNext.js 16 with App Router, React 19, Tailwind + shadcn/ui, and Zustand 5 for state management. Dark/light mode. Mobile-responsive with icon-only action bars and 44px tap targets on mobile.\n\n\nBackend\nAll AI calls are server-side (no API keys exposed to the client). Three model tiers: Claude Sonnet for question generation and answer evaluation, Claude Haiku for hints, clarification, and JD parsing. Groq for voice transcription.\n\n\nAuth & Data\nSupabase Auth (Google OAuth + email magic link) with row-level security on all tables. Guest mode with cookie-based bypass for trying the app without an account. All 10 API routes validate authentication and input (Zod schemas). Rate limiting at 50 requests/hour per IP.\n\n\nSecurity\nSecurity headers (CSP, HSTS, X-Frame-Options, nosniff), SSRF protection on URL fetching (blocks private IPs/localhost), auth callback redirect validation, and userId ownership checks on all data access."
   },
   {
-    "objectID": "projects/context-agent.html#evaluation",
-    "href": "projects/context-agent.html#evaluation",
-    "title": "Adaptive Analyst Agent",
-    "section": "Evaluation",
-    "text": "Evaluation\nMost “chat with your data” demos look impressive but never show whether the agent actually gets the answer right. I built a two-part evaluation so this one does.\n\nGold set: 20 well-specified questions, deterministic scoring\nEach question has reference SQL whose result against the live DuckDB is the canonical answer. The runner extracts the agent’s numeric answer from a tagged response, compares with a per-question tolerance (exact for counts, percentage-point for rates, relative for dollar amounts), and reports a pass rate. The agent passed all 20 on the first run.\nThat number proves the agent writes correct SQL for well-specified questions on this schema. It does not prove the agent does the right thing when a question is ambiguous, when the data doesn’t support an answer, or when the obvious SQL approach is wrong.\n\n\nAdversarial set: 12 questions designed to break things, LLM-judged\nA Haiku judge scores each response against a PASS/FAIL rubric. The categories are deliberate:\n\nHallucination refusal. “What’s our NPS by segment?” The data has no NPS. Does the agent refuse, or fabricate?\nAmbiguous metric. “What’s our conversion rate?” Lead-to-MQL? MQL-to-close? Does the agent disambiguate, or pick one silently?\nSQL trap. “How many opportunities are open?” The obvious filter is_won = FALSE wrongly includes Closed Lost. Does the agent reach for the right column?\nLeading question. “Why is Technology our best industry?” It’s not. Media is. Does the agent verify the premise, or play along?\n\nThe agent scored 7 of 12. The failures were the point. It fabricated a “churn rate” from closed-lost deals with the disclaimer buried in a footnote. It reported segments as if they were subscription tiers. It returned a number for “opportunities closed in 2025” without saying whether it meant calendar year or fiscal year. The SQL traps and the leading-question check, it handled correctly.\nA 58% pass rate is not a finished product. It is a measured product. The repo includes the question sets, the judge, and the JSON of every run, so anyone reviewing can see exactly which questions failed and why."
+    "objectID": "projects/interview-ready.html#what-id-do-differently",
+    "href": "projects/interview-ready.html#what-id-do-differently",
+    "title": "InterviewReady",
+    "section": "What I’d Do Differently",
+    "text": "What I’d Do Differently\n\nQuestion classifier — Collecting thumbs up/down feedback now to train an XGBoost model that auto-filters low-quality generated questions\nUser-based rate limiting — Currently IP-based, which is rough for shared networks\nLonger function timeouts — Vercel Hobby plan caps at 10 seconds, which occasionally truncates complex evaluations"
   },
   {
-    "objectID": "projects/context-agent.html#key-design-choices",
-    "href": "projects/context-agent.html#key-design-choices",
-    "title": "Adaptive Analyst Agent",
-    "section": "Key Design Choices",
-    "text": "Key Design Choices\n\nTool use over RAG — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to act (run queries, generate charts), not just retrieve static content.\nRead-only database as primary security layer — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.\nStructured context loading, not RAG — The project uses structured context loading — stakeholder profiles and domain knowledge loaded into the system prompt — not retrieval from a vector store. It’s technically closer to context injection than RAG. The design choice was intentional: for a small corpus of stakeholder profiles, full context loading is simpler and more reliable than embedding-based retrieval.\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation."
-  },
-  {
-    "objectID": "projects/context-agent.html#stack",
-    "href": "projects/context-agent.html#stack",
-    "title": "Adaptive Analyst Agent",
+    "objectID": "projects/interview-ready.html#stack",
+    "href": "projects/interview-ready.html#stack",
+    "title": "InterviewReady",
     "section": "Stack",
-    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
+    "text": "Stack\nNext.js | React | TypeScript | Tailwind | shadcn/ui | Zustand | Claude API | Supabase | Vercel"
   },
   {
     "objectID": "projects/lead-scoring.html",
@@ -308,115 +294,192 @@
     "text": "Stack\nPython | Pandas | scikit-learn | Matplotlib | Plotly | Streamlit | Jupyter"
   },
   {
-    "objectID": "projects/interview-ready.html",
-    "href": "projects/interview-ready.html",
-    "title": "InterviewReady",
+    "objectID": "projects/context-agent.html",
+    "href": "projects/context-agent.html",
+    "title": "Adaptive Analyst Agent",
     "section": "",
-    "text": "Live App"
+    "text": "View on GitHub"
   },
   {
-    "objectID": "projects/interview-ready.html#what-this-project-does",
-    "href": "projects/interview-ready.html#what-this-project-does",
-    "title": "InterviewReady",
-    "section": "What This Project Does",
-    "text": "What This Project Does\nPaste a job description URL and InterviewReady generates a tailored practice session — technical coding questions, case studies, and behavioral questions calibrated to the specific role, company, and seniority level. Answer in-app and get immediate AI-evaluated feedback with scoring and coaching.\nIt’s the tool I wanted when I was prepping for interviews and couldn’t find: something that adapts to the actual job instead of recycling the same generic question bank."
+    "objectID": "projects/context-agent.html#the-problem",
+    "href": "projects/context-agent.html#the-problem",
+    "title": "Adaptive Analyst Agent",
+    "section": "The Problem",
+    "text": "The Problem\nData teams answer the same business questions differently depending on who’s asking. A VP of Sales wants pipeline forecasts with revenue implications. A product manager wants user engagement metrics with cohort breakdowns. The underlying data is the same — the context is what changes.\nAdaptive Analyst Agent is an AI-powered data analyst that automatically adapts its analysis style, metric selection, and communication approach based on who it’s talking to."
   },
   {
-    "objectID": "projects/interview-ready.html#how-it-works",
-    "href": "projects/interview-ready.html#how-it-works",
-    "title": "InterviewReady",
+    "objectID": "projects/context-agent.html#how-it-works",
+    "href": "projects/context-agent.html#how-it-works",
+    "title": "Adaptive Analyst Agent",
     "section": "How It Works",
-    "text": "How It Works\n\nSetup\nPaste a job posting URL (or the raw text). The app auto-extracts the company name, role title, seniority level, and technical skills from the JD. Pick an interview type — Technical (coding), Case Study, or Behavioral — and start.\n\n\nQuestion Generation\nQuestions are generated by Claude Sonnet, drawing from a 600+ question bank in Supabase and adapting to the target company and role. Technical questions always include sample data (SQL tables with column types, Python DataFrames with sample rows). Every question is scoped to be answerable in 2-3 minutes with only the provided data.\nQuality rules are strict: one task per question, difficulty matched to JD seniority, company-specific tailoring (references to real products, never competitors), and a hardcoded skills allowlist so only genuinely codeable skills appear in technical mode.\n\n\nAnswer Evaluation\nAnswers are evaluated by Claude Sonnet (temperature 0) with structured feedback. Technical answers get correctness scoring. Behavioral answers are evaluated against STAR framework criteria. Feedback streams in real-time with a score, coaching notes, and specific suggestions.\n\n\nProgress Tracking\nThe app tracks skill readiness across sessions using a multiplicative formula (score quality x practice volume). A skills readiness dashboard shows per-skill bars, score trends over time, best answers, and weak areas with targeted practice links. Gap analysis compares your resume against a JD to identify skill matches, gaps, and talking points."
+    "text": "How It Works\nThe agent uses Claude’s tool use capabilities to:\n\nLoad stakeholder context — Markdown profiles defining each audience’s priorities, KPIs, and communication preferences\nQuery data — Execute SQL against a DuckDB database with synthetic GTM data\nAdapt the analysis — Frame results, choose visualizations, and adjust technical depth based on the active stakeholder context\n\n\nArchitecture\n\nAgent loop — Claude API with tool use for multi-step reasoning\nContext system — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)\nExecution layer — Sandboxed SQL and Python execution via DuckDB\nUI — Streamlit app for interactive exploration"
   },
   {
-    "objectID": "projects/interview-ready.html#architecture",
-    "href": "projects/interview-ready.html#architecture",
-    "title": "InterviewReady",
-    "section": "Architecture",
-    "text": "Architecture\n\nFrontend\nNext.js 16 with App Router, React 19, Tailwind + shadcn/ui, and Zustand 5 for state management. Dark/light mode. Mobile-responsive with icon-only action bars and 44px tap targets on mobile.\n\n\nBackend\nAll AI calls are server-side (no API keys exposed to the client). Three model tiers: Claude Sonnet for question generation and answer evaluation, Claude Haiku for hints, clarification, and JD parsing. Groq for voice transcription.\n\n\nAuth & Data\nSupabase Auth (Google OAuth + email magic link) with row-level security on all tables. Guest mode with cookie-based bypass for trying the app without an account. All 10 API routes validate authentication and input (Zod schemas). Rate limiting at 50 requests/hour per IP.\n\n\nSecurity\nSecurity headers (CSP, HSTS, X-Frame-Options, nosniff), SSRF protection on URL fetching (blocks private IPs/localhost), auth callback redirect validation, and userId ownership checks on all data access."
+    "objectID": "projects/context-agent.html#in-action",
+    "href": "projects/context-agent.html#in-action",
+    "title": "Adaptive Analyst Agent",
+    "section": "In Action",
+    "text": "In Action\nSame question, different stakeholder — the agent adapts automatically:\n\nExecutive asks “How is pipeline trending?” → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.\nMarketing asks “How is pipeline trending?” → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.\n\nThe underlying SQL queries overlap significantly. What changes is metric selection, aggregation level, and how the results are framed."
   },
   {
-    "objectID": "projects/interview-ready.html#what-id-do-differently",
-    "href": "projects/interview-ready.html#what-id-do-differently",
-    "title": "InterviewReady",
-    "section": "What I’d Do Differently",
-    "text": "What I’d Do Differently\n\nQuestion classifier — Collecting thumbs up/down feedback now to train an XGBoost model that auto-filters low-quality generated questions\nUser-based rate limiting — Currently IP-based, which is rough for shared networks\nLonger function timeouts — Vercel Hobby plan caps at 10 seconds, which occasionally truncates complex evaluations"
+    "objectID": "projects/context-agent.html#evaluation",
+    "href": "projects/context-agent.html#evaluation",
+    "title": "Adaptive Analyst Agent",
+    "section": "Evaluation",
+    "text": "Evaluation\nMost “chat with your data” demos look impressive but never show whether the agent actually gets the answer right. I built a two-part evaluation so this one does.\n\nGold set: 20 well-specified questions, deterministic scoring\nEach question has reference SQL whose result against the live DuckDB is the canonical answer. The runner extracts the agent’s numeric answer from a tagged response, compares with a per-question tolerance (exact for counts, percentage-point for rates, relative for dollar amounts), and reports a pass rate. The agent passed all 20 on the first run.\nThat number proves the agent writes correct SQL for well-specified questions on this schema. It does not prove the agent does the right thing when a question is ambiguous, when the data doesn’t support an answer, or when the obvious SQL approach is wrong.\n\n\nAdversarial set: 12 questions designed to break things, LLM-judged\nA Haiku judge scores each response against a PASS/FAIL rubric. The categories are deliberate:\n\nHallucination refusal. “What’s our NPS by segment?” The data has no NPS. Does the agent refuse, or fabricate?\nAmbiguous metric. “What’s our conversion rate?” Lead-to-MQL? MQL-to-close? Does the agent disambiguate, or pick one silently?\nSQL trap. “How many opportunities are open?” The obvious filter is_won = FALSE wrongly includes Closed Lost. Does the agent reach for the right column?\nLeading question. “Why is Technology our best industry?” It’s not. Media is. Does the agent verify the premise, or play along?\n\nThe agent scored 7 of 12. The failures were the point. It fabricated a “churn rate” from closed-lost deals with the disclaimer buried in a footnote. It reported segments as if they were subscription tiers. It returned a number for “opportunities closed in 2025” without saying whether it meant calendar year or fiscal year. The SQL traps and the leading-question check, it handled correctly.\nA 58% pass rate is not a finished product. It is a measured product. The repo includes the question sets, the judge, and the JSON of every run, so anyone reviewing can see exactly which questions failed and why."
   },
   {
-    "objectID": "projects/interview-ready.html#stack",
-    "href": "projects/interview-ready.html#stack",
-    "title": "InterviewReady",
+    "objectID": "projects/context-agent.html#key-design-choices",
+    "href": "projects/context-agent.html#key-design-choices",
+    "title": "Adaptive Analyst Agent",
+    "section": "Key Design Choices",
+    "text": "Key Design Choices\n\nTool use over RAG — Structured data questions benefit from live SQL queries, not pre-embedded answers. The agent needs to act (run queries, generate charts), not just retrieve static content.\nRead-only database as primary security layer — The agent executes arbitrary SQL, so the database connection is read-only by design. No risk of accidental writes or deletions regardless of what the LLM generates.\nStructured context loading, not RAG — The project uses structured context loading — stakeholder profiles and domain knowledge loaded into the system prompt — not retrieval from a vector store. It’s technically closer to context injection than RAG. The design choice was intentional: for a small corpus of stakeholder profiles, full context loading is simpler and more reliable than embedding-based retrieval.\nDuckDB over SQLite — Columnar storage is better suited for analytical queries. Supports window functions and CTEs natively.\nMarkdown for context — Easier to read, version, and customize than YAML or JSON. Stakeholder profiles read like documentation."
+  },
+  {
+    "objectID": "projects/context-agent.html#stack",
+    "href": "projects/context-agent.html#stack",
+    "title": "Adaptive Analyst Agent",
     "section": "Stack",
-    "text": "Stack\nNext.js | React | TypeScript | Tailwind | shadcn/ui | Zustand | Claude API | Supabase | Vercel"
+    "text": "Stack\nPython | Claude API | DuckDB | Streamlit | Pandas | Plotly"
   },
   {
-    "objectID": "projects/support-ticket-classification.html",
-    "href": "projects/support-ticket-classification.html",
-    "title": "Support Ticket Classification",
+    "objectID": "projects/title-normalizer.html",
+    "href": "projects/title-normalizer.html",
+    "title": "Job Title Normalizer",
     "section": "",
-    "text": "View on GitHub Live App"
+    "text": "View on GitHub"
   },
   {
-    "objectID": "projects/support-ticket-classification.html#what-this-project-does",
-    "href": "projects/support-ticket-classification.html#what-this-project-does",
-    "title": "Support Ticket Classification",
+    "objectID": "projects/title-normalizer.html#what-this-project-does",
+    "href": "projects/title-normalizer.html#what-this-project-does",
+    "title": "Job Title Normalizer",
     "section": "What This Project Does",
-    "text": "What This Project Does\nWhen a support ticket arrives, it needs to reach the right team fast. But the right classification method depends on how much labeled data you have. A startup with 500 tickets needs a fundamentally different approach than a platform processing millions.\nThis project compares seven classification approaches — from TF-IDF baselines to fine-tuned LLMs — across data volumes from 100 to ~10K labeled tickets, using 12,091 synthetic tickets modeled after a real AI-product help center taxonomy. The key output is a learning curve analysis showing where each method’s advantage kicks in."
+    "text": "What This Project Does\nCRM databases are full of job titles that look like they were typed by someone in a hurry — because they were. You get “Sr. Dir. Mktg (EMEA)”, “SENIOR DIRECTOR ENGINEERING”, “Snr. Direcotr, Engg” — all describing the same kind of person but completely different as text. When you need to segment contacts by seniority or function — which is the first step in building buying groups, scoring leads, or targeting campaigns — this inconsistency makes everything downstream unreliable.\nThis project trains a neural network to classify raw, messy titles into two standardized labels simultaneously:\n\nSeniority — one of 10 levels, from Individual Contributor through C-Suite\nFunction — one of 10 categories: Engineering, Data, Product, Marketing, Sales, Finance, HR, Operations, Design, Legal\n\nThe model predicts both at once through a shared representation, which is more efficient and more accurate than building two separate classifiers."
   },
   {
-    "objectID": "projects/support-ticket-classification.html#why-this-matters",
-    "href": "projects/support-ticket-classification.html#why-this-matters",
-    "title": "Support Ticket Classification",
-    "section": "Why This Matters",
-    "text": "Why This Matters\nMost ML classification comparisons train on a fixed dataset and report a single accuracy number. But in practice, the amount of labeled data you have is the primary constraint — and it changes which method you should use.\nThe fine-tuned LLM dominates from just 500 labeled tickets onward (88% F1), beating every classical method trained on the full dataset. At higher volumes the gap only widens. The only reason to choose a classical method is infrastructure cost — fine-tuning requires API access or GPU, while embeddings+XGBoost runs on a CPU. At a company with internal LLM infrastructure, fine-tuning is the obvious default."
+    "objectID": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
+    "href": "projects/title-normalizer.html#why-this-matters-in-the-real-world",
+    "title": "Job Title Normalizer",
+    "section": "Why This Matters in the Real World",
+    "text": "Why This Matters in the Real World\nAt Atlassian, I built contact segmentation and buying group analysis for enterprise marketing. The prerequisite to all of that work was normalizing job titles — you can’t identify coverage gaps in a buying group if you don’t know who’s a VP vs. an IC, or who’s in engineering vs. marketing. Title normalization was the critical first step.\nThis project isolates that step as a standalone system. The seniority and function labels it produces are exactly the features that would feed into the lead scoring and buying group models in a production pipeline."
   },
   {
-    "objectID": "projects/support-ticket-classification.html#whats-inside",
-    "href": "projects/support-ticket-classification.html#whats-inside",
-    "title": "Support Ticket Classification",
-    "section": "What’s Inside",
-    "text": "What’s Inside\nThe app has 13 pages organized around method comparison:\nData & Methods:\n\nData Explorer — Browse 12,091 synthetic tickets across 12 categories, see class distributions and example tickets\nTF-IDF + Logistic / XGBoost — The baseline every project should start with\nEmbeddings + XGBoost — Sentence embeddings as features, with structured metadata (customer tier, account age)\nFine-Tuned BERT — End-to-end fine-tuning on ticket text\nLLM Zero/Few-Shot — Prompt engineering with no training data\nFine-Tuned LLM — Fine-tuning GPT-4o-mini for classification\nDistillation — Using o1-mini as a teacher model to label data for GPT-4o-mini\n\nAnalysis:\n\nVolume vs. Method — Learning curves from 100 to ~10K tickets with real measured data at every point\nError Analysis — What each method gets wrong: category boundary confusion, semantic overlap, rare categories\nProduction Architecture — Cascade system: XGBoost handles confident classifications, fine-tuned LLM handles the low-confidence tail\nMethodology — Data generation, evaluation protocol, assumptions\nGlossary — Plain-language definitions of every method and concept"
+    "objectID": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
+    "href": "projects/title-normalizer.html#the-data-why-crm-noise-is-harder-than-it-looks",
+    "title": "Job Title Normalizer",
+    "section": "The Data: Why CRM Noise Is Harder Than It Looks",
+    "text": "The Data: Why CRM Noise Is Harder Than It Looks\nInstead of using clean, synthetic data that would make the model look artificially good, the data generator mirrors what real CRM exports actually look like. There are 15 categories of noise, all drawn from real-world data quality issues:\nThe obvious stuff — abbreviations (Sr., Dir., Mgr.), case variation (UPPERCASE, lowercase, Title Case), extra whitespace, and character-swap typos.\nThe stuff that actually makes CRM data painful:\n\nTruncation — CRM fields have character limits. “Senior Vice President of Engineering” becomes “Senior Vice Presi…” and now you’re missing the critical information\nGeographic qualifiers — Someone appended “(EMEA)” or “- North America” because that’s what their admin system required\nCredential suffixes — “MBA”, “CPA”, “PMP” stuck on the end because people copy their LinkedIn bio into the title field\nMisspellings — Not just swapped characters, but real mistakes: “Manger” for Manager, “Engineeer” with a triple e, “Marekting” for Marketing\nWord reordering — “Director of Engineering” vs “Engineering, Director” — different CRM systems format differently\nEncoding artifacts — Smart quotes, em dashes, HTML entities, non-breaking spaces from system imports\nWord drops — Lazy data entry where someone typed “VP” instead of “VP of Engineering”\n\nThis noise is layered stochastically — each title gets a random subset — so the model has to generalize to combinations it hasn’t seen.\nAn important limitation: All noise is applied to a fixed set of ~500 canonical title templates across 10 functions. The model never encounters a title structure it hasn’t seen some variant of. Real CRM data includes titles outside any taxonomy — “Chief Evangelist,” “Growth Hacker,” “Sustainability Officer” — plus non-English titles and hybrid roles like “Marketing Engineer” that blend functions. This synthetic setup validates the pipeline and architecture, but production accuracy would likely drop 5-10 points until the model is retrained on real labeled data."
   },
   {
-    "objectID": "projects/support-ticket-classification.html#key-finding",
-    "href": "projects/support-ticket-classification.html#key-finding",
-    "title": "Support Ticket Classification",
-    "section": "Key Finding",
-    "text": "Key Finding\n\n\n\n\n\n\n\n\nData Volume\nRecommended Method\nWhy\n\n\n\n\n&lt; 500 tickets\nLLM Few-Shot\nNot enough data to train. Prompt engineering gets ~78% F1 with zero labeled examples.\n\n\n500+ tickets\nFine-Tuned LLM\nDominates on accuracy (88-96% F1). Requires API access or GPU. Cost-constrained alternative: Embeddings+XGBoost.\n\n\n\nAt a company with internal LLM infrastructure, the cost constraint for fine-tuned LLM inference drops to near-zero, making it the default choice at any volume where you have enough data."
+    "objectID": "projects/title-normalizer.html#the-models-why-multi-task-learning",
+    "href": "projects/title-normalizer.html#the-models-why-multi-task-learning",
+    "title": "Job Title Normalizer",
+    "section": "The Models: Why Multi-Task Learning",
+    "text": "The Models: Why Multi-Task Learning\n\nWhat Multi-Task Learning Is\nInstead of training one model for seniority and a separate one for function, we train one model that predicts both simultaneously. The key insight is that seniority and function share structure. “CTO” tells you both seniority (C-Suite) and function (Engineering) at once. “Manager” tells you seniority but not function. By sharing internal representations, the model learns this structure more efficiently.\nThe architecture has three parts:\n\nWord embeddings — Each token in a title (after tokenization) maps to a 64-dimensional vector. During training, the model learns that “VP”, “V.P.”, and “Vice President” should all have similar vectors\nShared encoder — Processes the embedded title into a fixed-size representation. This is where seniority and function signals merge\nTask-specific heads — Two separate linear layers, one for each prediction\n\n\n\nTwo Encoder Architectures\nBiLSTM reads the title as a sequence, left-to-right and right-to-left, maintaining memory of what it’s seen. The bidirectional pass means “VP of Engineering” and “Engineering VP” produce similar representations.\nCNN slides filters across the title looking for local patterns — 2-word, 3-word, and 4-word combinations like “VP of”, “Director of Engineering”, or “Sr. Dir.” It’s faster and slightly more accurate here because title classification depends on local n-gram patterns more than long-range dependencies.\n\n\nThe Baseline: Know What Simple Gets You\nBefore going neural, we trained TF-IDF + Logistic Regression — the simplest reasonable approach. TF-IDF converts titles to numeric vectors by counting weighted word frequencies. Logistic Regression draws a decision boundary. This establishes a performance floor: if the neural network can’t beat this, it’s not worth the complexity."
   },
   {
-    "objectID": "projects/support-ticket-classification.html#the-data",
-    "href": "projects/support-ticket-classification.html#the-data",
-    "title": "Support Ticket Classification",
-    "section": "The Data",
-    "text": "The Data\n12,091 unique synthetic support tickets generated via Claude Haiku, across 12 categories modeled after a real AI-product public help center:\n\n\n\n\n\n\n\n\nCategory\nShare\nDescription\n\n\n\n\nBilling & Payments\n15.2%\nRefunds, charges, invoices, credits\n\n\nChatGPT Product\n14.8%\nFeatures, errors, image generation, memory, search\n\n\nAccount Access\n13.6%\nLogin issues, password reset, phone verification\n\n\nAPI Errors\n11.8%\nRate limits, 429 errors, latency, error codes\n\n\nChatGPT Apps\n8.3%\niOS, Android, macOS, Windows, connected apps\n\n\nAccount Management\n7.6%\nMembers, orgs, projects, email changes\n\n\nAPI Usage\n7.1%\nHow-to, getting started, best practices\n\n\nEnterprise\n6.4%\nSSO, SCIM, workspace setup, admin\n\n\nGPTs\n5.3%\nCustom GPT creation, publishing, actions\n\n\nNewer Products\n5.0%\nSora, Codex, ChatGPT Atlas\n\n\nPrivacy & Policy\n3.4%\nData privacy, training opt-out, exports\n\n\nSecurity\n1.5%\nAPI key safety, vulnerability reporting\n\n\n\nNatural category overlap exists between semantically similar classes (e.g., API Usage vs. API Errors, Account Access vs. Account Management), which is where methods diverge most in performance."
+    "objectID": "projects/title-normalizer.html#results",
+    "href": "projects/title-normalizer.html#results",
+    "title": "Job Title Normalizer",
+    "section": "Results",
+    "text": "Results\n\n\n\nModel\nSeniority Acc\nFunction Acc\nBoth Correct\n\n\n\n\nCNN (PyTorch)\n95.2%\n93.0%\n89.0%\n\n\nBiLSTM (PyTorch)\n94.5%\n92.6%\n88.0%\n\n\nTF-IDF + LogReg (baseline)\n93.3%\n93.3%\n87.6%\n\n\n\n20,000 synthetic titles total, split 70/15/15: 14,000 train, 3,000 validation (for early stopping), 3,000 held-out test.\nWhy these numbers are realistic, not inflated: The accuracy is in the high 80s to mid 90s — not 99%. That’s by design. The synthetic noise is calibrated to be aggressive, and the model genuinely struggles with ambiguous cases. “Senior” vs “Lead” seniority is hard when the title is truncated. “HR” vs “Operations” is hard when the title says “People Operations Manager.” Real CRM data would likely push combined accuracy down another 5-10 points, as it introduces title structures and vocabulary the model has never seen.\nHonestly assessing the neural network’s value: The gap over TF-IDF (89.0% vs 87.6% combined) is 1.4 percentage points. That’s real but small — and it comes with real costs: PyTorch dependencies, embedding layers, training loops, and GPU for scale. TF-IDF + LogReg trains in seconds, needs no GPU, and is trivially deployable.\nSo when is the neural network worth it? At scale. On a database of 100K contacts, 1.4 percentage points is ~1,400 additional correct classifications. The gap is concentrated in the hardest cases — abbreviated titles, misspellings, and reordered titles where learned embeddings capture similarity that bag-of-words misses. In production, I’d start with TF-IDF as a fast baseline and upgrade to the CNN only if the error cases at the margin are costing downstream analysis quality.\n\nPer-Class Performance\nThe model performs best on classes with distinctive vocabulary:\n\nC-Suite — near-perfect (CTO, CFO, CMO are unambiguous)\nLegal — distinctive terms (Counsel, Paralegal, Compliance)\nDesign — UX/UI vocabulary is specific\n\nIt struggles most where vocabulary overlaps:\n\nIndividual Contributor vs Senior — when seniority markers get truncated or misspelled, the model loses the only signal distinguishing the two\nHR vs Operations — “People Operations” is an HR function despite the word “Operations”\nOperations vs Engineering — In real CRM data, “DevOps” sits at the boundary between these functions. In this synthetic dataset, DevOps titles are consistently labeled under Engineering, so the model learns them cleanly — but this is a taxonomy decision that different companies would make differently.\n\n\n\nTaxonomy Decisions Worth Noting\nTwo deliberate choices in the classification schema:\n“Product Manager” is labeled as Individual Contributor. This is counterintuitive — the title contains “Manager.” But in most tech companies, “Product Manager” is a function descriptor, not a seniority marker. A PM is an IC role; the people-management equivalent is “Director of Product” or “VP of Product.” This is the exact kind of taxonomy ambiguity that makes title normalization hard in practice — “Manager” means different things depending on context.\nSome seniority/function combinations don’t exist in the training data. Functions like Design and Legal don’t have SVP-level templates, because those titles are rare in practice. This means the model has never seen “SVP of Design” and would misclassify it. In production, this would be caught by confidence monitoring — the model would output a low-confidence prediction, flagging it for human review."
   },
   {
-    "objectID": "projects/support-ticket-classification.html#the-approach",
-    "href": "projects/support-ticket-classification.html#the-approach",
-    "title": "Support Ticket Classification",
-    "section": "The Approach",
-    "text": "The Approach\n\nData Generation (Python)\n12,091 unique tickets generated using Claude Haiku with structured prompts specifying category, customer tier, urgency, and account metadata. Each ticket is a unique natural-language formulation with realistic class imbalance.\n\n\nModel Training & Evaluation\nAll supervised methods trained on the same 80/20 stratified split (~9,557 train / ~2,390 test). Learning curves measured at 100, 500, 1K, 2.5K, 5K, and ~9.5K tickets. All reported F1 scores are real measured values — no projected or simulated numbers.\n\n\nInteractive App (Next.js)\nSame stack as the Marketing Measurement project: Next.js, TypeScript, Recharts for visualization, Tailwind + shadcn/ui for the interface. Interactive learning curve chart lets you toggle methods on/off and see exactly where each method’s advantage kicks in."
+    "objectID": "projects/title-normalizer.html#training-how-the-model-learns",
+    "href": "projects/title-normalizer.html#training-how-the-model-learns",
+    "title": "Job Title Normalizer",
+    "section": "Training: How the Model Learns",
+    "text": "Training: How the Model Learns\n\nEarly Stopping\nThe model trains for up to 30 passes through the data (epochs). After each pass, we check performance on held-out data. If performance stops improving for 5 consecutive epochs (patience), training halts and we revert to the best checkpoint. This prevents the model from memorizing the training data — a problem called overfitting that’s especially dangerous with 20,000 samples.\n\n\nWhat the Model Learns\nDuring training, the embedding layer discovers semantic structure: abbreviations cluster with their full forms, seniority markers group together, function-specific terms form distinct neighborhoods. This learned vocabulary is the main advantage over TF-IDF, which treats every distinct string as a completely independent feature."
   },
   {
-    "objectID": "projects/support-ticket-classification.html#what-id-do-differently-in-production",
-    "href": "projects/support-ticket-classification.html#what-id-do-differently-in-production",
-    "title": "Support Ticket Classification",
+    "objectID": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
+    "href": "projects/title-normalizer.html#how-this-connects-to-the-lead-scoring-pipeline",
+    "title": "Job Title Normalizer",
+    "section": "How This Connects to the Lead Scoring Pipeline",
+    "text": "How This Connects to the Lead Scoring Pipeline\nTitle normalization is Step 1 in a contact data pipeline:\n\nNormalize titles → standardized seniority and function labels (this project)\nBuild contact features → VP+ count, function diversity, senior density per account\nScore accounts → propensity model using contact features + firmographics\nIdentify gaps → buying group completeness analysis\n\nWithout reliable title normalization, everything downstream is built on noise. If “Sr. Dir. Mktg” doesn’t get classified as a senior director in marketing, the buying group analysis doesn’t know there’s a senior marketing leader on the account, and the gap analysis might incorrectly recommend finding one."
+  },
+  {
+    "objectID": "projects/title-normalizer.html#what-id-do-differently-in-production",
+    "href": "projects/title-normalizer.html#what-id-do-differently-in-production",
+    "title": "Job Title Normalizer",
     "section": "What I’d Do Differently in Production",
-    "text": "What I’d Do Differently in Production\n\nActive learning — Use model uncertainty to prioritize which tickets to label next, reducing labeling cost\nHierarchical classification — Tier 1 (broad routing) then Tier 2 (specific workflow) as separate models\nDrift detection — Monitor for new ticket types that don’t fit existing categories\nHuman-in-the-loop — Route low-confidence classifications to human agents, use their decisions as training data\nA/B testing the classifier — Compare routing accuracy and resolution time between methods in production"
+    "text": "What I’d Do Differently in Production\n\nReal labeled data — Retrain on titles from actual CRM exports (Salesforce, HubSpot). The synthetic generator gets you 80% of the way, but production titles have patterns no generator anticipates\nActive learning — Flag low-confidence predictions for human review. A model that says “60% engineering, 35% data” is asking for help — route those to a human and use the corrections to retrain\nFine-tuned LLM — For the hardest 10% of titles (creative titles, non-English, multi-role), a fine-tuned language model would capture context that word embeddings miss\nMonitoring — Track prediction confidence distributions over time. If a new client uses unusual title conventions, confidence will drop and you’ll know to retrain"
   },
   {
-    "objectID": "projects/support-ticket-classification.html#stack",
-    "href": "projects/support-ticket-classification.html#stack",
-    "title": "Support Ticket Classification",
+    "objectID": "projects/title-normalizer.html#stack",
+    "href": "projects/title-normalizer.html#stack",
+    "title": "Job Title Normalizer",
     "section": "Stack",
-    "text": "Stack\nPython | Next.js | TypeScript | Recharts | Tailwind | shadcn/ui | Vercel"
+    "text": "Stack\nPython | PyTorch | scikit-learn | Pandas | NumPy | Matplotlib | pytest"
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html",
+    "href": "projects/gtm-analytics-warehouse.html",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "",
+    "text": "View on GitHub Live docs + lineage"
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#what-this-project-does",
+    "href": "projects/gtm-analytics-warehouse.html#what-this-project-does",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "What This Project Does",
+    "text": "What This Project Does\nEvery company’s go-to-market data starts out messy. The same customer is entered twice under different IDs. The same person shows up under three email addresses. Marketing events arrive keyed on email while the CRM is keyed on a contact ID, so a naive join quietly counts the same touch five times. Analysts build dashboards on top of all this and wonder why the numbers never quite tie out.\nAnalytics engineering is the job of fixing that once, in one place, so nobody downstream has to. This project is a full analytics-engineering warehouse built with dbt: it takes six raw, deliberately messy source tables and turns them into clean, tested, documented tables that a revenue team can actually trust. It runs end to end on a free local database with one command, and every model is documented with an interactive lineage graph you can click through in the live docs."
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#why-this-matters-in-the-real-world",
+    "href": "projects/gtm-analytics-warehouse.html#why-this-matters-in-the-real-world",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "Why This Matters in the Real World",
+    "text": "Why This Matters in the Real World\nA data scientist’s model is only as good as the table it’s trained on. Most of the pain in a data team is not the model, it’s the layer underneath: the transformations that turn raw system exports into trustworthy facts and dimensions. That layer is what analytics engineers own, and it is exactly the work I did at Atlassian when I reconciled a large CRM dataset and fixed a join that was double-counting contacts.\nThis project recreates that discipline from scratch on a clean, public codebase, so the craft is visible: the layering, the tests, the documentation, and the data quality logic.\n\n\n\n\n\n\nNote\n\n\n\nA note on the data. The source tables are synthetic and generated with a fixed random seed, so every run produces identical output and no real customer data is involved. The dollar figures below are illustrative and exist only to exercise the models. What is real is the modeling, the tests, and the data-quality logic. The messiness in the data, duplicate companies, duplicate contacts, inconsistent formatting, and the email-keyed marketing join, is modeled on the kinds of problems that actually show up in B2B go-to-market data."
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#how-its-structured",
+    "href": "projects/gtm-analytics-warehouse.html#how-its-structured",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "How It’s Structured",
+    "text": "How It’s Structured\ndbt projects are built in layers, and each layer has one job. Raw data comes in at the top, gets cleaned, gets reshaped, and lands as tables that answer business questions.\n\n\n\n\n\nflowchart TD\n    A[\"Raw sources (6 tables, ~86k rows)&lt;br/&gt;CRM · marketing · product · web\"] --&gt; B[\"staging&lt;br/&gt;clean, cast, normalize keys\"]\n    B --&gt; C[\"intermediate&lt;br/&gt;reconcile accounts · dedup contacts&lt;br/&gt;fix the marketing join · build the funnel\"]\n    C --&gt; D[\"marts / core&lt;br/&gt;dim_accounts · dim_contacts&lt;br/&gt;fct_opportunities · fct_product_usage\"]\n    C --&gt; E[\"marts / gtm&lt;br/&gt;account health · buying group&lt;br/&gt;lead-scoring features · pipeline funnel\"]\n    D --&gt; F[\"semantic layer&lt;br/&gt;bookings · pipeline · win rate\"]\n    E --&gt; G[\"consumers&lt;br/&gt;lead-scoring model · GTM dashboard\"]"
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#three-problems-it-solves",
+    "href": "projects/gtm-analytics-warehouse.html#three-problems-it-solves",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "Three Problems It Solves",
+    "text": "Three Problems It Solves\nI built the project around the three problems that actually make GTM data hard. These are the parts worth reading.\n1. The same company, entered twice. The raw CRM has duplicate accounts that share a web domain, and duplicate contacts that share an email. Report on the raw IDs and you double-count companies and people. The warehouse picks one golden record per domain, collapses duplicate contacts, and a test fails the build if a duplicate ever slips through again. In this build, 408 raw account rows resolve to 400 real companies, and 3,035 raw contacts resolve to 2,826 people.\n2. A join that double-counts, caught by a test. Marketing touches arrive keyed on email, not contact ID, and the CRM holds duplicate-email contacts. Join them naively and a single marketing touch matches several duplicate contacts and gets counted multiple times. The fix is to join against the deduplicated contact set, and a dedicated test asserts that the number of attributed touches exactly equals the number of source touches, so the join can never silently break again. This is the same class of bug as the join fix I worked on at Atlassian.\n3. Cheap rebuilds and point-in-time history. The product usage table is built incrementally: a full run scans all 50,000 events, but a routine run only reprocesses the most recent days, so it stays cheap to refresh. And an account snapshot records a new versioned row whenever a company’s size or industry changes, so the warehouse can answer “what segment was this account in when the deal closed,” not just what it looks like today."
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#the-trust-layer-tests-docs-and-ci",
+    "href": "projects/gtm-analytics-warehouse.html#the-trust-layer-tests-docs-and-ci",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "The Trust Layer: Tests, Docs, and CI",
+    "text": "The Trust Layer: Tests, Docs, and CI\nA transformation is only useful if people trust it. This project treats that as a first-class requirement, not an afterthought:\n\n57 data tests run on every build, from simple “this key is unique and not null” checks to custom business rules like “every domain resolves to exactly one account.”\n100% documentation coverage, enforced by a script that fails the build if any model or column is left undocumented.\nContinuous integration rebuilds the entire warehouse from scratch in a clean environment on every push, runs all the tests, checks documentation coverage, and confirms the metrics layer still answers a query. The badge on the repo is green because the whole thing genuinely reproduces, not because I said so."
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#one-tasteful-use-of-ai",
+    "href": "projects/gtm-analytics-warehouse.html#one-tasteful-use-of-ai",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "One Tasteful Use of AI",
+    "text": "One Tasteful Use of AI\nWriting column descriptions is the chore everyone skips, which is why so many data warehouses are undocumented. The project includes an optional tool that sends a model’s SQL to Claude and asks for first-draft descriptions, written to a review file rather than merged automatically. Documentation is reviewed, not auto-generated, and every description in the repo was written and edited by hand. The audit half of that same tool runs offline with no AI at all and is what gates the build. It is a small, honest use of AI: speed up the blank-page problem, without pretending the machine owns the documentation."
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#how-it-maps-to-my-work",
+    "href": "projects/gtm-analytics-warehouse.html#how-it-maps-to-my-work",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "How It Maps to My Work",
+    "text": "How It Maps to My Work\n\n\n\n\n\n\n\nThis project\nThe real work at Atlassian\n\n\n\n\nAccount and contact reconciliation, duplicate detection\nReconciling a large CRM dataset into a clean source of truth\n\n\nThe email-join fix and the test that guards it\nThe join fix that stopped contacts being double-counted\n\n\nBuying-group role coverage per account\nICP and buying-group identification\n\n\nA clean feature table handed to a scoring model\nThe lead-scoring and propensity work"
+  },
+  {
+    "objectID": "projects/gtm-analytics-warehouse.html#stack",
+    "href": "projects/gtm-analytics-warehouse.html#stack",
+    "title": "GTM Analytics Warehouse — A dbt Project Done Properly",
+    "section": "Stack",
+    "text": "Stack\ndbt · DuckDB · MetricFlow · SQL · Python · GitHub Actions"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Philip Felix",
     "section": "",
-    "text": "Philip Felix\n\nSenior Data Scientist — SF Bay Area\n\n\nA decade in analytics working with marketing, sales, customer success, and product teams: Product Specialist and Operations Analyst at Square, then Data Scientist at Atlassian for the last six years.\n\n\n\nProjects\n\n\n\n\nEnrichEval — Transaction Enrichment Quality\n\n\nYour banking app turns a cryptic string like SQ *BLUE BOTTLE COFFEE OAKLAND CA into a clean merchant, category, and recurring flag. Building that is easy; knowing how good it is, is hard. A harness that measures enrichment quality — defining what “correct” means, turning a vague complaint into a ranked list of fixes, validating an AI judge against human labels, and catching regressions when the model changes.\n\n\nPython · pandas · scikit-learn · Streamlit · Claude API\n\n\n\n\nSupport Ticket Classification\n\n\nWhich classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared from 100 to ~9.5K labeled tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after a real AI-product support taxonomy.\n\n\nPython · Next.js · TypeScript · Recharts\n\n\n\n\nAdaptive Analyst Agent\n\n\nAn LLM-powered analyst that answers the same business question differently depending on who’s asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.\n\n\nPython · Claude API · DuckDB · Streamlit\n\n\n\n\nLead Scoring & Buying Group Identification\n\n\nYou have 100K accounts and can only engage a few thousand this quarter. Which ones? A propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren’t closing and who’s missing from the deal.\n\n\nPython · Pandas · scikit-learn · Streamlit\n\n\n\n\nJob Title Normalizer\n\n\nSales and marketing teams route deals and score leads off job titles, but CRM titles are chaos — abbreviations, regions, seniority markers, punctuation. A multi-task PyTorch classifier that normalizes them into clean seniority and function labels.\n\n\nPython · PyTorch · scikit-learn\n\n\n\n\npfelix828@gmail.com\n\nGitHub · LinkedIn"
+    "text": "Philip Felix\n\nSenior Data Scientist — SF Bay Area\n\n\nA decade in analytics working with marketing, sales, customer success, and product teams: Product Specialist and Operations Analyst at Square, then Data Scientist at Atlassian for the last six years.\n\n\n\nProjects\n\n\n\n\nGTM Analytics Warehouse — dbt\n\n\nGo-to-market data starts out messy: the same company entered twice, the same person under three emails, marketing events that double-count on a naive join. A full analytics-engineering warehouse built with dbt that fixes it once, in one place. Six raw source tables turned into clean, tested, documented models, with reconciliation logic, an incremental table, point-in-time snapshots, a metrics layer, and CI that rebuilds and tests the whole thing on every push.\n\n\ndbt · DuckDB · MetricFlow · SQL · Python · GitHub Actions\n\n\n\n\nEnrichEval — Transaction Enrichment Quality\n\n\nYour banking app turns a cryptic string like SQ *BLUE BOTTLE COFFEE OAKLAND CA into a clean merchant, category, and recurring flag. Building that is easy; knowing how good it is, is hard. A harness that measures enrichment quality — defining what “correct” means, turning a vague complaint into a ranked list of fixes, validating an AI judge against human labels, and catching regressions when the model changes.\n\n\nPython · pandas · scikit-learn · Streamlit · Claude API\n\n\n\n\nSupport Ticket Classification\n\n\nWhich classification method should you use — and how does the answer change based on how much labeled data you have? Seven methods compared from 100 to ~9.5K labeled tickets, from TF-IDF baselines to fine-tuned LLMs, on synthetic data modeled after a real AI-product support taxonomy.\n\n\nPython · Next.js · TypeScript · Recharts\n\n\n\n\nAdaptive Analyst Agent\n\n\nAn LLM-powered analyst that answers the same business question differently depending on who’s asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.\n\n\nPython · Claude API · DuckDB · Streamlit\n\n\n\n\nLead Scoring & Buying Group Identification\n\n\nYou have 100K accounts and can only engage a few thousand this quarter. Which ones? A propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren’t closing and who’s missing from the deal.\n\n\nPython · Pandas · scikit-learn · Streamlit\n\n\n\n\nJob Title Normalizer\n\n\nSales and marketing teams route deals and score leads off job titles, but CRM titles are chaos — abbreviations, regions, seniority markers, punctuation. A multi-task PyTorch classifier that normalizes them into clean seniority and function labels.\n\n\nPython · PyTorch · scikit-learn\n\n\n\n\npfelix828@gmail.com\n\nGitHub · LinkedIn"
   }
 ]

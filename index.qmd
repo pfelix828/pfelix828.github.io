@@ -27,6 +27,18 @@ Projects
 
 ::: {.project-card}
 ::: {.project-card-title}
+[GTM Analytics Warehouse — dbt](projects/gtm-analytics-warehouse.qmd)
+:::
+::: {.project-card-description}
+Go-to-market data starts out messy: the same company entered twice, the same person under three emails, marketing events that double-count on a naive join. A full analytics-engineering warehouse built with dbt that fixes it once, in one place. Six raw source tables turned into clean, tested, documented models, with reconciliation logic, an incremental table, point-in-time snapshots, a metrics layer, and CI that rebuilds and tests the whole thing on every push.
+:::
+::: {.project-card-stack}
+dbt · DuckDB · MetricFlow · SQL · Python · GitHub Actions
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
 [EnrichEval — Transaction Enrichment Quality](projects/enrich-eval.qmd)
 :::
 ::: {.project-card-description}
