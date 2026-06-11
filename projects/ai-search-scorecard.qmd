@@ -3,7 +3,7 @@ title: "AI Search Visibility Scorecard"
 toc-depth: 3
 ---
 
-[Live App](https://ai-search-scorecard.vercel.app){.btn .btn-outline-primary}
+[Live App](https://ai-search-scorecard.vercel.app){.btn .btn-outline-primary} [Source](https://github.com/pfelix828/ai-search-scorecard){.btn .btn-outline-secondary}
 
 ## What This Project Does
 
