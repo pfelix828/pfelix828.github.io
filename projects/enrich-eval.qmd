@@ -3,7 +3,7 @@ title: "EnrichEval — A Quality Lab for Transaction Enrichment"
 toc-depth: 3
 ---
 
-[View on GitHub](https://github.com/pfelix828/enrich-eval){.btn .btn-outline-primary} [Live App](https://enrich-eval.streamlit.app){.btn .btn-outline-primary}
+[View on GitHub](https://github.com/pfelix828/enrich-eval){.btn .btn-outline-primary} [Live App](https://enrich-eval.vercel.app){.btn .btn-outline-primary}
 
 ## What This Project Does
 
