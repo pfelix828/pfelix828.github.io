@@ -27,6 +27,18 @@ Projects
 
 ::: {.project-card}
 ::: {.project-card-title}
+[AI Search Visibility Scorecard](projects/ai-search-scorecard.qmd)
+:::
+::: {.project-card-description}
+AI assistants now answer "what's the best PDF editor?" directly, and there is no Search Console for that channel: no impressions, no ranks, and answers that change every run. A measurement framework for brand visibility in AI answer engines, built as a weekly scorecard: prompt-panel sampling with confidence intervals, share of voice against competitors, treated-vs-control experiments with an honestly reported null, and a proxy model connecting visibility to revenue. Simulated data, real methodology.
+:::
+::: {.project-card-stack}
+Next.js · TypeScript · Recharts · Statistics · Vercel
+:::
+:::
+
+::: {.project-card}
+::: {.project-card-title}
 [GTM Analytics Warehouse — dbt](projects/gtm-analytics-warehouse.qmd)
 :::
 ::: {.project-card-description}

@@ -12,6 +12,8 @@ website:
         href: index.qmd
       - text: Projects
         menu:
+          - text: AI Search Visibility Scorecard
+            href: projects/ai-search-scorecard.qmd
           - text: GTM Analytics Warehouse — dbt
             href: projects/gtm-analytics-warehouse.qmd
           - text: EnrichEval — Transaction Enrichment Quality
