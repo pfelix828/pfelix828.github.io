@@ -3,7 +3,7 @@ title: "Job Title Normalizer"
 toc-depth: 3
 ---
 
-[View on GitHub](https://github.com/pfelix828/title-normalizer){.btn .btn-outline-primary}
+[View on GitHub](https://github.com/pfelix828/title-normalizer){.btn .btn-outline-primary} [Live App](https://pfelix828.github.io/title-normalizer/){.btn .btn-outline-primary}
 
 ## What This Project Does
 

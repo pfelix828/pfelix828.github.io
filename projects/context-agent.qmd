@@ -2,7 +2,7 @@
 title: "Adaptive Analyst Agent"
 ---
 
-[View on GitHub](https://github.com/pfelix828/context-agent){.btn .btn-outline-primary}
+[View on GitHub](https://github.com/pfelix828/context-agent){.btn .btn-outline-primary} [Live App](https://adaptive-analyst-agent.streamlit.app){.btn .btn-outline-primary}
 
 ## The Problem
 
