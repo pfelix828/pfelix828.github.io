@@ -57,7 +57,7 @@ dbt · DuckDB · MetricFlow · SQL · Python · GitHub Actions
 Your banking app turns a cryptic string like `SQ *BLUE BOTTLE COFFEE OAKLAND CA` into a clean merchant, category, and recurring flag. Building that is easy; knowing how good it is, is hard. A harness that measures enrichment quality — defining what "correct" means, turning a vague complaint into a ranked list of fixes, validating an AI judge against human labels, and catching regressions when the model changes.
 :::
 ::: {.project-card-stack}
-Python · pandas · scikit-learn · Streamlit · Claude API
+Python · pandas · scikit-learn · Next.js · Claude API
 :::
 :::
 
@@ -78,10 +78,10 @@ Python · Next.js · TypeScript · Recharts
 [Adaptive Analyst Agent](projects/context-agent.qmd)
 :::
 ::: {.project-card-description}
-An LLM-powered analyst that answers the same business question differently depending on who's asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context.
+An LLM-powered analyst that answers the same business question differently depending on who's asking. A VP gets a board-level summary. A campaign manager gets channel attribution and budget recommendations. Same data, different context. The live demo replays unedited recordings of real runs, self-corrections included.
 :::
 ::: {.project-card-stack}
-Python · Claude API · DuckDB · Streamlit
+Python · Claude API · DuckDB · Next.js
 :::
 :::
 
@@ -93,7 +93,7 @@ Python · Claude API · DuckDB · Streamlit
 You have 100K accounts and can only engage a few thousand this quarter. Which ones? A propensity model to answer that, plus a buying group analyzer that figures out why good accounts aren't closing and who's missing from the deal.
 :::
 ::: {.project-card-stack}
-Python · Pandas · scikit-learn · Streamlit
+Python · Pandas · scikit-learn · Next.js
 :::
 :::
 

@@ -216,13 +216,13 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Agent loop</strong> — Claude API with tool use for multi-step reasoning</li>
 <li><strong>Context system</strong> — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)</li>
 <li><strong>Execution layer</strong> — Sandboxed SQL and Python execution via DuckDB</li>
-<li><strong>UI</strong> — Streamlit app for interactive exploration</li>
+<li><strong>UI</strong> — the deployed app is a session player that replays unedited recordings of real runs: every SQL query, every error the agent hit and corrected, every chart. The Streamlit app in the repo runs the agent live on your machine</li>
 </ul>
 </section>
 </section>
 <section id="in-action" class="level2">
 <h2 class="anchored" data-anchor-id="in-action">In Action</h2>
-<p>Same question, different stakeholder — the agent adapts automatically:</p>
+<p>The live app replays eight recorded sessions, two per stakeholder, exactly as they ran. Same question, different stakeholder — the agent adapts automatically:</p>
 <ul>
 <li><strong>Executive asks “How is pipeline trending?”</strong> → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.</li>
 <li><strong>Marketing asks “How is pipeline trending?”</strong> → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.</li>
@@ -262,7 +262,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="stack" class="level2">
 <h2 class="anchored" data-anchor-id="stack">Stack</h2>
-<p>Python | Claude API | DuckDB | Streamlit | Pandas | Plotly</p>
+<p>Python | Claude API | DuckDB | Pandas | Plotly | Streamlit local app | Next.js live demo</p>
 
 
 </section>

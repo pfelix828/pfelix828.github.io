@@ -23,11 +23,11 @@ The agent uses Claude's tool use capabilities to:
 - **Agent loop** — Claude API with tool use for multi-step reasoning
 - **Context system** — Configurable markdown files (stakeholder profiles, domain knowledge, analysis frameworks)
 - **Execution layer** — Sandboxed SQL and Python execution via DuckDB
-- **UI** — Streamlit app for interactive exploration
+- **UI** — the deployed app is a session player that replays unedited recordings of real runs: every SQL query, every error the agent hit and corrected, every chart. The Streamlit app in the repo runs the agent live on your machine
 
 ## In Action
 
-Same question, different stakeholder — the agent adapts automatically:
+The live app replays eight recorded sessions, two per stakeholder, exactly as they ran. Same question, different stakeholder — the agent adapts automatically:
 
 - **Executive asks "How is pipeline trending?"** → Board-level summary: total pipeline value, LTV/CAC ratio, YoY comparisons, and a one-line assessment of whether the quarter is on track.
 - **Marketing asks "How is pipeline trending?"** → Campaign-level breakdown: channel attribution, cost per MQL by source, specific winners and losers, and recommendations for budget reallocation.
@@ -67,4 +67,4 @@ A 58% pass rate is not a finished product. It is a measured product. The repo in
 
 ## Stack
 
-Python | Claude API | DuckDB | Streamlit | Pandas | Plotly
+Python | Claude API | DuckDB | Pandas | Plotly | Streamlit local app | Next.js live demo

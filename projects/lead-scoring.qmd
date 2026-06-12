@@ -264,4 +264,4 @@ This project uses synthetic data and runs offline. In a production environment, 
 
 ## Stack
 
-Python | Pandas | scikit-learn | Matplotlib | Plotly | Streamlit | Jupyter
+Python | Pandas | scikit-learn | Plotly | Jupyter | Next.js live demo | Streamlit local app
